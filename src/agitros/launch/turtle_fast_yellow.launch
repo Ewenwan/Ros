@@ -1,0 +1,16 @@
+<launch>
+  <node
+   pkg="turtlesim"
+   type="turtlesim_node"
+   name="turtlesim" />
+  <node
+   pkg="agitros"
+   type="pubVelWMaxVel"
+   name="publish_velocity" >
+   <param name="max_vel" value="8" />
+  </node>
+  <node
+   pkg="agitros"
+   type="setBgColor"
+   name="set_bg_color" />
+</launch>

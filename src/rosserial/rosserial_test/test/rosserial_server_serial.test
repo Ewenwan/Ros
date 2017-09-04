@@ -1,0 +1,11 @@
+<launch>
+  <include file="$(find rosserial_server)/launch/serial.launch">
+    <arg name="port" value="/tmp/rosserial_pty" />
+  </include>
+
+  <test test-name="rosserial_server_serial_test_publish_subscribe" pkg="rosserial_test"
+        type="rosserial_test_publish_subscribe" time-limit="10.0">
+    <param name="mode" value="serial" />
+    <param name="port" value="/tmp/rosserial_pty" />
+  </test>
+</launch>

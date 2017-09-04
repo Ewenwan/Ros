@@ -1,0 +1,1 @@
+/usr/bin/c++  -fPIC  -g -Wall -o0   -shared -Wl,-soname,libface_recognition_lib.so -o /home/ewenwan/ewenwan/catkin_ws/devel/lib/libface_recognition_lib.so CMakeFiles/face_recognition_lib.dir/src/face_recognition_lib.cpp.o 

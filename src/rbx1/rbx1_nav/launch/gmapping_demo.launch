@@ -1,0 +1,6 @@
+<launch>
+  <include file="$(find rbx1_nav)/launch/gmapping.launch"/>
+
+  <include file="$(find rbx1_nav)/launch/tb_move_base.launch"/>
+
+</launch>

@@ -1,0 +1,23 @@
+<launch>
+  <arg name="map_name" default="$(find yujin_maps)/maps/6th_floor_plan.yaml"/>
+  <include file="$(find kobuki_softnode)/launch/full.launch"/>
+
+  <node pkg="fake_localization" name="fake_localization" type="fake_localization">
+    <remap from="base_pose_ground_truth" to="odom"/>
+  </node>
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <rosparam file="$(find rbx1_nav)/config/kobuki/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find rbx1_nav)/config/kobuki/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find rbx1_nav)/config/kobuki/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find rbx1_nav)/config/kobuki/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find rbx1_nav)/config/kobuki/base_local_planner_params.yaml" command="load" />
+    <remap from="cmd_vel" to="mobile_base/commands/velocity"/>
+  </node>
+
+  <node pkg="map_server" type="map_server" name="map_server" output="screen" args="$(arg map_name)">
+  </node>
+
+  <!-- node name="rviz" pkg="rviz" type="rviz" args="-d $(find rbx1_nav)/rviz/nav.rviz"/ -->
+</launch>
+

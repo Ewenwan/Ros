@@ -1,0 +1,7 @@
+<launch>
+  <node pkg="rbx1_vision" name="cv_bridge_demo" type="cv_bridge_demo.py" output="screen">
+    <remap from="input_rgb_image" to="/camera/rgb/image_raw" />
+    <remap from="input_depth_image" to="/camera/depth/image_rect" />
+  </node>
+  
+</launch>

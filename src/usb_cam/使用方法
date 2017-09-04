@@ -1,0 +1,49 @@
+
+
+节点
+Nodes
+
+usb_cam_node         标准usb 照相机
+The usb_cam_node interfaces with standard USB cameras (e.g. the Logitech Quickcam)
+ using libusb_cam and publishes images as sensor_msgs::Image. 
+Uses the image_transport library to allow compressed image transport.
+
+发布的话题
+Published Topics
+~<camera_name>/image (sensor_msgs/Image)
+
+
+ The image 
+
+
+可配置的参数
+Parameters
+~video_device (string, default: "/dev/video0")     The device the camera is on. 照相机设备号
+
+~image_width (integer, default: 640)                Image width  图片
+
+~image_height (integer, default: 480)               Image height 
+
+~pixel_format (string, default: "mjpeg")            格 mjpeg, yuyv, uyvy 
+
+~io_method (string, default: "mmap")                 Possible values are mmap, read, userptr 
+
+~camera_frame_id (string, default: "head_camera")    坐标  The camera's tf frame 
+
+~framerate (integer, default: 30)                  The required framerate 
+
+~contrast (integer, default: 32)                    Contrast of video image (0-255) 
+
+~brightness (integer, default: 32)                   Brightness of video image (0-255) 
+
+~saturation (integer, default: 32)                  Saturation of video image (0-255) 
+
+~sharpness (integer, default: 22)                    Sharpness of video image (0-255) 
+
+~autofocus (boolean, default: false)                Enable camera's autofocus 
+
+~focus (integer, default: 51)             If autofocus is disabled, the focus of the camera (0=at infinity) 
+
+~camera_info_url (string, default: )    An url to the camera calibration file that will be read by the CameraInfoManager class 
+
+~camera_name (string, default: head_camera)  The camera name. This must match the name in the camera calibration 

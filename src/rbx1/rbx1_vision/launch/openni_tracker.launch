@@ -1,0 +1,5 @@
+<launch>
+  <node pkg="openni_tracker" name="openni_tracker" type="openni_tracker" output="screen">
+    <param name="camera_frame_id" value="openni_depth_frame" />
+  </node>
+</launch>

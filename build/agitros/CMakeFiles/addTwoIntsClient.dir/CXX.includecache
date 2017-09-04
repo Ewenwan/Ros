@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ewenwan/ewenwan/catkin_ws/src/agitros/src/add_two_ints_client.cpp
+ros/ros.h
+/home/ewenwan/ewenwan/catkin_ws/src/agitros/src/ros/ros.h
+agitros/AddTwoInts.h
+/home/ewenwan/ewenwan/catkin_ws/src/agitros/src/agitros/AddTwoInts.h
+cstdlib
+-
+

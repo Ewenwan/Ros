@@ -1,0 +1,36 @@
+<launch>
+  <!-- Turtlebot Driver -->
+  <node pkg="create_node" type="turtlebot_node.py" name="turtlebot_node" respawn="true" args="--respawnable">
+    <param name="bonus" value="false" />
+    <param name="update_rate" value="30.0" />
+    <param name="port" value="/dev/ttyUSB0" />
+    <remap from="cmd_vel" to="mobile_base/commands/velocity" />
+    <remap from="turtlebot_node/sensor_state" to="mobile_base/sensors/core" />
+    <remap from="imu/data" to="mobile_base/sensors/imu_data" />
+    <remap from="imu/raw" to="mobile_base/sensors/imu_data_raw" />
+  </node>
+
+  <!-- Enable breaker 1 for the kinect -->
+  <node pkg="create_node" type="kinect_breaker_enabler.py" name="kinect_breaker_enabler"/>
+
+  <!-- The odometry estimator -->
+  <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf">
+    <remap from="imu_data" to="mobile_base/sensors/imu_data"/>
+    <remap from="robot_pose_ekf/odom_combined" to="odom_combined"/>
+    <param name="freq" value="10.0"/>
+    <param name="sensor_timeout" value="1.0"/>
+    <param name="publish_tf" value="true"/>
+    <param name="odom_used" value="true"/>
+    <param name="imu_used" value="true"/>
+    <param name="vo_used" value="false"/>
+    <param name="output_frame" value="odom"/>
+  </node>
+
+  <!-- velocity commands multiplexer -->
+  <node pkg="nodelet" type="nodelet" name="mobile_base_nodelet_manager" args="manager"/>
+  <node pkg="nodelet" type="nodelet" name="cmd_vel_mux" args="load yocs_cmd_vel_mux/CmdVelMuxNodelet mobile_base_nodelet_manager">
+    <param name="yaml_cfg_file" value="$(find turtlebot_bringup)/param/mux.yaml"/>
+    <remap from="cmd_vel_mux/output" to="mobile_base/commands/velocity"/>
+    <remap from="cmd_vel_mux/input/navi" to="cmd_vel"/>
+  </node>
+</launch>

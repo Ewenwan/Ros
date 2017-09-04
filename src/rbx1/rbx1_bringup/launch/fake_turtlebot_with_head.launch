@@ -1,0 +1,18 @@
+<launch>
+  <param name="/use_sim_time" value="false" />
+
+  <!-- Load the URDF/Xacro model of our robot -->
+  <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find rbx1_description)/urdf/turtlebot_with_head.xacro'" />
+   
+  <param name="robot_description" command="$(arg urdf_file)" />
+    
+  <node name="arbotix" pkg="arbotix_python" type="arbotix_driver" output="screen" clear_params="true">
+      <rosparam file="$(find rbx1_bringup)/config/fake_turtlebot_with_head_arbotix.yaml" command="load" />
+      <param name="sim" value="true"/>
+  </node>
+  
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+      <param name="publish_frequency" type="double" value="20.0" />
+  </node>
+
+</launch>

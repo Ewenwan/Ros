@@ -1,0 +1,22 @@
+<package>
+  <name>ros_arduino_python</name>
+  <version>0.2.0</version>
+  <description>
+    ROS Arduino Python.
+  </description>
+  <author>Patrick Goebel</author>
+  <maintainer email="patrick@pirobot.org">Patrick Goebel</maintainer>
+  <license>BSD</license>
+  <url>http://ros.org/wiki/ros_arduino_python</url>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <run_depend>rospy</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>nav_msgs</run_depend>
+  <run_depend>tf</run_depend>
+  <run_depend>ros_arduino_msgs</run_depend>
+  <run_depend>python-serial</run_depend>
+</package>

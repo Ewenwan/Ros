@@ -1,0 +1,6 @@
+set(ros_arduino_python_SETUP_PY_VERSION "0.2.0")
+set(ros_arduino_python_SETUP_PY_SCRIPTS "")
+set(ros_arduino_python_SETUP_PY_PACKAGES "ros_arduino_python")
+set(ros_arduino_python_SETUP_PY_PACKAGE_DIRS "src/ros_arduino_python")
+set(ros_arduino_python_SETUP_PY_MODULES "")
+set(ros_arduino_python_SETUP_PY_MODULE_DIRS "")

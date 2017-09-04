@@ -1,0 +1,8 @@
+<launch>
+  <node pkg="cv_camera" type="cv_camera_node" name="cv_camera_no_yaml">
+    <param name="frame_id" value="camera2" />
+    <param name="file" value="$(find cv_camera)/test/capture.avi" />
+    <param name="rate" value="1.0" />
+  </node>
+  <test test-name="test_cv_camera" pkg="cv_camera" type="test_cv_camera_no_yaml" />
+</launch>

@@ -1,0 +1,21 @@
+<package>
+  <name>ros_arduino_bridge</name>
+  <version>0.2.0</version>
+  <description>
+    Metapackage for ros_arduino_bridge. 
+  </description>
+  <author>Patrick Goebel</author>
+  <maintainer email="patrick@pirobot.org">Patrick Goebel</maintainer>
+  <license>BSD</license>
+  <url>http://ros.org/wiki/ros_arduino_bridge</url>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <run_depend>ros_arduino_firmware</run_depend>
+  <run_depend>ros_arduino_msgs</run_depend>
+  <run_depend>ros_arduino_python</run_depend>
+
+  <export>
+   <metapackage/>
+  </export>
+</package>

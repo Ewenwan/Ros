@@ -1,0 +1,22 @@
+workspace_folder/        -- WORKSPACE
+  src/                   -- SOURCE SPACE
+    CMakeLists.txt       -- 'Toplevel' CMake file, provided by catkin
+
+    package_1/  包1  例如 beginner_tutorials
+      CMakeLists.txt     -- CMakeLists.txt file for package_1  编译规则
+      package.xml        -- Package manifest for package_1     提供有关程序包的元信息
+      src                -- 存放 源文件 cpp   py 。。。。
+
+    
+    ...
+
+    package_n/  包n
+      CMakeLists.txt     -- CMakeLists.txt file for package_n
+      package.xml        -- Package manifest for package_n        清单文件
+      src                -- 存放 源文件 cpp   py 。。。。
+  
+  devel/
+
+     依赖库
+  build/
+     编译文件

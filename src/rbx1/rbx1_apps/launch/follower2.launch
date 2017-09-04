@@ -1,0 +1,57 @@
+<launch>
+  <node pkg="nodelet" type="nodelet" name="pcl_manager" args="manager" output="screen" />
+
+  <!-- Run a VoxelGrid filter on the z axis -->
+  <node pkg="nodelet" type="nodelet" name="voxel_grid_z" args="load pcl/VoxelGrid pcl_manager" output="screen">
+    <remap from="~input" to="/camera/depth_registered/points" />
+    <remap from="~output" to="/z_filtered" />
+    <rosparam>
+      filter_field_name: z
+      filter_limit_min: 0.3
+      filter_limit_max: 1.6
+      filter_limit_negative: False
+      leaf_size: 0.02
+    </rosparam>
+  </node>
+  
+  <!-- Run a passthrough filter on the x axis -->
+  <node pkg="nodelet" type="nodelet" name="passthrough_x" args="load pcl/PassThrough pcl_manager" output="screen">
+    <remap from="~input" to="/z_filtered" />
+    <remap from="~output" to="/x_filtered" />
+    <rosparam>
+      filter_field_name: x
+      filter_limit_min: -0.3
+      filter_limit_max: 0.3
+      filter_limit_negative: False
+    </rosparam>
+  </node>
+  
+  <!-- Run a passthrough filter on the y axis -->
+  <node pkg="nodelet" type="nodelet" name="passthrough_y" args="load pcl/PassThrough pcl_manager" output="screen">
+    <remap from="~input" to="/x_filtered" />
+    <remap from="~output" to="/search_cloud" />
+    <rosparam>
+      filter_field_name: y
+      filter_limit_min: -0.5
+      filter_limit_max: -0.1
+      filter_limit_negative: False
+    </rosparam>
+  </node>
+  
+  <node pkg="rbx1_apps" name="follower" type="follower2.py" output="screen">
+    <remap from="point_cloud" to="search_cloud" />
+    
+    <rosparam>
+       goal_z: 0.8
+       z_threshold: 0.025
+       x_threshold: 0.025
+       z_scale: 1.0
+       x_scale: 3.0
+       max_angular_speed: 5.0
+       min_angular_speed: 0.1
+       max_linear_speed: 0.4
+       min_linear_speed: 0.05
+    </rosparam>
+    
+  </node>
+</launch>

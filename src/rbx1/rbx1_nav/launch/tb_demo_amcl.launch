@@ -1,0 +1,18 @@
+<launch>
+
+  <param name="use_sim_time" value="false" />
+  
+  <!-- EDIT THIS LINE TO REFLECT THE NAME OF YOUR OWN MAP FILE 
+       Can also be overridden on the command line -->
+  <arg name="map" default="test_map.yaml" />
+
+  <!-- Run the map server with the desired map -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find rbx1_nav)/maps/$(arg map)"/>
+
+  <!-- Start move_base  -->
+  <include file="$(find rbx1_nav)/launch/tb_move_base.launch" />
+
+  <!-- Fire up AMCL -->
+  <include file="$(find rbx1_nav)/launch/tb_amcl.launch" />
+  
+</launch>

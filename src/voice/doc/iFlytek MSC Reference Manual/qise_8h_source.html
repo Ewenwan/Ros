@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.9"/>
+<title>MSC for Windows&amp;Linux API: qise.h 源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { init_search(); });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">MSC for Windows&amp;Linux API
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.9 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+</script>
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>首页</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="搜索" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+</div><!-- top -->
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="headertitle">
+<div class="title">qise.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="qise_8h.html">浏览该文件的文档.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="keyword">const</span> <span class="keywordtype">char</span>* MSPAPI <a class="code" href="qise_8h.html#a4bffbcea9f255da99ee22aad62708211">QISESessionBegin</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* params, <span class="keyword">const</span> <span class="keywordtype">char</span>* userModelId, <span class="keywordtype">int</span>* errorCode);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="keywordtype">int</span> MSPAPI <a class="code" href="qise_8h.html#a08f4552a392de5667b75329125f1873b">QISETextPut</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* sessionID, <span class="keyword">const</span> <span class="keywordtype">char</span>* textString, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> textLen, <span class="keyword">const</span> <span class="keywordtype">char</span>* params);</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="keywordtype">int</span> MSPAPI <a class="code" href="qise_8h.html#a3cfd5070e9b90971f4695cb42d0d5a46">QISEAudioWrite</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* sessionID, <span class="keyword">const</span> <span class="keywordtype">void</span>* waveData, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> waveLen, <span class="keywordtype">int</span> audioStatus, <span class="keywordtype">int</span> *epStatus, <span class="keywordtype">int</span> *Status);</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="keyword">const</span> <span class="keywordtype">char</span> * MSPAPI <a class="code" href="qise_8h.html#a3749ae7c9cfb830301dea93ee8c626f3">QISEGetResult</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* sessionID, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>* rsltLen, <span class="keywordtype">int</span>* rsltStatus, <span class="keywordtype">int</span> *errorCode);</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;<span class="keywordtype">int</span> MSPAPI <a class="code" href="qise_8h.html#a10031b2946a4c3cd44e6bfc5590a718a">QISESessionEnd</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* sessionID, <span class="keyword">const</span> <span class="keywordtype">char</span>* hints);</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;</div>
+<div class="ttc" id="qise_8h_html_a10031b2946a4c3cd44e6bfc5590a718a"><div class="ttname"><a href="qise_8h.html#a10031b2946a4c3cd44e6bfc5590a718a">QISESessionEnd</a></div><div class="ttdeci">int MSPAPI QISESessionEnd(const char *sessionID, const char *hints)</div><div class="ttdoc">结束本次语音评测。 </div></div>
+<div class="ttc" id="qise_8h_html_a4bffbcea9f255da99ee22aad62708211"><div class="ttname"><a href="qise_8h.html#a4bffbcea9f255da99ee22aad62708211">QISESessionBegin</a></div><div class="ttdeci">const char *MSPAPI QISESessionBegin(const char *params, const char *userModelId, int *errorCode)</div><div class="ttdoc">开始一次语评测。 </div></div>
+<div class="ttc" id="qise_8h_html_a3749ae7c9cfb830301dea93ee8c626f3"><div class="ttname"><a href="qise_8h.html#a3749ae7c9cfb830301dea93ee8c626f3">QISEGetResult</a></div><div class="ttdeci">const char *MSPAPI QISEGetResult(const char *sessionID, unsigned int *rsltLen, int *rsltStatus, int *errorCode)</div><div class="ttdoc">获取评测结果。 </div></div>
+<div class="ttc" id="qise_8h_html_a3cfd5070e9b90971f4695cb42d0d5a46"><div class="ttname"><a href="qise_8h.html#a3cfd5070e9b90971f4695cb42d0d5a46">QISEAudioWrite</a></div><div class="ttdeci">int MSPAPI QISEAudioWrite(const char *sessionID, const void *waveData, unsigned int waveLen, int audioStatus, int *epStatus, int *Status)</div><div class="ttdoc">写入本次评测的音频。 </div></div>
+<div class="ttc" id="qise_8h_html_a08f4552a392de5667b75329125f1873b"><div class="ttname"><a href="qise_8h.html#a08f4552a392de5667b75329125f1873b">QISETextPut</a></div><div class="ttdeci">int MSPAPI QISETextPut(const char *sessionID, const char *textString, unsigned int textLen, const char *params)</div><div class="ttdoc">写入待评测的文本。 </div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+生成于 2017年 二月 27日 星期一 16:24:26 , 为 MSC for Windows&amp;Linux API使用  &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.9
+</small></address>
+</body>
+</html>

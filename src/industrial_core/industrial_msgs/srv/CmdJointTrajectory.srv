@@ -1,0 +1,9 @@
+# Send a JointTrajectory command to the robot.
+#   - duplicates functionality of the joint_path_command topic
+#   - provides a response-code to verify command was received
+#   - returns when trajectory is sent to robot, not when motion completed
+#   - return code may NOT indicate successful transfer to robot
+
+trajectory_msgs/JointTrajectory trajectory
+---
+industrial_msgs/ServiceReturnCode code

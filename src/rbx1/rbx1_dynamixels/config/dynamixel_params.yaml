@@ -1,0 +1,27 @@
+joints: ['head_pan_joint', 'head_tilt_joint']
+
+head_pan_joint:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: head_pan_joint
+    joint_speed: 2.0
+    motor:
+        id: 1
+        init: 512
+        min: 0
+        max: 1024
+
+head_tilt_joint:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: head_tilt_joint
+    joint_speed: 2.0
+    motor:
+        id: 2
+        init: 512
+        min: 300
+        max: 800

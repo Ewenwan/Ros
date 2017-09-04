@@ -1,0 +1,11 @@
+\subsubsection usage Usage
+\verbatim
+<node name="calibrate_linear" pkg="rbx1_nav" type="calibrate_linear">
+  <param name="test_distance" type="double" value="1.0" />
+  <param name="speed" type="double" value="0.15" />
+  <param name="tolerance" type="double" value="0.01" />
+  <param name="odom_linear_scale_correction" type="double" value="1.0" />
+  <param name="start_test" type="bool" value="False" />
+</node>
+\endverbatim
+

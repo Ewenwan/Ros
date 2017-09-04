@@ -1,0 +1,21 @@
+<launch>
+
+  <!-- This launch file provides a simulated industrial robot
+
+       Several nodes are started, to simulate low-level robot communication
+       and higher-level actionlib support:
+         - industrial_robot simulator : accepts motion commands and publishes robot state
+         - joint_trajectory_action : actionlib interface to control robot motion
+
+    Usage:
+      robot_interface_simulator.launch
+  -->
+
+  <!-- industrial_robot_simulator: accepts robot commands and reports status -->
+  <node pkg="industrial_robot_simulator" type="industrial_robot_simulator" name="industrial_robot_simulator"/>
+  
+  <!-- joint_trajectory_action: provides actionlib interface for high-level robot control -->
+  <node pkg="industrial_robot_client" type="joint_trajectory_action" name="joint_trajectory_action"/>
+
+</launch>
+

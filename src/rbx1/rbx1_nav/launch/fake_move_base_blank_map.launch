@@ -1,0 +1,11 @@
+<launch>
+  <!-- 运行一个空白地图的地图服务器  map_server -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find rbx1_nav)/maps/blank_map.yaml"/>
+  
+  <!-- 包含其他launch文件 即打开move_base节点 -->
+  <include file="$(find rbx1_nav)/launch/fake_move_base.launch" />
+
+  <!-- 模拟发布一个标准的静态坐标转换  /odom and /map 里程记相对 地图（原传感器信息得到） -->
+  <node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster" args="0 0 0 0 0 0 /map /odom 100" />
+
+</launch>

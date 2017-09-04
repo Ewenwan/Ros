@@ -1,0 +1,23 @@
+<launch>
+  <!-- Load the URDF/Xacro model of our robot -->
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(find rbx1_description)/urdf/pi_robot.xacro'" />
+
+  <!-- Provide simulated control of the robot joint angles -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+     <param name="/use_gui" value="True"/>
+     <param name="rate" value="20"/>
+  </node>
+
+  <!-- Publish the robot state -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+    <param name="publish_frequency" value="20.0"/>
+  </node>
+    
+  <!-- Publish a static transform between the robot base and the world frame -->
+  <node pkg="tf" type="static_transform_publisher" name="world_base_broadcaster" args="0 0 0.0325 0 0 0 /world /base_link 100" />
+
+  <!-- We need a static transforms for the wheels -->
+  <node pkg="tf" type="static_transform_publisher" name="odom_left_wheel_broadcaster" args="0 0 0 0 0 0 /base_link /left_wheel_link 100" />
+  <node pkg="tf" type="static_transform_publisher" name="odom_right_wheel_broadcaster" args="0 0 0 0 0 0 /base_link /right_wheel_link 100" />
+
+</launch>

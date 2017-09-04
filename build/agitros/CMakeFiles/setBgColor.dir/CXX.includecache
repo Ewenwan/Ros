@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ewenwan/ewenwan/catkin_ws/src/agitros/src/set_bg_color.cpp
+ros/ros.h
+-
+std_srvs/Empty.h
+-
+

@@ -1,0 +1,8 @@
+prefix=/home/ewenwan/ewenwan/catkin_ws/install
+
+Name: rosserial_tivac
+Description: Description of rosserial_tivac
+Version: 0.7.6
+Cflags: 
+Libs: -L/home/ewenwan/ewenwan/catkin_ws/install/lib 
+Requires: 

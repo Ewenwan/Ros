@@ -1,0 +1,20 @@
+/**
+\mainpage
+\htmlinclude manifest.html
+
+\b simple_message defines a simple messaging connection and protocol for communicating with an industrial robot controller.  Additional handler and manager classes are included for handling connection limited systems.
+
+<!-- 
+Provide an overview of your package.
+-->
+
+
+\section codeapi Code API
+
+The main APIs of are largely captured in the following interface classes:
+- industrial::simple_message::SimpleMessage : Defines the protocol for messaging between ROS nodes and a robot controller.
+- industrial::smpl_msg_connection::SmplMsgConnection : Defines the connection interface for sending simple messages.
+- industrial::message_handler::MessageHandler : Defines a callback interface for handling message of a specific type.
+- industrial::message_manager::MessageManager : Manages multiple message handlers on a single connection (useful for connection limited systems, such as robot controllers).
+
+*/

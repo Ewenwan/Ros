@@ -1,0 +1,9 @@
+<launch>
+  <node pkg="rosserial_python" type="serial_node.py" name="rosserial_python_node" args="tcp 11412" />
+
+  <test test-name="rosserial_python_socket_test_publish_subscribe" pkg="rosserial_test"
+        type="rosserial_test_publish_subscribe" time-limit="10.0">
+    <param name="mode" value="socket" />
+    <param name="tcp_port" value="11412" />
+  </test>
+</launch>

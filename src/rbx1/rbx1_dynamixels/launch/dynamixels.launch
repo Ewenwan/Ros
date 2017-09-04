@@ -1,0 +1,51 @@
+<launch>
+    <param name="/use_sim_time" value="false" />
+
+    <!-- Load the URDF/Xacro model of our robot -->
+    <param name="robot_description" command="$(find xacro)/xacro.py '$(find rbx1_description)/urdf/turtlebot_with_head.xacro'" />
+
+    <!-- Publish the robot state -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+    	<param name="publish_frequency" value="20.0"/>
+    </node>
+
+   <!-- Start the Dynamixel low-level driver manager with parameters -->
+   <node name="dynamixel_manager" pkg="dynamixel_controllers"
+      type="controller_manager.py" required="true" output="screen">
+      <rosparam>
+         namespace: turtlebot_dynamixel_manager
+         serial_ports:
+            dynamixel_ax12:
+               port_name: /dev/ttyUSB0
+               baud_rate: 1000000
+               min_motor_id:  1
+               max_motor_id: 2
+               update_rate: 20
+      </rosparam>
+   </node>
+   
+    <!-- Load the joint controller configuration from a YAML file -->
+    <rosparam file="$(find rbx1_dynamixels)/config/dynamixel_params.yaml" command="load"/>
+
+   <!-- Start the head pan and tilt controllers -->
+   <node name="dynamixel_controller_spawner_ax12" pkg="dynamixel_controllers"
+   type="controller_spawner.py"
+        args="--manager=turtlebot_dynamixel_manager
+              --port=dynamixel_ax12
+              --type=simple
+        head_pan_joint
+        head_tilt_joint"
+        output="screen" />
+
+   <!-- Start the Dynamixel Joint States Publisher -->
+   <node name="dynamixel_joint_states_publisher" pkg="rbx1_dynamixels" type="dynamixel_joint_state_publisher.py" output="screen" />
+
+   <!-- Start all Dynamixels in the relaxed state -->
+   <node pkg="rbx1_dynamixels" type="relax_all_servos.py" name="relax_all_servos" />
+   
+   <!-- We need a static transforms for the TurtleBot wheels -->
+   <node pkg="tf" type="static_transform_publisher" name="odom_left_wheel_broadcaster" args="0 0.13 0.015 0 0 0 /base_link /base_l_wheel_link 100" />
+   <node pkg="tf" type="static_transform_publisher" name="odom_right_wheel_broadcaster" args="0 -0.13 0.015 0 0 0 /base_link /base_r_wheel_link 100" />
+   <node pkg="tf" type="static_transform_publisher" name="odom_front_wheel_broadcaster" args="0.13 0 0 0 0 0 /base_link /front_wheel_link 100" />
+
+</launch>

@@ -1,0 +1,588 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.9"/>
+<title>MSC for Windows&amp;Linux API: qisr.h 文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { init_search(); });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">MSC for Windows&amp;Linux API
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.9 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+</script>
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>首页</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="搜索" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#func-members">函数</a>  </div>
+  <div class="headertitle">
+<div class="title">qisr.h 文件参考</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>iFLY Speech Recognizer Header File  
+<a href="#details">更多...</a></p>
+
+<p><a href="qisr_8h_source.html">浏览源代码.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+函数</h2></td></tr>
+<tr class="memitem:aaec4a5779275e07c4f7405ed8d739416"><td class="memItemLeft" align="right" valign="top">const char *MSPAPI&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="qisr_8h.html#aaec4a5779275e07c4f7405ed8d739416">QISRSessionBegin</a> (const char *grammarList, const char *params, int *errorCode)</td></tr>
+<tr class="memdesc:aaec4a5779275e07c4f7405ed8d739416"><td class="mdescLeft">&#160;</td><td class="mdescRight">开始一次语音识别。  <a href="#aaec4a5779275e07c4f7405ed8d739416">更多...</a><br /></td></tr>
+<tr class="separator:aaec4a5779275e07c4f7405ed8d739416"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47fd2588fe834fa2d51fef1961d7aef4"><td class="memItemLeft" align="right" valign="top">int MSPAPI&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="qisr_8h.html#a47fd2588fe834fa2d51fef1961d7aef4">QISRAudioWrite</a> (const char *sessionID, const void *waveData, unsigned int waveLen, int audioStatus, int *epStatus, int *recogStatus)</td></tr>
+<tr class="memdesc:a47fd2588fe834fa2d51fef1961d7aef4"><td class="mdescLeft">&#160;</td><td class="mdescRight">写入本次识别的音频。  <a href="#a47fd2588fe834fa2d51fef1961d7aef4">更多...</a><br /></td></tr>
+<tr class="separator:a47fd2588fe834fa2d51fef1961d7aef4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e7880db4792266a4d1439238c0b2c1b"><td class="memItemLeft" align="right" valign="top">const char *MSPAPI&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="qisr_8h.html#a2e7880db4792266a4d1439238c0b2c1b">QISRGetResult</a> (const char *sessionID, int *rsltStatus, int waitTime, int *errorCode)</td></tr>
+<tr class="memdesc:a2e7880db4792266a4d1439238c0b2c1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取识别结果。  <a href="#a2e7880db4792266a4d1439238c0b2c1b">更多...</a><br /></td></tr>
+<tr class="separator:a2e7880db4792266a4d1439238c0b2c1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab50c4114e032100c4093ddd51329fecc"><td class="memItemLeft" align="right" valign="top">int MSPAPI&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="qisr_8h.html#ab50c4114e032100c4093ddd51329fecc">QISRSessionEnd</a> (const char *sessionID, const char *hints)</td></tr>
+<tr class="memdesc:ab50c4114e032100c4093ddd51329fecc"><td class="mdescLeft">&#160;</td><td class="mdescRight">结束本次语音识别。  <a href="#ab50c4114e032100c4093ddd51329fecc">更多...</a><br /></td></tr>
+<tr class="separator:ab50c4114e032100c4093ddd51329fecc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2081e3cad9a8155c15790a2476be7044"><td class="memItemLeft" align="right" valign="top">int MSPAPI&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="qisr_8h.html#a2081e3cad9a8155c15790a2476be7044">QISRGetParam</a> (const char *sessionID, const char *paramName, char *paramValue, unsigned int *valueLen)</td></tr>
+<tr class="memdesc:a2081e3cad9a8155c15790a2476be7044"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取当次语音识别信息，如上行流量、下行流量等。  <a href="#a2081e3cad9a8155c15790a2476be7044">更多...</a><br /></td></tr>
+<tr class="separator:a2081e3cad9a8155c15790a2476be7044"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<div class="textblock"><p>iFLY Speech Recognizer Header File </p>
+<p>This file contains the quick application programming interface (API) declarations of ISR. Developer can include this file in your project to build applications. For more information, please read the developer guide.</p>
+<p>Use of this software is subject to certain restrictions and limitations set forth in a license agreement entered into between iFLYTEK, Co,LTD. and the licensee of this software. Please refer to the license agreement for license use rights and restrictions.</p>
+<p>Copyright (C) 1999 - 2015 by iFLYTEK, Co,LTD. All rights reserved.</p>
+<dl class="section author"><dt>作者</dt><dd>MSC </dd></dl>
+<dl class="section version"><dt>版本</dt><dd>5.0 </dd></dl>
+<dl class="section date"><dt>日期</dt><dd>2015/03/19</dd></dl>
+<dl class="section see"><dt>参见</dt><dd></dd></dl>
+<p><b>History:</b><br />
+ </p><table class="doxtable">
+<tr>
+<th>Version </th><th>Date </th><th>Author </th><th>Notes </th></tr>
+<tr>
+<td>5.0 </td><td>2015/03/19 </td><td>MSC </td><td>Create this file </td></tr>
+</table>
+</div><h2 class="groupheader">函数说明</h2>
+<a class="anchor" id="a47fd2588fe834fa2d51fef1961d7aef4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int MSPAPI QISRAudioWrite </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>sessionID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>waveData</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>waveLen</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>audioStatus</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>epStatus</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>recogStatus</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>写入本次识别的音频。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sessionID[in]</td><td>由QISRSessionBegin返回的句柄。 </td></tr>
+    <tr><td class="paramname">waveData[in]</td><td>音频数据缓冲区起始地址。 </td></tr>
+    <tr><td class="paramname">waveLen[in]</td><td>音频数据长度,单位字节。 </td></tr>
+    <tr><td class="paramname">audioStatus[in]</td><td>用来告知MSC音频发送是否完成，典型值如下： <table class="doxtable">
+<tr>
+<th>枚举常量 </th><th>描述  </th></tr>
+<tr>
+<td>MSP_AUDIO_SAMPLE_FIRST = 1 </td><td>第一块音频  </td></tr>
+<tr>
+<td>MSP_AUDIO_SAMPLE_CONTINUE = 2 </td><td>还有后继音频  </td></tr>
+<tr>
+<td>MSP_AUDIO_SAMPLE_LAST = 4 </td><td>最后一块音频  </td></tr>
+</table>
+</td></tr>
+    <tr><td class="paramname">epStatus[out]</td><td>端点检测（End-point detected）器所处的状态,可能的值如下： <table class="doxtable">
+<tr>
+<th>枚举常量 </th><th>描述  </th></tr>
+<tr>
+<td>MSP_EP_LOOKING_FOR_SPEECH = 0 </td><td>还没有检测到音频的前端点  </td></tr>
+<tr>
+<td>MSP_EP_IN_SPEECH = 1 </td><td>已经检测到了音频前端点，正在进行正常的音频处理  </td></tr>
+<tr>
+<td>MSP_EP_AFTER_SPEECH = 3 </td><td>检测到音频的后端点，后继的音频会被MSC忽略  </td></tr>
+<tr>
+<td>MSP_EP_TIMEOUT = 4 </td><td>超时  </td></tr>
+<tr>
+<td>MSP_EP_ERROR = 5 </td><td>出现错误  </td></tr>
+<tr>
+<td>MSP_EP_MAX_SPEECH = 6 </td><td>音频过大  </td></tr>
+</table>
+<b>注意：当epStatus大于等于3时,用户应当停止写入音频的操作,否则写入MSC的音频会被忽略。</b> </td></tr>
+    <tr><td class="paramname">recogStatus[out]</td><td>识别器返回的状态，提醒用户及时开始\停止获取识别结果。典型值如下： <table class="doxtable">
+<tr>
+<th>枚举常量 </th><th>描述  </th></tr>
+<tr>
+<td>MSP_REC_STATUS_SUCCESS = 0 </td><td>识别成功，有识别结果返回  </td></tr>
+<tr>
+<td>MSP_REC_STATUS_NO_MATCH = 1 </td><td>识别结束，没有识别结果  </td></tr>
+<tr>
+<td>MSP_REC_STATUS_INCOMPLETE = 2 </td><td>正在识别  </td></tr>
+<tr>
+<td>MSP_REC_STATUS_COMPLETE = 5 </td><td>识别结束，有识别结果返回  </td></tr>
+</table>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>函数调用成功返回MSP_SUCCESS，否则返回错误代码，<a href="http://open.voicecloud.cn/index.php/default/doccenter/doccenterInner?itemTitle=ZmFx&amp;anchor=Y29udGl0bGU2Ng==" target="_blank">详见错误码列表</a>。 </dd></dl>
+<dl class="section remark"><dt>备注</dt><dd>本接口需不断调用，直到音频全部写入为止。上传音频时，需更新audioStatus的值。具体来说:<br />
+<b>当写入首块音频时,将audioStatus置为MSP_AUDIO_SAMPLE_FIRST<br />
+当写入最后一块音频时,将audioStatus置为MSP_AUDIO_SAMPLE_LAST<br />
+其余情况下,将audioStatus置为MSP_AUDIO_SAMPLE_CONTINUE</b><br />
+同时，需定时检查两个变量：epStatus和rsltStatus。具体来说:<br />
+<b>当epStatus显示已检测到后端点时，MSC已不再接收音频，应及时停止音频写入<br />
+当rsltStatus显示有识别结果返回时，即可从MSC缓存中获取结果</b></dd></dl>
+<dl class="section see"><dt>参见</dt><dd><pre class="fragment">char audio_data[5120] ={'\0'};
+unsigned int   audio_len = 0;
+int audio_status = 2;
+int ep_status = 0;
+int rec_status = 0;
+int ret = 0;
+while(MSP_AUDIO_SAMPLE_LAST != audio_status )
+{
+    // 读取音频到缓冲区audio_data中,设置音频长度audio_len,音频状态audio_status。
+    ret = QISRAudioWrite( sessionID, audio_data, audio_len, audio_status, &amp;ep_status, &amp;rec_status );
+    if( MSP_SUCCESS != ret )
+    {
+        printf( "QISRAudioWrite failed, error code is: %d", ret );
+        break;
+    }
+    else if(MSP_EP_AFTER_SPEECH == ep_status )//检测到音频后端点,停止写入音频 
+    {
+        printf( "end point of speech has been detected!" );
+        break;
+    }
+    //如果是实时采集音频,可以省略此操作。5KB大小的16KPCM持续的时间是160毫秒 
+    Sleep( 160 );  
+}
+.</pre> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a2081e3cad9a8155c15790a2476be7044"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int MSPAPI QISRGetParam </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>sessionID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>paramName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>paramValue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int *&#160;</td>
+          <td class="paramname"><em>valueLen</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>获取当次语音识别信息，如上行流量、下行流量等。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sessionID[in]</td><td>由QISRSessionEnd返回的句柄，如果为NULL，获取MSC的设置信息。 </td></tr>
+    <tr><td class="paramname">paramName[in]</td><td>参数名，一次调用只支持查询一个参数。参数如下： <table class="doxtable">
+<tr>
+<th>参数</th><th>描述 </th></tr>
+<tr>
+<td>sid</td><td>服务端会话ID，长度为32字节 </td></tr>
+<tr>
+<td>upflow</td><td>上行数据量，单位字节 </td></tr>
+<tr>
+<td>downflow</td><td>下行数据量，单位字节 </td></tr>
+<tr>
+<td>volume</td><td>最近一次写入的音频的音量 </td></tr>
+</table>
+</td></tr>
+    <tr><td class="paramname">paramValue[in/out]</td><td>输入:buffer首地址<br />
+输出:向该buffer写入获取到的信息 </td></tr>
+    <tr><td class="paramname">valueLen[in/out]</td><td>输入:buffer的大小，valueLen大小需根据结果大小做调整<br />
+输出:<b>信息实际长度(不含’\0’),长度需+1</b> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>函数调用成功返回MSP_SUCCESS，否则返回错误代码，<a href="http://open.voicecloud.cn/index.php/default/doccenter/doccenterInner?itemTitle=ZmFx&amp;anchor=Y29udGl0bGU2Ng==" target="_blank">详见错误码列表</a>。 </dd></dl>
+<dl class="section remark"><dt>备注</dt><dd>以查询上行流量为例，获取到的是本次识别当前累计的上行流量。下行流量查询与此相似。</dd></dl>
+<dl class="section see"><dt>参见</dt><dd><pre class="fragment">const char * para_name = "sid";
+char para_value[33] = {'\0'};
+unsigned int value_len = 33;
+int ret = QISRGetParam ( sessionID, para_name, para_value, &amp;value_len );
+if( MSP_SUCCESS != ret )
+{
+    printf( "QISRGetParam failed, error code is: %d", ret );
+}
+.</pre> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a2e7880db4792266a4d1439238c0b2c1b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* MSPAPI QISRGetResult </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>sessionID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>rsltStatus</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>waitTime</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>errorCode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>获取识别结果。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sessionID[in]</td><td>由QISRSessionBegin返回的句柄。 </td></tr>
+    <tr><td class="paramname">rsltStatus[out]</td><td>识别结果的状态,其取值范围和含义请参考QISRAudioWrite的参数recogStatus。 </td></tr>
+    <tr><td class="paramname">waitTime[in]</td><td>此参数做保留用。 </td></tr>
+    <tr><td class="paramname">errorCode[out]</td><td>函数调用成功返回MSP_SUCCESS，否则返回错误代码，<a href="http://open.voicecloud.cn/index.php/default/doccenter/doccenterInner?itemTitle=ZmFx&amp;anchor=Y29udGl0bGU2Ng==" target="_blank">详见错误码列表</a>。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>函数执行成功且有识别结果时，返回结果字符串指针；其他情况(失败或无结果)返回NULL。</dd></dl>
+<dl class="section remark"><dt>备注</dt><dd>当写入音频过程中已经有部分识别结果返回时，可以获取结果。在音频写入完毕后，用户需反复调用此接口，直到识别结果获取完毕（rlstStatus值为5）或返回错误码。<br />
+<b>注意：如果某次成功调用后暂未获得识别结果，请将当前线程sleep一段时间，以防频繁调用浪费CPU资源。</b></dd></dl>
+<dl class="section see"><dt>参见</dt><dd><pre class="fragment">char rslt_str[2048] ={'\0'};
+const char* rec_result = NULL;
+int rslt_status = 0;
+int ret = 0;
+while(MSP_REC_STATUS_COMPLETE != rslt_status )
+{
+    rec_result = QISRGetResult ( sessionID, &amp;rslt_status, 5000, &amp;ret );
+    if( MSP_SUCCESS != ret )
+    {
+        printf( "QISRGetResult failed, error code is: %d", ret );
+        break;
+    }
+    if( NULL != rec_result )
+    {
+        strcat( rslt_str, rec_result );//用户可以用其他的方式保存识别结果
+        continue;
+    }
+    //sleep一下很有必要,防止MSC端无缓存的识别结果时浪费CPU资源
+    Sleep( 200 );
+}
+.</pre> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aaec4a5779275e07c4f7405ed8d739416"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* MSPAPI QISRSessionBegin </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>grammarList</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>errorCode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>开始一次语音识别。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">grammarList[in]</td><td>进行连续语音识别(sub=iat)时，此参数设为NULL。进行关键字、语法识别(sub=asr)时，上传方式如下： <table class="doxtable">
+<tr>
+<th>类型 </th><th>说明  </th></tr>
+<tr>
+<td>关键词识别 </td><td>传入调用MSPUploadData接口上传关键词的返回值。关键词会永久生效。  </td></tr>
+<tr>
+<td>语法识别 </td><td>除上述方法外，也可在此处传入语法字符串指针，并在params参数中添加"grammartype=abnf"或" grammartype=xml"。<br />
+此方法仅在本次识别有效。 </td></tr>
+</table>
+</td></tr>
+    <tr><td class="paramname">params[in]</td><td>本次识别参数，可设置的参数列表如下: <table class="doxtable">
+<tr>
+<th>参数 </th><th>参数说明 </th><th>值  </th></tr>
+<tr>
+<td>sub </td><td>本次识别请求的类型 </td><td>iat:连续语音识别<br />
+asr:语法、关键词识别。默认为iat  </td></tr>
+<tr>
+<td>ptt </td><td>添加标点符号(<b>仅sub=iat时有效</b>) </td><td>0:无标点符号;1:有标点符号。默认为1  </td></tr>
+<tr>
+<td>sch </td><td>是否使用语义功能(<b>仅sub=iat时有效</b>) </td><td>0:不使用语义;1:使用语义。默认为0  </td></tr>
+<tr>
+<td>nlp_version </td><td>语义版本(<b>仅在使用语义功能时有效</b>) </td><td>1.0:老版本语义,返回结果为xml格式;2.0:新版本语义,场景比1.0支持的更多,返回结果为原生json,默认为1.0  </td></tr>
+<tr>
+<td>aue </td><td>音频编码格式和压缩等级 </td><td>编码算法：raw；speex；speex-wb；ico<br />
+编码等级：raw：无等级。speex系列：0-10；<br />
+默认为speex-wb;7<br />
+<b>speex对应sample_rate=8000<br />
+speex-wb对应sample_rate=16000<br />
+ico对应sample_rate=16000</b>  </td></tr>
+<tr>
+<td>sample_rate </td><td>音频格式 </td><td>8000<br />
+16000<br />
+默认为16000  </td></tr>
+<tr>
+<td>result_encoding </td><td>识别结果字符串所用编码格式 </td><td>gb2312;utf8;unicode<br />
+不同的格式支持不同的编码：<br />
+plain:utf8,gb2312<br />
+xml:gb2312, utf8, unicode<br />
+json:utf8  </td></tr>
+<tr>
+<td>grammartype </td><td>语法类型(<b>仅sub=asr时有效</b>) </td><td>abnf<br />
+xml  </td></tr>
+<tr>
+<td>vad_bos </td><td>允许头部静音的最长时间 </td><td>0-10000毫秒。默认为10000<br />
+如果静音时长超过了此值，则认为用户此次无有效音频输入。此参数仅在打开VAD功能时有效。  </td></tr>
+<tr>
+<td>vad_eos </td><td>允许尾部静音的最长时间 </td><td>0-10000毫秒。默认为2000<br />
+如果尾部静音时长超过了此值，则认为用户音频已经结束，此参数仅在打开VAD功能时有效。  </td></tr>
+<tr>
+<td>vad_enable </td><td>VAD功能开关 </td><td>是否启用VAD <br />
+ 默认为开启VAD <br />
+ 0（或false）为关闭 </td></tr>
+<tr>
+<td>result_type </td><td>识别结果格式 </td><td>sub=asr时：支持plain,xml,json<br />
+sub=iat时：支持plain,json  </td></tr>
+<tr>
+<td>domain </td><td>领域 </td><td>iat：连续语音识别<br />
+asr：语法、关键词识别<br />
+search：热词<br />
+video：视频<br />
+poi：地名<br />
+music：音乐<br />
+默认为iat。<br />
+<b>注意：sub=asr时，domain只能为asr</b> </td></tr>
+<tr>
+<td>language </td><td>语言 </td><td>zh_cn:简体中文<br />
+zh_tw:繁体中文<br />
+en_us:英语<br />
+默认为zh_cn  </td></tr>
+<tr>
+<td>accent </td><td>口音 </td><td>mandarin:普通话<br />
+cantonese:粤语<br />
+默认为mandarin  </td></tr>
+</table>
+<b>注意:没有默认值的参数必须由外部设定其值</b><br />
+ </td></tr>
+    <tr><td class="paramname">errorCode[out]</td><td>函数调用成功则其值为MSP_SUCCESS，否则返回错误代码，<a href="http://open.voicecloud.cn/index.php/default/doccenter/doccenterInner?itemTitle=ZmFx&amp;anchor=Y29udGl0bGU2Ng==" target="_blank">详见错误码列表</a>。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>函数调用成功返回字符串格式的sessionID，失败返回NULL。sessionID是本次识别的句柄。</dd></dl>
+<dl class="section remark"><dt>备注</dt><dd>参数只在当次识别中生效。<br />
+<b>当使用连续语音识别(sub=iat)时，为了保证识别结果的个性化，可调用MSPUploadData接口上传联系人、用户词表。用法请参照MSPUploadData接口。</b></dd></dl>
+<dl class="section see"><dt>参见</dt><dd><pre class="fragment">const char * params = "sub=iat,aue=speex-wb;7,result_type=plain,result_encoding=utf8,language=zh_cn,
+                      accent=mandarin,sample_rate=16000,domain=music,vad_bos=1000,vad_eos=1000";
+int    ret = 0;
+const char* sessionID = QISRSessionBegin( NULL, params, &amp;ret );
+if( MSP_SUCCESS != ret )
+{
+    printf( "QISRSessionBegin failed, error code is: %d", ret );
+}
+.</pre> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ab50c4114e032100c4093ddd51329fecc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int MSPAPI QISRSessionEnd </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>sessionID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>hints</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>结束本次语音识别。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sessionID[in]</td><td>由QISRSessionBegin返回的句柄。 </td></tr>
+    <tr><td class="paramname">hints[in]</td><td>结束本次语音识别的原因描述，为用户自定义内容。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>函数调用成功返回MSP_SUCCESS，否则返回错误代码，<a href="http://open.voicecloud.cn/index.php/default/doccenter/doccenterInner?itemTitle=ZmFx&amp;anchor=Y29udGl0bGU2Ng==" target="_blank">详见错误码列表</a>。 </dd></dl>
+<dl class="section remark"><dt>备注</dt><dd>本接口和QISRSessionBegin对应,调用此接口后，该句柄对应的相关资源（参数、语法、音频、实例等）都会被释放，用户不应再使用该句柄。</dd></dl>
+<dl class="section see"><dt>参见</dt><dd><pre class="fragment">int ret = QISRSessionEnd ( sessionID, "normal end" );
+if( MSP_SUCCESS != ret )
+{
+    printf( "QISRSessionEnd failed, error code is: %d", ret );
+}
+sessionID = NULL;</pre> </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+生成于 2017年 二月 27日 星期一 16:24:26 , 为 MSC for Windows&amp;Linux API使用  &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.9
+</small></address>
+</body>
+</html>

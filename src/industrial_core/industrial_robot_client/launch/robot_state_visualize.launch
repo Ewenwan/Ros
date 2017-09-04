@@ -1,0 +1,29 @@
+<launch>
+
+ <!--Simple launch file starts a robot visualization of the current hardware state
+    as reported by the actual robot via the robot state node
+    
+    parameters:
+        robot_ip - ip address of robot state server
+        urdf_path - urdf path and filename relative to current directory
+            (including the extension)
+
+	usage robot_state_visualize.launch robot_ip:=<value> urdf_path:=<value>
+	    
+	example:
+	robot_state_visualize.launch robot_ip:=192.168.1.10 urdf_path:= urdf/M16iB20.urdf
+ -->
+
+	<arg name="robot_ip" />
+	<arg name="urdf_path" />
+	
+	<!-- Populate parameters -->
+	<param name="robot_description" textfile="$(arg urdf_path)" />
+	<param name="robot_ip_address" type="str" value="$(arg robot_ip)"/>
+
+    <!-- Required nodes -->
+	<node name="state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
+	<node name="robot_state" pkg="industrial_robot_client" type="robot_state"/>
+
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find industrial_robot_client)/config/robot_state_visualize.rviz"/>
+</launch>

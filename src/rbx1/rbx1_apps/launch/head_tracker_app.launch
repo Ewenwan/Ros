@@ -1,0 +1,30 @@
+<launch>
+
+  <!-- The camera arg can be one of kinect, xtion, or usb -->
+  <arg name="kinect" default="false" />
+  <arg name="xtion" default="false" />
+  <arg name="usb" default="false" />
+
+  <!-- These arguments determine which vision node we run -->
+  <arg name="face" default="false" />
+  <arg name="color" default="false" />
+  <arg name="keypoints" default="false" />
+
+  <!-- Launch the appropriate camera driver -->
+  <include if="$(arg kinect)" file="$(find freenect_launch)/launch/examples/freenect-registered-xyzrgb.launch" />
+  
+  <include if="$(arg xtion)" file="$(find openni2_launch)/launch/openni2.launch">
+     <arg name="depth_registration" value="true" />
+  </include>
+  
+  <include if="$(arg usb)" file="$(find rbx1_vision)/launch/usb_cam.launch" />
+  
+  <include if="$(arg face)" file="$(find rbx1_vision)/launch/face_tracker2.launch" />
+  <include if="$(arg color)" file="$(find rbx1_vision)/launch/camshift.launch" />
+  <include if="$(arg keypoints)" file="$(find rbx1_vision)/launch/lk_tracker.launch" />
+  
+  <include file="$(find rbx1_dynamixels)/launch/dynamixels.launch" />
+
+  <include file="$(find rbx1_dynamixels)/launch/head_tracker.launch" />
+  
+</launch>

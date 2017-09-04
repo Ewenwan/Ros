@@ -1,0 +1,8 @@
+prefix=/home/ewenwan/ewenwan/catkin_ws/install
+
+Name: industrial_utils
+Description: Description of industrial_utils
+Version: 0.5.1
+Cflags: -I/home/ewenwan/ewenwan/catkin_ws/install/include
+Libs: -L/home/ewenwan/ewenwan/catkin_ws/install/lib -lindustrial_utils
+Requires: roscpp urdf

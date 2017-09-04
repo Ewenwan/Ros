@@ -1,0 +1,30 @@
+<package format="2">
+  <name>industrial_robot_simulator</name>
+  <version>0.5.1</version>
+  <description>The industrial robot simulator is a stand in for industrial robot driver node(s).  It adheres to the driver specification for industrial robot controllers.</description>
+
+  <maintainer email="sedwards@swri.org">Shaun Edwards</maintainer>
+  <license>BSD</license>
+  <url type="website">http://ros.org/wiki/industrial_robot_simulator</url>
+  <author>Shaun Edwards</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>control_msgs</depend>
+  <depend>industrial_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>trajectory_msgs</depend>
+
+  <exec_depend>industrial_robot_client</exec_depend>
+  <exec_depend>python-rospkg</exec_depend>
+  <exec_depend>rospy</exec_depend>
+
+  <test_depend version_gte="1.9.55">roslaunch</test_depend>
+  <!--
+  industrial_robot_client is included as a work-around for:
+  https://github.com/catkin/catkin_tools/issues/285, once
+  this issue is fixed and released, it can be removed
+  -->
+  <test_depend>industrial_robot_client</test_depend>
+</package>

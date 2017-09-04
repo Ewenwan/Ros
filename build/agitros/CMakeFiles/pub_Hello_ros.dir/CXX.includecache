@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ewenwan/ewenwan/catkin_ws/src/agitros/src/talker.cpp
+ros/ros.h
+/home/ewenwan/ewenwan/catkin_ws/src/agitros/src/ros/ros.h
+std_msgs/String.h
+/home/ewenwan/ewenwan/catkin_ws/src/agitros/src/std_msgs/String.h
+sstream
+-
+

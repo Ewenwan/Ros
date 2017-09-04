@@ -1,0 +1,8 @@
+prefix=/home/ewenwan/ewenwan/catkin_ws/devel
+
+Name: voice_system
+Description: Description of voice_system
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/ewenwan/ewenwan/catkin_ws/devel/lib 
+Requires: 

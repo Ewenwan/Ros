@@ -1,0 +1,21 @@
+<launch>
+  <arg name="base"       default="create"/>  <!-- create, rhoomba -->
+  <arg name="battery"    default="$(optenv TURTLEBOT_BATTERY /proc/acpi/battery/BAT0)"/>  <!-- /proc/acpi/battery/BAT0 -->
+  <arg name="stacks"     default="circles"/>  <!-- circles, hexagons -->
+  <arg name="3d_sensor"  default="kinect"/>  <!-- kinect, asus_xtion_pro -->
+  <arg name="simulation" default="$(optenv TURTLEBOT_SIMULATION false)"/>
+	
+  <param name="/use_sim_time" value="$(arg simulation)"/>
+  
+  <include file="$(find turtlebot_bringup)/launch/includes/robot.launch.xml">
+    <arg name="base" value="$(arg base)" />
+    <arg name="stacks" value="$(arg stacks)" />
+    <arg name="3d_sensor" value="$(arg 3d_sensor)" />
+  </include>
+  
+  <include file="$(find rbx1_bringup)/launch/includes/tb_create_mobile_base.launch.xml" />
+
+  <include file="$(find turtlebot_bringup)/launch/includes/netbook.launch.xml">
+    <arg name="battery" value="$(arg battery)" />
+  </include>
+</launch>

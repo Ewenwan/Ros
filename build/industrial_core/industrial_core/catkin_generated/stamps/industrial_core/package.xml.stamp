@@ -1,0 +1,23 @@
+<package>
+  <name>industrial_core</name>
+  <version>0.5.1</version>
+  <description>ROS-Industrial core stack contains packages and libraries for supporing industrial systems</description>
+
+  <maintainer email="sedwards@swri.org">Shaun Edwards</maintainer>
+  <license>BSD</license>
+  <url type="website">http://ros.org/wiki/industrial_core</url>
+  <author email="sedwards@swri.org">Shaun Edwards</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <run_depend>simple_message</run_depend>
+  <run_depend>industrial_msgs</run_depend>
+  <run_depend>industrial_robot_client</run_depend>
+  <run_depend>industrial_robot_simulator</run_depend>
+  <run_depend>industrial_deprecated</run_depend>
+  <run_depend>industrial_utils</run_depend>
+  <run_depend>industrial_trajectory_filters</run_depend>
+
+  <export>
+    <metapackage/>
+  </export>
+</package>

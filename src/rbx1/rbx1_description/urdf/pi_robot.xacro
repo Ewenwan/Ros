@@ -1,0 +1,192 @@
+<?xml version="1.0"?>
+
+<robot name="pi_robot"
+       xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+       xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+       xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+       xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <property name="PI_ROBOT_SCALE" value="0.0254"/>
+  <property name="MESH_SCALE" value="100"/>
+  <property name="GROUND_CLEARANCE" value="0.073" />
+  
+  <xacro:include filename="$(find rbx1_description)/urdf/pi_robot_head.xacro" />
+  <xacro:include filename="$(find rbx1_description)/urdf/pi_robot_arm.xacro" />
+
+  <material name="Green">
+    <color rgba="0.0 0.8 0.0 1.0"/>
+  </material>
+  
+  <material name="OffWhite">
+    <color rgba="0.8 0.8 0.8 0.9"/>
+  </material>
+
+  <!-- base_footprint is a fictitious link(frame) that is on the ground right below base_link origin, navigation stack depends on this frame -->
+  <!--
+  <link name="base_footprint">
+    <inertial>
+      <mass value="0.0001" />
+      <origin xyz="0 0 0" />
+      <inertia ixx="0.0001" ixy="0.0" ixz="0.0"
+              iyy="0.0001" iyz="0.0" 
+              izz="0.0001" />
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.05 0.05 0.001" />
+      </geometry>
+         <material name="green">
+            <color rgba="0.2 0.8 0.2 1.0"/>
+         </material>   
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+       <box size="0.001 0.001 0.001" />
+      </geometry>
+    </collision>
+  </link>
+  -->
+
+  <link name="base_link">
+    <inertial>
+      <mass value="5.0" />
+      <origin xyz="0 0 0" />
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0"
+          iyy="1.0" iyz="0.0"
+          izz="1.0" />
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 ${GROUND_CLEARANCE}" rpy="0 0 -1.57" />
+      <geometry>
+         <!--
+         <cylinder length="0.3" radius=".15"/>
+         -->
+          <mesh filename="package://rbx1_description/meshes/pi_robot.dae" scale="${PI_ROBOT_SCALE} ${PI_ROBOT_SCALE} ${PI_ROBOT_SCALE}"/>
+      </geometry>
+      <material name="grey">
+	    <color rgba="0.1 0.1 0.1 10"/>
+	  </material>
+    </visual>
+
+    <collision>
+       <origin xyz="0 0 0.16" rpy="0 0 0" />
+       <geometry>
+          <cylinder length="0.32" radius=".15"/>
+       </geometry>
+     </collision>
+  </link>
+
+  <!--
+  <joint name="base_joint" type="fixed">
+    <origin xyz="0 0 -0.073" rpy="0 0 0" />        
+    <parent link="base_link"/>
+    <child link="base_footprint" />
+  </joint>
+  -->
+  
+  <link name="base_laser_bottom">
+	 <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.05 0.05 0.041" />
+      </geometry>
+        <material name="black">
+           <color rgba="0.1 0.1 0.1 1.0"/>
+        </material>          
+     </visual>
+     <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.05 0.05 0.041" />
+      </geometry>
+       </collision>
+	 <inertial>
+       <mass value="0.1" />
+         <inertia ixx="0.001" ixy="0.0" ixz="0.0"
+                   iyy="0.001" iyz="0.0"
+                   izz="0.001" />                     
+      </inertial>
+  </link>
+  
+  <joint name="base_laser_bottom_joint" type="fixed">
+     <parent link="base_link"/>
+     <child link="base_laser_bottom" />
+     <origin xyz="0.123 0 ${0.0265 + GROUND_CLEARANCE}" rpy="0 0 0" />
+   </joint>
+   
+  <link name="base_laser_middle">
+	 <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+		<geometry>
+          <cylinder length="0.0115" radius=".02"/>
+        </geometry>
+        <material name="dark_grey">
+           <color rgba="0.2 0.2 0.2 1.0"/>
+        </material>        
+     </visual>
+     <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+		 <geometry>
+          <cylinder length="0.0115" radius=".02"/>
+         </geometry>
+       </collision>
+	 <inertial>
+       <mass value="0.1" />
+         <inertia ixx="0.001" ixy="0.0" ixz="0.0"
+                   iyy="0.001" iyz="0.0"
+                   izz="0.001" />                     
+      </inertial>
+   </link>
+   
+  <joint name="base_laser_middle_joint" type="fixed">
+     <parent link="base_laser_bottom"/>
+     <child link="base_laser_middle" />
+     <origin xyz="0 0 0.02625" rpy="0 0 0" />
+   </joint>
+   
+  <link name="base_laser">
+	 <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+		<geometry>
+          <cylinder length="0.0175" radius=".0185"/>
+        </geometry>
+        <material name="red">
+           <color rgba="0.8 0.1 0.1 1.0"/>
+        </material>          
+     </visual>
+     <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+		 <geometry>
+          <cylinder length="0.0175" radius=".0185"/>
+         </geometry>
+       </collision>
+	 <inertial>
+       <mass value="0.1" />
+         <inertia ixx="0.001" ixy="0.0" ixz="0.0"
+                   iyy="0.001" iyz="0.0"
+                   izz="0.001" />                     
+      </inertial>
+   </link>
+    
+   <joint name="base_laser_joint" type="fixed">
+     <parent link="base_laser_middle"/>
+     <child link="base_laser" />
+     <origin xyz="0 0 0.0145" rpy="0 0 0" />
+   </joint>
+    
+   <!-- Attach the head -->
+   <pi_robot_head parent="base_link" color="white">
+     <origin xyz="${0.088 - AX12_DEPTH/2} 0 ${0.798 + GROUND_CLEARANCE}"/>
+   </pi_robot_head>
+   
+    <!-- Attach the arm -->
+    <pi_robot_arm parent="base_link" color="white" gripper_color="green">
+      <origin xyz="0.125 ${AX12_DEPTH + 0.012} ${AX12_HEIGHT + 0.55 + GROUND_CLEARANCE}" rpy="0 0 1.57" />
+    </pi_robot_arm>
+   
+</robot>

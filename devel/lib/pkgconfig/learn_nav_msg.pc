@@ -1,0 +1,8 @@
+prefix=/home/ewenwan/ewenwan/catkin_ws/devel
+
+Name: learn_nav_msg
+Description: Description of learn_nav_msg
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/ewenwan/ewenwan/catkin_ws/devel/lib 
+Requires: 

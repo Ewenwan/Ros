@@ -1,0 +1,7 @@
+# Direct method of turning drive power on and off
+# NOTE: Motion commands will automatically to this if
+# drive power is not on and a motion command is received.
+
+bool drive_power
+---
+industrial_msgs/ServiceReturnCode code

@@ -1,0 +1,27 @@
+ <launch>
+    <!-- Turtlesim Node 节点 命名为 sim -->
+    <node pkg="turtlesim" type="turtlesim_node" name="sim"/>
+    <!-- Turtle_teleop_key Node 键盘控制节点 命名为 teleop -->
+    <node pkg="turtlesim" type="turtle_teleop_key" name="teleop" output="screen"/>
+    
+    <!-- Axes 坐标 线速度 角速度尺度-->
+    <param name="scale_linear" value="2" type="double"/>
+    <param name="scale_angular" value="2" type="double"/>
+    
+    <!-- 广播/turtle1 坐标的 坐标变换广播 turtle1_tf_broadcaster-->
+    <node pkg="learning_tf" type="turtle_tf_broadcaster"
+          args="/turtle1" name="turtle1_tf_broadcaster" />
+          
+    <!-- 广播/turtle2 坐标的 坐标变换广播 turtle2_tf_broadcaster-->        
+    <node pkg="learning_tf" type="turtle_tf_broadcaster"
+          args="/turtle2" name="turtle2_tf_broadcaster" />
+          
+    <!-- 监听/turtle1  /turtle2 坐标的坐标变换监听 turtle_tf_listener-->       
+    <node pkg="learning_tf" type="turtle_tf_listener"
+          name="listener" />
+    <!-- 为/turtle1添加子坐标系 add_frame_tf_broadcaster 与/turtle1固定距离-->       
+    <node pkg="learning_tf" type="add_frame"
+          name="add_frame_tf_broadcaster" />
+          
+          
+  </launch>

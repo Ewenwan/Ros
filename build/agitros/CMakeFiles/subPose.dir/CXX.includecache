@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ewenwan/ewenwan/catkin_ws/src/agitros/src/SubPose.cpp
+ros/ros.h
+-
+turtlesim/Pose.h
+-
+iomanip
+-
+

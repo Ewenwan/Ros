@@ -1,0 +1,8 @@
+prefix=/home/ewenwan/ewenwan/catkin_ws/devel
+
+Name: using_markers_rviz
+Description: Description of using_markers_rviz
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/ewenwan/ewenwan/catkin_ws/devel/lib 
+Requires: 

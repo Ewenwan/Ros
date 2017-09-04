@@ -1,0 +1,13 @@
+<package>
+  <name>ros_arduino_firmware</name>
+  <version>0.2.0</version>
+  <description>
+    ROS Arduino Firmware.
+  </description>
+  <author>Patrick Goebel</author>
+  <maintainer email="patrick@pirobot.org">Patrick Goebel</maintainer>
+  <license>BSD</license>
+  <url>http://ros.org/wiki/ros_arduino_firmware</url>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+</package>

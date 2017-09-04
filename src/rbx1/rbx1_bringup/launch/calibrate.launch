@@ -1,0 +1,16 @@
+<launch>
+  <include file="$(find rbx1_bringup)/launch/fake_laser.launch"/>
+
+  <node pkg="turtlebot_calibration" type="scan_to_angle.py" name="scan_to_angle" >
+    <param name="min_angle" value="-0.3" />
+    <param name="max_angle" value="0.3" />
+  </node>
+
+  <node pkg="turtlebot_calibration" type="calibrate.py" name="turtlebot_calibration" output="screen" required="true">
+    <remap from="imu" to="mobile_base/sensors/imu_data_raw" />
+    <remap from="cmd_vel" to="mobile_base/commands/velocity" />
+    <remap from="scan_angle" to="scan_angle" />
+    <remap from="odom" to="odom" />
+  </node>
+
+</launch>

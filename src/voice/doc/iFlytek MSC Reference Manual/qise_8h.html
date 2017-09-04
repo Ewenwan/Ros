@@ -1,0 +1,534 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.9"/>
+<title>MSC for Windows&amp;Linux API: qise.h 文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { init_search(); });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">MSC for Windows&amp;Linux API
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.9 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+</script>
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>首页</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="搜索" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#func-members">函数</a>  </div>
+  <div class="headertitle">
+<div class="title">qise.h 文件参考</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>iFLY Speech Evaluation Header File  
+<a href="#details">更多...</a></p>
+
+<p><a href="qise_8h_source.html">浏览源代码.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+函数</h2></td></tr>
+<tr class="memitem:a4bffbcea9f255da99ee22aad62708211"><td class="memItemLeft" align="right" valign="top">const char *MSPAPI&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="qise_8h.html#a4bffbcea9f255da99ee22aad62708211">QISESessionBegin</a> (const char *params, const char *userModelId, int *errorCode)</td></tr>
+<tr class="memdesc:a4bffbcea9f255da99ee22aad62708211"><td class="mdescLeft">&#160;</td><td class="mdescRight">开始一次语评测。  <a href="#a4bffbcea9f255da99ee22aad62708211">更多...</a><br /></td></tr>
+<tr class="separator:a4bffbcea9f255da99ee22aad62708211"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08f4552a392de5667b75329125f1873b"><td class="memItemLeft" align="right" valign="top">int MSPAPI&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="qise_8h.html#a08f4552a392de5667b75329125f1873b">QISETextPut</a> (const char *sessionID, const char *textString, unsigned int textLen, const char *params)</td></tr>
+<tr class="memdesc:a08f4552a392de5667b75329125f1873b"><td class="mdescLeft">&#160;</td><td class="mdescRight">写入待评测的文本。  <a href="#a08f4552a392de5667b75329125f1873b">更多...</a><br /></td></tr>
+<tr class="separator:a08f4552a392de5667b75329125f1873b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3cfd5070e9b90971f4695cb42d0d5a46"><td class="memItemLeft" align="right" valign="top">int MSPAPI&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="qise_8h.html#a3cfd5070e9b90971f4695cb42d0d5a46">QISEAudioWrite</a> (const char *sessionID, const void *waveData, unsigned int waveLen, int audioStatus, int *epStatus, int *Status)</td></tr>
+<tr class="memdesc:a3cfd5070e9b90971f4695cb42d0d5a46"><td class="mdescLeft">&#160;</td><td class="mdescRight">写入本次评测的音频。  <a href="#a3cfd5070e9b90971f4695cb42d0d5a46">更多...</a><br /></td></tr>
+<tr class="separator:a3cfd5070e9b90971f4695cb42d0d5a46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3749ae7c9cfb830301dea93ee8c626f3"><td class="memItemLeft" align="right" valign="top">const char *MSPAPI&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="qise_8h.html#a3749ae7c9cfb830301dea93ee8c626f3">QISEGetResult</a> (const char *sessionID, unsigned int *rsltLen, int *rsltStatus, int *errorCode)</td></tr>
+<tr class="memdesc:a3749ae7c9cfb830301dea93ee8c626f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取评测结果。  <a href="#a3749ae7c9cfb830301dea93ee8c626f3">更多...</a><br /></td></tr>
+<tr class="separator:a3749ae7c9cfb830301dea93ee8c626f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10031b2946a4c3cd44e6bfc5590a718a"><td class="memItemLeft" align="right" valign="top">int MSPAPI&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="qise_8h.html#a10031b2946a4c3cd44e6bfc5590a718a">QISESessionEnd</a> (const char *sessionID, const char *hints)</td></tr>
+<tr class="memdesc:a10031b2946a4c3cd44e6bfc5590a718a"><td class="mdescLeft">&#160;</td><td class="mdescRight">结束本次语音评测。  <a href="#a10031b2946a4c3cd44e6bfc5590a718a">更多...</a><br /></td></tr>
+<tr class="separator:a10031b2946a4c3cd44e6bfc5590a718a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<div class="textblock"><p>iFLY Speech Evaluation Header File </p>
+<p>This file contains the quick application programming interface (API) declarations of evaluation. Developer can include this file in your project to build applications. For more information, please read the developer guide.</p>
+<p>Use of this software is subject to certain restrictions and limitations set forth in a license agreement entered into between iFLYTEK, Co,LTD. and the licensee of this software. Please refer to the license agreement for license use rights and restrictions.</p>
+<p>Copyright (C) 1999 - 2012 by ANHUI USTC iFLYTEK, Co,LTD. All rights reserved.</p>
+<dl class="section author"><dt>作者</dt><dd>Speech Dept. iFLYTEK. </dd></dl>
+<dl class="section version"><dt>版本</dt><dd>1.0 </dd></dl>
+<dl class="section date"><dt>日期</dt><dd>2012/4/16</dd></dl>
+<dl class="section see"><dt>参见</dt><dd></dd></dl>
+<p><b>History:</b><br />
+ </p><table class="doxtable">
+<tr>
+<th>Version </th><th>Date </th><th>Author </th><th>Notes </th></tr>
+<tr>
+<td>1.0 </td><td>2012/4/16 </td><td>MSP40 </td><td>Create this file </td></tr>
+</table>
+</div><h2 class="groupheader">函数说明</h2>
+<a class="anchor" id="a3cfd5070e9b90971f4695cb42d0d5a46"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int MSPAPI QISEAudioWrite </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>sessionID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>waveData</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>waveLen</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>audioStatus</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>epStatus</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>Status</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>写入本次评测的音频。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sessionID[in]</td><td>由QISESessionBegin返回的句柄。 </td></tr>
+    <tr><td class="paramname">waveData[in]</td><td>音频数据缓冲区起始地址。 </td></tr>
+    <tr><td class="paramname">waveLen[in]</td><td>音频数据长度,单位字节。 </td></tr>
+    <tr><td class="paramname">audioStatus[in]</td><td>用来告知MSC音频发送是否完成，典型值如下： <table class="doxtable">
+<tr>
+<th>枚举常量 </th><th>描述  </th></tr>
+<tr>
+<td>MSP_AUDIO_SAMPLE_FIRST = 1 </td><td>第一块音频  </td></tr>
+<tr>
+<td>MSP_AUDIO_SAMPLE_CONTINUE = 2 </td><td>还有后继音频  </td></tr>
+<tr>
+<td>MSP_AUDIO_SAMPLE_LAST = 4 </td><td>最后一块音频  </td></tr>
+</table>
+</td></tr>
+    <tr><td class="paramname">epStatus[out]</td><td>端点检测（End-point detected）器所处的状态,可能的值如下： <table class="doxtable">
+<tr>
+<th>枚举常量 </th><th>描述  </th></tr>
+<tr>
+<td>MSP_EP_LOOKING_FOR_SPEECH = 0 </td><td>还没有检测到音频的前端点  </td></tr>
+<tr>
+<td>MSP_EP_IN_SPEECH = 1 </td><td>已经检测到了音频前端点，正在进行正常的音频处理  </td></tr>
+<tr>
+<td>MSP_EP_AFTER_SPEECH = 3 </td><td>检测到音频的后端点，后继的音频会被MSC忽略  </td></tr>
+<tr>
+<td>MSP_EP_TIMEOUT = 4 </td><td>超时  </td></tr>
+<tr>
+<td>MSP_EP_ERROR = 5 </td><td>出现错误  </td></tr>
+<tr>
+<td>MSP_EP_MAX_SPEECH = 6 </td><td>音频过大  </td></tr>
+</table>
+<b>注意：当epStatus大于等于3时,用户应当停止写入音频的操作,否则写入MSC的音频会被忽略。</b> </td></tr>
+    <tr><td class="paramname">recogStatus[out]</td><td>评测器返回的状态，提醒用户及时开始\停止获取评测结果。典型值如下： <table class="doxtable">
+<tr>
+<th>枚举常量 </th><th>描述  </th></tr>
+<tr>
+<td>MSP_REC_STATUS_SUCCESS = 0 </td><td>评测成功，有评测结果返回  </td></tr>
+<tr>
+<td>MSP_REC_STATUS_NO_MATCH = 1 </td><td>评测结束，没有评测结果  </td></tr>
+<tr>
+<td>MSP_REC_STATUS_INCOMPLETE = 2 </td><td>正在评测  </td></tr>
+<tr>
+<td>MSP_REC_STATUS_COMPLETE = 5 </td><td>评测结束，有评测结果返回  </td></tr>
+</table>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>函数调用成功返回MSP_SUCCESS，否则返回错误代码，<a href="http://open.voicecloud.cn/index.php/default/doccenter/doccenterInner?itemTitle=ZmFx&amp;anchor=Y29udGl0bGU2Ng==" target="_blank">详见错误码列表</a>。 </dd></dl>
+<dl class="section remark"><dt>备注</dt><dd>本接口需不断调用，直到音频全部写入为止。上传音频时，需更新audioStatus的值。具体来说:<br />
+<b>当写入首块音频时,将audioStatus置为MSP_AUDIO_SAMPLE_FIRST<br />
+当写入最后一块音频时,将audioStatus置为MSP_AUDIO_SAMPLE_LAST<br />
+其余情况下,将audioStatus置为MSP_AUDIO_SAMPLE_CONTINUE</b><br />
+同时，需定时检查两个变量：epStatus和rsltStatus。具体来说:<br />
+<b>当epStatus显示已检测到后端点时，MSC已不再接收音频，应及时停止音频写入<br />
+当rsltStatus显示有评测结果返回时，即可从MSC缓存中获取结果</b></dd></dl>
+<dl class="section see"><dt>参见</dt><dd><pre class="fragment">char audio_data[5120] ={'\0'};
+unsigned int   audio_len = 0;
+int audio_status = 2;
+int ep_status = 0;
+int rec_status = 0;
+int ret = 0;
+while(MSP_AUDIO_SAMPLE_LAST != audio_status )
+{
+    // 读取音频到缓冲区audio_data中,设置音频长度audio_len,音频状态audio_status。
+    ret = QISEAudioWrite( sessionID, audio_data, audio_len, audio_status, &amp;ep_status, &amp;rec_status );
+    if( MSP_SUCCESS != ret )
+    {
+        printf( "QISEAudioWrite failed, error code is: %d", ret );
+        break;
+    }
+    else if(MSP_EP_AFTER_SPEECH == ep_status )//检测到音频后端点,停止写入音频 
+    {
+        printf( "end point of speech has been detected!" );
+        break;
+    }
+    //如果是实时采集音频,可以省略此操作。5KB大小的16KPCM持续的时间是160毫秒 
+    Sleep( 160 );  
+}
+.</pre> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a3749ae7c9cfb830301dea93ee8c626f3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* MSPAPI QISEGetResult </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>sessionID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int *&#160;</td>
+          <td class="paramname"><em>rsltLen</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>rsltStatus</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>errorCode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>获取评测结果。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sessionID[in]</td><td>由QISESessionBegin返回的句柄。 </td></tr>
+    <tr><td class="paramname">rsltStatus[out]</td><td>评测结果的状态,其取值范围和含义请参考QISEAudioWrite的参数recogStatus。 </td></tr>
+    <tr><td class="paramname">waitTime[in]</td><td>此参数做保留用。 </td></tr>
+    <tr><td class="paramname">errorCode[out]</td><td>函数调用成功返回MSP_SUCCESS，否则返回错误代码，<a href="http://open.voicecloud.cn/index.php/default/doccenter/doccenterInner?itemTitle=ZmFx&amp;anchor=Y29udGl0bGU2Ng==" target="_blank">详见错误码列表</a>。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>函数执行成功且有评测结果时，返回结果字符串指针；其他情况(失败或无结果)返回NULL。</dd></dl>
+<dl class="section remark"><dt>备注</dt><dd>当写入音频过程中已经有部分评测结果返回时，可以获取结果。在音频写入完毕后，用户需反复调用此接口，直到评测结果获取完毕（rlstStatus值为5）或返回错误码。<br />
+<b>注意：如果某次成功调用后暂未获得评测结果，请将当前线程sleep一段时间，以防频繁调用浪费CPU资源。</b></dd></dl>
+<dl class="section see"><dt>参见</dt><dd><pre class="fragment">char rslt_str[2048] ={'\0'};
+const char* rec_result = NULL;
+int rslt_status = 0;
+int ret = 0;
+while(MSP_REC_STATUS_COMPLETE != rslt_status )
+{
+    rec_result = QISEGetResult ( sessionID, &amp;rslt_status, 5000, &amp;ret );
+    if( MSP_SUCCESS != ret )
+    {
+        printf( "QISEGetResult failed, error code is: %d", ret );
+        break;
+    }
+    if( NULL != rec_result )
+    {
+        strcat( rslt_str, rec_result );//用户可以用其他的方式保存评测结果
+        continue;
+    }
+    //sleep一下很有必要,防止MSC端无缓存的评测结果时浪费CPU资源
+    Sleep( 200 );
+}
+.</pre> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a4bffbcea9f255da99ee22aad62708211"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* MSPAPI QISESessionBegin </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>userModelId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>errorCode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>开始一次语评测。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">params[in]</td><td>本次评测参数，可设置的参数列表如下: <table class="doxtable">
+<tr>
+<th>参数 </th><th>参数说明 </th><th>值  </th></tr>
+<tr>
+<td>sub </td><td>本次评测请求的类型 </td><td>ise  </td></tr>
+<tr>
+<td>aue </td><td>音频编码格式和压缩等级 </td><td>编码算法：raw；speex；speex-wb；ico<br />
+编码等级：raw：无等级。speex系列：0-10；<br />
+默认为speex-wb;7<br />
+<b>speex对应audio/L16;rate=8000<br />
+speex-wb对应audio/L16;rate=16000<br />
+ico对应audio/L16;rate=16000</b>  </td></tr>
+<tr>
+<td>auf </td><td>音频格式 </td><td>audio/L16;rate=8000<br />
+audio/L16;rate=16000<br />
+默认为audio/L16;rate=16000  </td></tr>
+<tr>
+<td>rse </td><td>评测结果字符串所用编码格式 </td><td>gb2312  </td></tr>
+<tr>
+<td>vad_timeout </td><td>允许头部静音的最长时间 </td><td>0-10000毫秒。默认为10000<br />
+如果静音时长超过了此值，则认为用户此次无有效音频输入。此参数仅在打开VAD功能时有效。  </td></tr>
+<tr>
+<td>vad_speech_tail </td><td>允许尾部静音的最长时间 </td><td>0-10000毫秒。默认为2000<br />
+如果尾部静音时长超过了此值，则认为用户音频已经结束，此参数仅在打开VAD功能时有效。  </td></tr>
+<tr>
+<td>vad_enable </td><td>VAD功能开关 </td><td>是否启用VAD <br />
+ 默认为开启VAD <br />
+ 0（或false）为关闭 </td></tr>
+<tr>
+<td>category </td><td>评测类型 </td><td>read_syllable<b>(不支持language=en_us)</b><br />
+read_word<br />
+read_sentence  </td></tr>
+<tr>
+<td>language </td><td>评测语言 </td><td>zh_cn:简体中文<br />
+en_us:英语<br />
+默认为zh_cn  </td></tr>
+</table>
+<b>注意:没有默认值的参数必须由外部设定其值</b><br />
+ </td></tr>
+    <tr><td class="paramname">userModelId[in]</td><td>此参数保留，传入NULL即可。 </td></tr>
+    <tr><td class="paramname">errorCode[out]</td><td>函数调用成功则其值为MSP_SUCCESS，否则返回错误代码，<a href="http://open.voicecloud.cn/index.php/default/doccenter/doccenterInner?itemTitle=ZmFx&amp;anchor=Y29udGl0bGU2Ng==" target="_blank">详见错误码列表</a>。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>函数调用成功返回字符串格式的sessionID，失败返回NULL。sessionID是本次评测的句柄。</dd></dl>
+<dl class="section remark"><dt>备注</dt><dd>参数只在当次评测中生效.</dd></dl>
+<dl class="section see"><dt>参见</dt><dd><pre class="fragment">const char * params = "sub=ise,category=read_syllable,language=zh_cn,aue=speex-wb;7,auf=audio/L16;rate=16000";
+int    ret = 0;
+const char* sessionID = QISESessionBegin( params,NULL,&amp;ret );
+if( MSP_SUCCESS != ret )
+{
+    printf( "QISESessionBegin failed, error code is: %d", ret );
+}
+.</pre> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a10031b2946a4c3cd44e6bfc5590a718a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int MSPAPI QISESessionEnd </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>sessionID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>hints</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>结束本次语音评测。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sessionID[in]</td><td>由QISESessionBegin返回的句柄。 </td></tr>
+    <tr><td class="paramname">hints[in]</td><td>结束本次语音评测的原因描述，为用户自定义内容。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>函数调用成功返回MSP_SUCCESS，否则返回错误代码，<a href="http://open.voicecloud.cn/index.php/default/doccenter/doccenterInner?itemTitle=ZmFx&amp;anchor=Y29udGl0bGU2Ng==" target="_blank">详见错误码列表</a>。 </dd></dl>
+<dl class="section remark"><dt>备注</dt><dd>本接口和QISESessionBegin对应,调用此接口后，该句柄对应的相关资源都会被释放，用户不应再使用该句柄。</dd></dl>
+<dl class="section see"><dt>参见</dt><dd><pre class="fragment">int ret = QISESessionEnd ( sessionID, "normal end" );
+if( MSP_SUCCESS != ret )
+{
+    printf( "QISESessionEnd failed, error code is: %d", ret );
+}
+sessionID = NULL;</pre> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a08f4552a392de5667b75329125f1873b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int MSPAPI QISETextPut </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>sessionID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>textString</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>textLen</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>params</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>写入待评测的文本。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sessionID[in]</td><td>由QISESessionBegin返回的句柄。 </td></tr>
+    <tr><td class="paramname">textString[in]</td><td>字符串指针。指向待评测的文本字符串。 </td></tr>
+    <tr><td class="paramname">textLen[in]</td><td>评测文本长度,最大支持4194304个字节（不含’\0’）。 </td></tr>
+    <tr><td class="paramname">params[in]</td><td>本次评测所用的参数，只对本次评测的文本有效。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>函数调用成功返回MSP_SUCCESS，否则返回错误代码。<a href="http://open.voicecloud.cn/index.php/default/doccenter/doccenterInner?itemTitle=ZmFx&amp;anchor=Y29udGl0bGU2Ng==" target="_blank">详见错误码列表</a>。</dd></dl>
+<dl class="section see"><dt>参见</dt><dd><pre class="fragment">const char* src_text = “科大讯飞股份有限公司”;
+unsigned int text_len = strlen(src_text); //textLen参数为评测文本所占字节数
+int ret = QISETextPut( sessionID, src_text, text_len, NULL );
+if( MSP_SUCCESS != ret )
+{
+    printf( QISETextPut failed, error code is: %d”, ret );
+}
+.</pre> </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+生成于 2017年 二月 27日 星期一 16:24:26 , 为 MSC for Windows&amp;Linux API使用  &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.9
+</small></address>
+</body>
+</html>

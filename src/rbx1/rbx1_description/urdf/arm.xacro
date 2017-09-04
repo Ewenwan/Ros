@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+
+<robot name="arm" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find rbx1_description)/urdf/arm_hardware.xacro" />
+
+  <material name="white">
+    <color rgba="0.87 0.90 0.87 1.0"/>
+  </material>
+  <material name="black">
+    <color rgba="0.0 0.0 0.0 1.0"/>
+  </material>
+  <material name="green">
+    <color rgba="0.22 0.32 0.14 1.0"/>
+  </material>
+
+  <macro name="turtlebot_arm" params="parent color gripper_color *origin"> 
+    <link name="arm_base_link" />     
+    <joint name="arm_base_joint" type="fixed">
+      <insert_block name="origin" />
+      <parent link="${parent}"/>
+      <child link="arm_base_link" />
+    </joint>
+
+    <!-- fake gripper_link joint -->
+    <link name="gripper_link" />
+    <joint name="gripper_link_joint" type="fixed">
+      <origin xyz="0 0 .112" rpy="0 -${M_PI/2} 0" />
+      <parent link="bioloid_F2_0_link"/>
+      <child link="gripper_link" />
+    </joint>
+
+	<!-- arm base plate (needed for collision awareness) -->
+	<arm_head_base_plate parent="arm_base_link" number="0" x_loc="0.035" y_loc="-0.0175" z_loc="0" color="green"/>
+	
+    <!-- shoulder pan joint -->
+    <dynamixel_AX12_fixed parent="arm_base_link" number="0" x_loc="0." y_loc="0" z_loc="${-AX12_WIDTH/2}" r="${M_PI/2}" p="0" y="${M_PI/2}"/>
+    <bioloid_F3_revolute parent="dynamixel_AX12_0_link" number="0" joint_name="arm_shoulder_pan" x_loc="0" y_loc="${AX12_WIDTH/2 + 0.005}" z_loc="0" r="${-M_PI/2}" p="${M_PI/2}" y="${-M_PI}" color="${color}"/>
+    <dynamixel_AX12_fixed parent="bioloid_F3_0_link" number="1" x_loc="0" y_loc="0" z_loc="${-AX12_HEIGHT-F10_HEIGHT+0.001}" r="0" p="${M_PI}" y="0"/>
+    <!--shoulder lift joint -->
+    <bioloid_F4_revolute parent="dynamixel_AX12_1_link" number="0" joint_name="arm_shoulder_lift" x_loc="0" y_loc="0" z_loc="0" color="${color}"/>
+    <bioloid_F10_fixed parent="bioloid_F4_0_link" number="0" x_loc="0" y_loc="0" z_loc="${F4_HEIGHT+F10_HEIGHT/2}" color="${color}"/>
+    <bioloid_F10_fixed parent="bioloid_F10_0_link" number="1" x_loc="0" y_loc="0" z_loc="${F10_HEIGHT}" color="${color}"/>
+    <bioloid_F10_fixed parent="bioloid_F10_1_link" number="2" x_loc="0" y_loc="0" z_loc="${F10_HEIGHT}" color="${color}"/>
+    <bioloid_F3_fixed parent="bioloid_F10_2_link" number="1" x_loc="0" y_loc="0" z_loc="${F10_HEIGHT/2}" r="0" p="${M_PI}" y="0" color="${color}"/>
+    <!--elbow joint -->
+    <dynamixel_AX12_fixed parent="bioloid_F3_1_link" number="2" x_loc="0" y_loc="0" z_loc="${-AX12_HEIGHT-F10_HEIGHT+0.001}" r="0" p="${M_PI}" y="0"/>
+    <bioloid_F4_revolute parent="dynamixel_AX12_2_link" number="1" joint_name="arm_elbow_flex" x_loc="0" y_loc="0" z_loc="0" color="${color}"/>
+    <bioloid_F10_fixed parent="bioloid_F4_1_link" number="3" x_loc="0" y_loc="0" z_loc="${F4_HEIGHT+F10_HEIGHT/2}" color="${color}"/>
+    <bioloid_F10_fixed parent="bioloid_F10_3_link" number="4" x_loc="0" y_loc="0" z_loc="${F10_HEIGHT}" color="${color}"/>
+    <bioloid_F10_fixed parent="bioloid_F10_4_link" number="5" x_loc="0" y_loc="0" z_loc="${F10_HEIGHT}" color="${color}"/>
+    <bioloid_F3_fixed parent="bioloid_F10_5_link" number="2" x_loc="0" y_loc="0" z_loc="${F10_HEIGHT/2}" r="0" p="${M_PI}" y="0" color="${color}"/>
+    <!--wrist joint-->
+    <dynamixel_AX12_fixed parent="bioloid_F3_2_link" number="3" x_loc="0" y_loc="0" z_loc="${-AX12_HEIGHT-F10_HEIGHT+0.001}" r="0" p="${M_PI}" y="0"/>
+    <bioloid_F2_revolute parent="dynamixel_AX12_3_link" number="0" joint_name="arm_wrist_flex" x_loc="0" y_loc="0" z_loc="0" ulimit="2.9" llimit="-2.9" color="${color}"/>
+    <bioloid_F3_fixed parent="bioloid_F2_0_link" number="3" x_loc="0.000" y_loc="0.016" z_loc="${F2_HEIGHT}" r="0" p="${M_PI}" y="${-M_PI/2}" color="${color}"/>
+    <!--gripper joint -->
+    <dynamixel_AX12_fixed parent="bioloid_F3_3_link" number="4" x_loc="-0.02275" y_loc="0" z_loc="${-AX12_WIDTH/2}" r="${M_PI}" p="${M_PI/2}" y="0"/>
+    <!--finger 1-->
+    <bioloid_F2_revolute parent="dynamixel_AX12_4_link" number="1" joint_name="gripper" x_loc="0" y_loc="0" z_loc="0" ulimit="0.50" llimit="-0.60" color="${color}"/>
+    <finger_fixed parent="bioloid_F2_1_link" number="0" x_loc="0" y_loc="0" z_loc="${F2_HEIGHT}" r="0" p="0" y="0" color="${gripper_color}"/>
+    <!--finger 2-->
+    <bioloid_F3_fixed parent="dynamixel_AX12_4_link" number="4" x_loc="0" y_loc="0" z_loc="${-AX12_HEIGHT-F10_HEIGHT+0.001}" r="0" p="${M_PI}" y="0" color="${color}"/>
+    <finger_fixed parent="bioloid_F3_4_link" number="1" x_loc="0" y_loc="0" z_loc="0" r="0" p="0" y="${M_PI}" color="${gripper_color}"/>
+  </macro>
+
+</robot>

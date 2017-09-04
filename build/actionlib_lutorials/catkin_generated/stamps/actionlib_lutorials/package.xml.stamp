@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<package>
+  <name>actionlib_lutorials</name>
+  <version>0.0.0</version>
+  <description>The actionlib_lutorials package</description>
+
+  <!-- 维护者 -->
+  <maintainer email="1631684@tongji.edu.cn">ewenwan</maintainer>
+
+  <license>TODO</license>
+
+  <!-- 相关网址-->
+  <!-- <url type="website">http://wiki.ros.org/actionlib_lutorials</url> -->
+  <!-- 作者 -->
+  <!-- <author email="jane.doe@example.com">Jane Doe</author> -->
+
+
+ <!-- 编译工具依赖 -->
+  <buildtool_depend>catkin</buildtool_depend>
+  <!-- 编译依赖 --> 
+  <build_depend>actionlib</build_depend>
+  <build_depend>actionlib_msg</build_depend>
+  <build_depend>message_generation</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>std_msgs</build_depend>
+  
+  <build_depend>angles</build_depend>
+  <build_depend>rosconsole</build_depend>
+  <build_depend>turtlesim</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  
+  <!-- 运行依赖 --> 
+  <run_depend>actionlib</run_depend>
+  <run_depend>actionlib_msg</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>std_msgs</run_depend>
+  
+  <run_depend>angles</run_depend>
+  <run_depend>rosconsole</run_depend>
+  <run_depend>turtlesim</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>message_runtime</run_depend>
+  
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <!-- Other tools can request additional information be placed here -->
+
+  </export>
+</package>

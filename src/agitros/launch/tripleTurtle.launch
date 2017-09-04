@@ -1,0 +1,19 @@
+<launch>
+   <include file ="$(find agitros)/launch/doubleTurtle.launch"/>
+   
+   <!-- 参数名：use_sim3 默认值为：0 -->
+   <arg   name="use_sim3"   default ="0" />
+   
+   <group ns="sim3" if="$( arg use_sim3 )" >
+     <node
+      name="turtlesim_node"
+      pkg="turtlesim"
+      type="turtlesim_node"/>
+     <node
+      pkg="turtlesim"
+      type="turtle_teleop_key"
+      name="teleop_key"
+      required="true"
+      launch-prefix="xterm -e"/>
+   </group>
+</launch>

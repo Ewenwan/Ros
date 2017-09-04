@@ -1,0 +1,8 @@
+prefix=/home/ewenwan/ewenwan/catkin_ws/devel
+
+Name: industrial_robot_simulator
+Description: Description of industrial_robot_simulator
+Version: 0.5.1
+Cflags: 
+Libs: -L/home/ewenwan/ewenwan/catkin_ws/devel/lib 
+Requires: std_msgs sensor_msgs control_msgs trajectory_msgs

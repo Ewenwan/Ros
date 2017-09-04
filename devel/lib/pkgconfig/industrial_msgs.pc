@@ -1,0 +1,8 @@
+prefix=/home/ewenwan/ewenwan/catkin_ws/devel
+
+Name: industrial_msgs
+Description: Description of industrial_msgs
+Version: 0.5.1
+Cflags: -I/home/ewenwan/ewenwan/catkin_ws/devel/include
+Libs: -L/home/ewenwan/ewenwan/catkin_ws/devel/lib 
+Requires: message_runtime std_msgs trajectory_msgs genmsg

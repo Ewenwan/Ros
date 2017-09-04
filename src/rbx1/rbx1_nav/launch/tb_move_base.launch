@@ -1,0 +1,11 @@
+<launch>
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" clear_params="true">
+    <rosparam file="$(find rbx1_nav)/config/turtlebot/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find rbx1_nav)/config/turtlebot/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find rbx1_nav)/config/turtlebot/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find rbx1_nav)/config/turtlebot/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find rbx1_nav)/config/turtlebot/base_local_planner_params.yaml" command="load" />
+  </node>
+  
+</launch>

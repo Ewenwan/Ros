@@ -1,0 +1,10 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~test_distance" : \b [double] Test distance in meters min: 0.0, default: 1.0, max: 2.0
+- \b "~speed" : \b [double] Robot speed in meters per second min: 0.0, default: 0.15, max: 0.3
+- \b "~tolerance" : \b [double] Error tolerance to goal distance in meters min: 0.0, default: 0.01, max: 0.1
+- \b "~odom_linear_scale_correction" : \b [double] Linear correction factor min: 0.0, default: 1.0, max: 3.0
+- \b "~start_test" : \b [bool] Check to start the test min: False, default: False, max: True
+

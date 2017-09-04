@@ -1,0 +1,8 @@
+prefix=/home/ewenwan/ewenwan/catkin_ws/install
+
+Name: rbx1_apps
+Description: Description of rbx1_apps
+Version: 0.4.0
+Cflags: 
+Libs: -L/home/ewenwan/ewenwan/catkin_ws/install/lib 
+Requires: 

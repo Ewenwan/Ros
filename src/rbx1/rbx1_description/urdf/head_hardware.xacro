@@ -1,0 +1,182 @@
+<?xml version="1.0"?>
+<robot name="head_hardware" xmlns:xacro="http://ros.org/wiki/xacro">
+  <property name="M_PI" value="3.14159"/>
+  <property name="M_SCALE" value="0.001"/>
+  <property name="F10_HEIGHT" value="0.004"/>
+  <property name="F4_HEIGHT" value="0.0525"/>
+  <property name="F3_HEIGHT" value="0.009"/>
+  <property name="AX12_HEIGHT" value="0.0385"/>
+  <property name="AX12_WIDTH" value="0.038"/>
+  <property name="F2_HEIGHT" value="0.0265"/>
+  <property name="MESH_EXT" value="dae"/>
+  
+  <macro name="bioloid_F10_fixed" params="parent number x_loc y_loc z_loc color">
+    <joint name="bioloid_F10_${number}_joint" type="fixed">
+      <origin xyz="${x_loc} ${y_loc} ${z_loc}" rpy="0 0 0" />
+      <parent link="${parent}"/>
+      <child link="bioloid_F10_${number}_link" />
+    </joint>
+
+    <link name="bioloid_F10_${number}_link">
+      <inertial>
+        <mass value="0.00001" />
+        <origin xyz="0 0 0" />
+        <inertia ixx="1.0" ixy="0.0" ixz="0.0"
+          iyy="1.0" iyz="0.0"
+          izz="1.0" />
+      </inertial>
+
+      <visual>
+        <origin xyz=" 0 0 0 " rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://rbx1_description/meshes/F10.${MESH_EXT}" scale="${M_SCALE} ${M_SCALE} ${M_SCALE}"/>
+        </geometry>
+        <material name="${color}"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.025 0.038 0.004"/>
+        </geometry>
+      </collision>
+    </link>
+  </macro>
+
+  <macro name="bioloid_F3_fixed" params="parent number x_loc y_loc z_loc r p y color">
+    <joint name="bioloid_F3_${number}_joint" type="fixed">
+      <origin xyz="${x_loc} ${y_loc} ${z_loc}" rpy="${r} ${p} ${y}" />
+      <parent link="${parent}"/>
+      <child link="bioloid_F3_head_${number}_link" />
+    </joint>
+
+    <link name="bioloid_F3_${number}_link">
+      <inertial>
+        <mass value="0.00001" />
+        <origin xyz="0 0 0" />
+        <inertia ixx="1.0" ixy="0.0" ixz="0.0"
+          iyy="1.0" iyz="0.0"
+          izz="1.0" />
+      </inertial>
+
+      <visual>
+        <origin xyz=" 0 0 0 " rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://rbx1_description/meshes/F3.${MESH_EXT}" scale="${M_SCALE} ${M_SCALE} ${M_SCALE}"/>
+        </geometry>
+        <material name="${color}"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0.0 0.0 -0.0045" rpy="0 0 0" />
+        <geometry>
+          <box size="0.025 0.038 0.009"/>
+        </geometry>
+      </collision>
+    </link>
+  </macro>
+
+  <macro name="dynamixel_AX12_fixed" params="parent number x_loc y_loc z_loc r p y">
+    <joint name="dynamixel_AX12_${number}_joint" type="fixed">
+      <origin xyz="${x_loc} ${y_loc} ${z_loc}" rpy="${r} ${p} ${y}" />
+      <parent link="${parent}"/>
+      <child link="dynamixel_AX12_${number}_link" />
+    </joint>
+
+    <link name="dynamixel_AX12_${number}_link">
+      <inertial>
+        <mass value="0.00001" />
+        <origin xyz="0 0 0" />
+        <inertia ixx="1.0" ixy="0.0" ixz="0.0"
+          iyy="1.0" iyz="0.0"
+          izz="1.0" />
+      </inertial>
+
+      <visual>
+        <origin xyz=" 0 0 0 " rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://rbx1_description/meshes/ax12_box.${MESH_EXT}" scale="1 1 1"/>
+        </geometry>
+        <material name="black"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0.0 0.0 -0.0045" rpy="0 0 0" />
+        <geometry>
+          <box size="0.025 0.038 0.009"/>
+        </geometry>
+      </collision>
+    </link>
+  </macro>
+
+  <macro name="bioloid_F3_head_revolute" params="parent number joint_name x_loc y_loc z_loc ulimit llimit r p y color">
+    <joint name="${joint_name}_joint" type="revolute">
+      <origin xyz="${x_loc} ${y_loc} ${z_loc}" rpy="${r} ${p} ${y}" />
+      <parent link="${parent}"/>
+       <axis xyz="0 0 -1"/>
+      <limit effort="30" velocity="1.0" lower="${llimit}" upper="${ulimit}" />
+      <child link="bioloid_F3_head_${number}_link" />
+    </joint>
+
+    <link name="bioloid_F3_head_${number}_link">
+      <inertial>
+        <mass value="0.00001" />
+        <origin xyz="0 0 0" />
+        <inertia ixx="1.0" ixy="0.0" ixz="0.0"
+          iyy="1.0" iyz="0.0"
+          izz="1.0" />
+      </inertial>
+
+      <visual>
+        <origin xyz=" 0 0 0 " rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://rbx1_description/meshes/F3.${MESH_EXT}" scale="${M_SCALE} ${M_SCALE} ${M_SCALE}"/>
+        </geometry>
+        <material name="${color}"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0.0 0.0 -0.0045" rpy="0 0 0" />
+        <geometry>
+          <box size="0.025 0.038 0.009"/>
+        </geometry>
+      </collision>
+    </link>
+  </macro>
+
+  <macro name="bioloid_F4_head_revolute" params="parent number joint_name x_loc y_loc z_loc ulimit llimit color">
+    <joint name="${joint_name}_joint" type="revolute">
+      <origin xyz="${x_loc} ${y_loc} ${z_loc}" rpy="0 0 0" />
+      <parent link="${parent}"/>
+      <axis xyz="0 -1 0"/>
+      <limit effort="30" velocity="1.0" lower="${llimit}" upper="${ulimit}" />
+      <child link="bioloid_F4_head_${number}_link" />
+    </joint>
+
+    <link name="bioloid_F4_head_${number}_link">
+      <inertial>
+        <mass value="0.00001" />
+        <origin xyz="0 0 0" />
+        <inertia ixx="1.0" ixy="0.0" ixz="0.0"
+          iyy="1.0" iyz="0.0"
+          izz="1.0" />
+      </inertial>
+
+      <visual>
+        <origin xyz=" 0 0 0 " rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://rbx1_description/meshes/F4.${MESH_EXT}" scale="${M_SCALE} ${M_SCALE} ${M_SCALE}"/>
+        </geometry>
+        <material name="${color}"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0.0 0.0 0.0215" rpy="0 0 0" />
+        <geometry>
+          <box size="0.028 0.0485 0.065"/>
+        </geometry>
+      </collision>
+    </link>
+  </macro>
+
+</robot>

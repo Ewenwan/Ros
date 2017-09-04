@@ -1,0 +1,10 @@
+<launch>
+  <arg name="port" default="11411" />
+  <arg name="addr" default="127.0.0.1" />
+
+  <node pkg="rosserial_server" type="udp_socket_node" name="rosserial_server">
+    <param name="client_port" value="$(arg port)" />
+    <param name="client_addr" value="$(arg addr)" />
+  </node>
+  <node pkg="rosserial_python" type="message_info_service.py" name="rosserial_message_info" />
+</launch>

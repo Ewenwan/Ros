@@ -1,0 +1,12 @@
+<launch>     
+    <!-- run turtlesim -->
+    <node pkg="turtlesim" type="turtlesim_node" name="turtlesim">
+    </node>
+    
+    <!-- run turtle_teleop_key -->
+    <node pkg="turtlesim" type="turtle_teleop_key" name="turtle_teleop_key" output="screen"
+    required="true"
+    launch-prefix="xterm -e" >
+      <param name="twist_name" value="/turtle1/cmd_vel" />
+    </node>
+</launch>

@@ -1,0 +1,10 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~test_angle" : \b [double] Test Angle min: 0.0, default: 360.0, max: 360.0
+- \b "~speed" : \b [double] Angular speed in radians per second min: -1.5, default: 0.5, max: 1.5
+- \b "~tolerance" : \b [double] Error tolerance to goal angle in degrees min: 1.0, default: 1.0, max: 10.0
+- \b "~odom_angular_scale_correction" : \b [double] Angular correction factor min: 0.0, default: 1.0, max: 3.0
+- \b "~start_test" : \b [bool] Check to start the test min: False, default: False, max: True
+

@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.9"/>
+<title>MSC for Windows&amp;Linux API: msp_cmn.h 源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { init_search(); });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">MSC for Windows&amp;Linux API
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.9 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+</script>
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>首页</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="搜索" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+</div><!-- top -->
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="headertitle">
+<div class="title">msp_cmn.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="msp__cmn_8h.html">浏览该文件的文档.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="keywordtype">int</span> MSPAPI <a class="code" href="msp__cmn_8h.html#a137acfe684fe46cbe5baf19f7d4a7fcc">MSPLogin</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* usr, <span class="keyword">const</span> <span class="keywordtype">char</span>* pwd, <span class="keyword">const</span> <span class="keywordtype">char</span>* params);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="keyword">const</span> <span class="keywordtype">char</span>* MSPAPI <a class="code" href="msp__cmn_8h.html#ada276fa6db4a66342d951820020e4e8f">MSPUploadData</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* dataName, <span class="keywordtype">void</span>* data, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> dataLen, <span class="keyword">const</span> <span class="keywordtype">char</span>* params, <span class="keywordtype">int</span>* errorCode);</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="keyword">const</span> <span class="keywordtype">char</span>* MSPAPI <a class="code" href="msp__cmn_8h.html#ae7be2dd2c6ee318524621b952998c14d">MSPSearch</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* params, <span class="keyword">const</span> <span class="keywordtype">char</span>* text, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>* dataLen, <span class="keywordtype">int</span>* errorCode);</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="keywordtype">int</span> MSPAPI <a class="code" href="msp__cmn_8h.html#a1e0f72cd113b4578afdf3d16ab34463e">MSPLogout</a>();</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;<span class="keywordtype">int</span> MSPAPI <a class="code" href="msp__cmn_8h.html#a4d3fa0aad5e761cb2a2afe30ae2a9714">MSPGetParam</a>( <span class="keyword">const</span> <span class="keywordtype">char</span> *paramName, <span class="keywordtype">char</span> *paramValue, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> *valueLen );</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160; <span class="keyword">const</span> <span class="keywordtype">char</span>* MSPAPI <a class="code" href="msp__cmn_8h.html#a632008aeddf5eba09555920ce38686a4">MSPGetVersion</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *verName, <span class="keywordtype">int</span> *errorCode);</div>
+<div class="ttc" id="msp__cmn_8h_html_ada276fa6db4a66342d951820020e4e8f"><div class="ttname"><a href="msp__cmn_8h.html#ada276fa6db4a66342d951820020e4e8f">MSPUploadData</a></div><div class="ttdeci">const char *MSPAPI MSPUploadData(const char *dataName, void *data, unsigned int dataLen, const char *params, int *errorCode)</div><div class="ttdoc">用户数据上传。 </div></div>
+<div class="ttc" id="msp__cmn_8h_html_a137acfe684fe46cbe5baf19f7d4a7fcc"><div class="ttname"><a href="msp__cmn_8h.html#a137acfe684fe46cbe5baf19f7d4a7fcc">MSPLogin</a></div><div class="ttdeci">int MSPAPI MSPLogin(const char *usr, const char *pwd, const char *params)</div><div class="ttdoc">初始化msc，用户登录。 </div></div>
+<div class="ttc" id="msp__cmn_8h_html_ae7be2dd2c6ee318524621b952998c14d"><div class="ttname"><a href="msp__cmn_8h.html#ae7be2dd2c6ee318524621b952998c14d">MSPSearch</a></div><div class="ttdeci">const char *MSPAPI MSPSearch(const char *params, const char *text, unsigned int *dataLen, int *errorCode)</div><div class="ttdoc">文本搜索。 </div></div>
+<div class="ttc" id="msp__cmn_8h_html_a4d3fa0aad5e761cb2a2afe30ae2a9714"><div class="ttname"><a href="msp__cmn_8h.html#a4d3fa0aad5e761cb2a2afe30ae2a9714">MSPGetParam</a></div><div class="ttdeci">int MSPAPI MSPGetParam(const char *paramName, char *paramValue, unsigned int *valueLen)</div><div class="ttdoc">获取MSC的设置信息 </div></div>
+<div class="ttc" id="msp__cmn_8h_html_a1e0f72cd113b4578afdf3d16ab34463e"><div class="ttname"><a href="msp__cmn_8h.html#a1e0f72cd113b4578afdf3d16ab34463e">MSPLogout</a></div><div class="ttdeci">int MSPAPI MSPLogout()</div><div class="ttdoc">退出登录。 </div></div>
+<div class="ttc" id="msp__cmn_8h_html_a632008aeddf5eba09555920ce38686a4"><div class="ttname"><a href="msp__cmn_8h.html#a632008aeddf5eba09555920ce38686a4">MSPGetVersion</a></div><div class="ttdeci">const char *MSPAPI MSPGetVersion(const char *verName, int *errorCode)</div><div class="ttdoc">获取MSC或本地引擎版本信息 </div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+生成于 2017年 二月 27日 星期一 16:24:26 , 为 MSC for Windows&amp;Linux API使用  &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.9
+</small></address>
+</body>
+</html>

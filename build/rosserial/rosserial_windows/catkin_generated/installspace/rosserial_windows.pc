@@ -1,0 +1,8 @@
+prefix=/home/ewenwan/ewenwan/catkin_ws/install
+
+Name: rosserial_windows
+Description: Description of rosserial_windows
+Version: 0.7.6
+Cflags: 
+Libs: -L/home/ewenwan/ewenwan/catkin_ws/install/lib 
+Requires: 

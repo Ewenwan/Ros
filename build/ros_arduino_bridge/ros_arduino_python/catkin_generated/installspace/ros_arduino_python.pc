@@ -1,0 +1,8 @@
+prefix=/home/ewenwan/ewenwan/catkin_ws/install
+
+Name: ros_arduino_python
+Description: Description of ros_arduino_python
+Version: 0.2.0
+Cflags: 
+Libs: -L/home/ewenwan/ewenwan/catkin_ws/install/lib 
+Requires: 

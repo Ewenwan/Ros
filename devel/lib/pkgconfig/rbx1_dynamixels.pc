@@ -1,0 +1,8 @@
+prefix=/home/ewenwan/ewenwan/catkin_ws/devel
+
+Name: rbx1_dynamixels
+Description: Description of rbx1_dynamixels
+Version: 0.4.0
+Cflags: 
+Libs: -L/home/ewenwan/ewenwan/catkin_ws/devel/lib 
+Requires: 

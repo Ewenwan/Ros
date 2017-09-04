@@ -1,0 +1,40 @@
+<library path="libindustrial_trajectory_filters">
+
+  <class name="industrial_trajectory_filters/NPointFilter"
+	type="industrial_trajectory_filters::NPointFilterAdapter" 	
+	base_class_type="planning_request_adapter::PlanningRequestAdapter">
+    <description>
+	This is a simple filter which reduces a trajectory to N points or less.
+	ROS parameters:
+	- n_points (default = 2)
+    </description>
+  </class>
+
+  <class name="industrial_trajectory_filters/UniformSampleFilter"
+	type="industrial_trajectory_filters::UniformSampleFilterAdapter" 	
+	base_class_type="planning_request_adapter::PlanningRequestAdapter">
+    <description>
+	This is a simple filter which performs a uniforming sampling of
+	a trajectory using linear interpolation. 
+	ROS parameters:
+	- sample_duration (default = 0.050)
+    </description>
+  </class>
+  <class name="industrial_trajectory_filters/AddSmoothingFilter" type="industrial_trajectory_filters::AddSmoothingFilter" base_class_type="planning_request_adapter::PlanningRequestAdapter">
+    <description>
+           This filter replaces each point with a weighted average of the adjacent 
+           waypoints/states in the trajectory. Odd number of weights are provided
+           via a yaml file loaded upon launch onto the ROS parameter server.
+           ROS Parameters Example:
+                  smoothing_filter_name: /move_group/smoothing_5_coef
+                  smoothing_5_coef:
+                            - 0.25
+                            - 0.50
+                            - 1.00
+                            - 0.50
+                            - 0.25
+    </description>
+  </class>
+
+  
+</library>

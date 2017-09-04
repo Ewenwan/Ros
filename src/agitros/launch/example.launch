@@ -1,0 +1,30 @@
+ <launch>
+      <!-- run turtlesim -->
+    <node
+     pkg="turtlesim"
+     type="turtlesim_node"   
+     name="turtlesim"       
+     respawn="true" >
+    </node>
+    
+      <!-- run teleop_key -->
+    <node
+     pkg="turtlesim"
+     type="turtle_teleop_key"
+     name="turtle_teleop_key"
+     output="screen"
+     required="true"
+     launch-prefix="xterm -e"
+     >
+
+    </node>
+    
+      <!-- run subscribe_to_pose -->
+    <node
+    pkg="agitros"
+    type="subPose"
+    name="subscribe_to_pose"
+    output="screen">
+    </node>
+   
+</launch>

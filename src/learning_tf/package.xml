@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<package>
+  <name>learning_tf</name>
+  <version>0.0.0</version>
+  <description>The learning_tf package</description>
+
+  <maintainer email="1631684@tongji.edu.cn">ewenwan</maintainer>
+
+  <license>TODO</license>
+
+
+  <!-- Url tags are optional, but multiple are allowed, one per tag -->
+  <!-- Optional attribute type can be: website, bugtracker, or repository -->
+  <!-- Example: -->
+  <!-- <url type="website">http://wiki.ros.org/learning_tf</url> -->
+
+
+  <!-- Author tags are optional, multiple are allowed, one per tag -->
+  <!-- Authors do not have to be maintainers, but could be -->
+  <!-- Example: -->
+  <!-- <author email="jane.doe@example.com">Jane Doe</author> -->
+  
+  <!-- 编译工具依赖-->
+  <buildtool_depend>catkin</buildtool_depend>
+  <!-- 编译依赖-->
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>tf</build_depend>
+  <build_depend>turtlesim</build_depend>
+  
+  <!-- 运行依赖-->
+  <run_depend>roscpp</run_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>tf</run_depend>
+  <run_depend>turtlesim</run_depend>
+
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <!-- Other tools can request additional information be placed here -->
+
+  </export>
+</package>

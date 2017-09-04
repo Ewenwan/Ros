@@ -1,0 +1,19 @@
+<package>
+  <name>rosserial_python</name>
+  <version>0.7.6</version>
+  <description>
+    A Python-based implementation of the ROS serial protocol.
+  </description>
+  <author>Michael Ferguson</author>
+  <maintainer email="paul.bouchier@gmail.com">Paul Bouchier</maintainer>
+  <maintainer email="mpurvis@clearpathrobotics.com">Mike Purvis</maintainer>
+  <license>BSD</license>
+  <url>http://ros.org/wiki/rosserial_python</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <run_depend>rospy</run_depend>
+  <run_depend>rosserial_msgs</run_depend>
+  <run_depend>diagnostic_msgs</run_depend>
+  <run_depend>python-serial</run_depend>
+</package>

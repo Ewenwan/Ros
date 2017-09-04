@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.9"/>
+<title>MSC for Windows&amp;Linux API: qmfv.h 源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { init_search(); });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">MSC for Windows&amp;Linux API
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.9 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+</script>
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>首页</span></a></li>
+      <li class="current"><a href="files.html"><span>文件</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="搜索" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>文件成员</span></a></li>
+    </ul>
+  </div>
+</div><!-- top -->
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="headertitle">
+<div class="title">qmfv.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="qmfv_8h.html">浏览该文件的文档.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keyword">const</span> <span class="keywordtype">char</span>* MSPAPI <a class="code" href="qmfv_8h.html#adbe23b402d4c50b4c06f47ca26253be5">QMFVSessionBegin</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* params, <span class="keywordtype">int</span>* errorCode);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="keywordtype">int</span> MSPAPI <a class="code" href="qmfv_8h.html#a081a01b2add2dfac3010ec7cd8ba5eac">QMFVDataWrite</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* sessionID, <span class="keyword">const</span> <span class="keywordtype">char</span>* params, <span class="keyword">const</span> <span class="keywordtype">void</span>* data, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> dataLen, <span class="keywordtype">int</span> *resultStatus);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="keyword">const</span> <span class="keywordtype">void</span> * MSPAPI <a class="code" href="qmfv_8h.html#aa87716ad6b28326982626c0c6a6ffcbd">QMFVGetResult</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* sessionID, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>* resultLen, <span class="keywordtype">int</span>* resultStatus, <span class="keywordtype">int</span> *errorCode);</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="keywordtype">int</span> MSPAPI <a class="code" href="qmfv_8h.html#a7174d943c2f1691f6a8c717429d43f8d">QMFVGetParam</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* sessionID, <span class="keyword">const</span> <span class="keywordtype">char</span>* paramName, <span class="keywordtype">char</span>* paramValue, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>* valueLen);</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;<span class="keywordtype">int</span> MSPAPI <a class="code" href="qmfv_8h.html#ad4ea72dd39285348cf26c627d67c6b65">QMFVSessionEnd</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* sessionID, <span class="keyword">const</span> <span class="keywordtype">char</span>* hints);</div>
+<div class="ttc" id="qmfv_8h_html_ad4ea72dd39285348cf26c627d67c6b65"><div class="ttname"><a href="qmfv_8h.html#ad4ea72dd39285348cf26c627d67c6b65">QMFVSessionEnd</a></div><div class="ttdeci">int MSPAPI QMFVSessionEnd(const char *sessionID, const char *hints)</div><div class="ttdoc">结束本次身份验证。 </div></div>
+<div class="ttc" id="qmfv_8h_html_adbe23b402d4c50b4c06f47ca26253be5"><div class="ttname"><a href="qmfv_8h.html#adbe23b402d4c50b4c06f47ca26253be5">QMFVSessionBegin</a></div><div class="ttdeci">const char *MSPAPI QMFVSessionBegin(const char *params, int *errorCode)</div><div class="ttdoc">开始一次身份验证。 </div></div>
+<div class="ttc" id="qmfv_8h_html_a081a01b2add2dfac3010ec7cd8ba5eac"><div class="ttname"><a href="qmfv_8h.html#a081a01b2add2dfac3010ec7cd8ba5eac">QMFVDataWrite</a></div><div class="ttdeci">int MSPAPI QMFVDataWrite(const char *sessionID, const char *params, const void *data, unsigned int dataLen, int *resultStatus)</div><div class="ttdoc">写入本次身份验证的数据。 </div></div>
+<div class="ttc" id="qmfv_8h_html_a7174d943c2f1691f6a8c717429d43f8d"><div class="ttname"><a href="qmfv_8h.html#a7174d943c2f1691f6a8c717429d43f8d">QMFVGetParam</a></div><div class="ttdeci">int MSPAPI QMFVGetParam(const char *sessionID, const char *paramName, char *paramValue, unsigned int *valueLen)</div><div class="ttdoc">获取当次身份验证信息，如上行流量、下行流量等。 </div></div>
+<div class="ttc" id="qmfv_8h_html_aa87716ad6b28326982626c0c6a6ffcbd"><div class="ttname"><a href="qmfv_8h.html#aa87716ad6b28326982626c0c6a6ffcbd">QMFVGetResult</a></div><div class="ttdeci">const void *MSPAPI QMFVGetResult(const char *sessionID, unsigned int *resultLen, int *resultStatus, int *errorCode)</div><div class="ttdoc">获取身份验证结果。 </div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+生成于 2017年 二月 27日 星期一 16:24:26 , 为 MSC for Windows&amp;Linux API使用  &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.9
+</small></address>
+</body>
+</html>

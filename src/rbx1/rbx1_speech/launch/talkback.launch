@@ -1,0 +1,15 @@
+<launch>
+
+  <node name="recognizer" pkg="pocketsphinx" type="recognizer.py">
+    <param name="lm" value="$(find rbx1_speech)/config/nav_commands.lm"/>
+    <param name="dict" value="$(find rbx1_speech)/config/nav_commands.dic"/>
+  </node>
+
+  <node name="soundplay_node" pkg="sound_play" type="soundplay_node.py" output="screen"/>
+
+  <node name="talkback" pkg="rbx1_speech" type="talkback.py" output="screen">
+  	<param name="voice" value="voice_don_diphone"/>
+  	<param name="wavepath" value="$(find rbx1_speech)/sounds"/>
+  </node>
+
+</launch>

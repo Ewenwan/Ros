@@ -1,0 +1,21 @@
+<package>
+  <name>rosserial_tivac</name>
+  <version>0.7.6</version>
+  <description>
+  rosserial_tivac package provides the required hardware definitions for compiling rosserial_client targets for TivaC Launchpad 
+  evaluation boards.
+  </description>
+  <maintainer email="vmatos@robosavvy.com">Vitor Matos</maintainer>
+  <license>BSD</license>
+  <url type="website">http://wiki.ros.org/rosserial_tivac</url>
+  <url type="repository">https://github.com/ros-drivers/rosserial</url>
+  <author>Vitor Matos</author>
+  <author email="vmatos@robosavvy.com">Vitor Matos</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <run_depend>rosserial_msgs</run_depend>
+  <run_depend>rosserial_client</run_depend>
+</package>
+
+

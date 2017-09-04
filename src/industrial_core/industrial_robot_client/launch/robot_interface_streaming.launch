@@ -1,0 +1,36 @@
+<launch>
+
+  <!-- This launch file provides a socket-based connection to industrial robots
+       that implement the standard ROS Industrial simple_message protocol.
+	   *** Motion control is implemented by STREAMING path data to the robot ***
+           (for DOWNLOAD-based path-control, use a different launch file)
+
+       Several nodes are started, to supply both low-level robot communication
+       and higher-level actionlib support:
+         - robot_state : publishes current joint positions and robot state data
+         - motion_streaming_interface : command robot motion by sending motion points to robot
+         - joint_trajectory_action : actionlib interface to control robot motion
+
+    Usage:
+      robot_interface_streaming.launch robot_ip:=<value>
+  -->
+
+  <!-- robot_ip: IP-address of the robot's socket-messaging server -->
+  <arg name="robot_ip" />
+  
+  <!-- copy the specified IP address to the Parameter Server, for use by nodes below -->
+  <param name="/robot_ip_address" type="str" value="$(arg robot_ip)"/>
+  
+  <!-- robot_state: publishes joint positions and robot-state data
+                   (from socket connection to robot) -->
+  <node pkg="industrial_robot_client" type="robot_state" name="robot_state"/>
+  
+  <!-- motion_streaming_interface: sends robot motion commands by STREAMING path to robot
+                                  (using socket connection to robot) -->
+  <node pkg="industrial_robot_client" type="motion_streaming_interface" name="motion_streaming_interface"/>
+  
+  <!-- joint_trajectory_action: provides actionlib interface for high-level robot control -->
+  <node pkg="industrial_robot_client" type="joint_trajectory_action" name="joint_trajectory_action"/>
+
+</launch>
+

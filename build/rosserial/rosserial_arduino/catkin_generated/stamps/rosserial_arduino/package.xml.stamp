@@ -1,0 +1,25 @@
+<package>
+  <name>rosserial_arduino</name>
+  <version>0.7.6</version>
+  <description>
+    Libraries and examples for ROSserial usage on Arduino/AVR Platforms.
+  </description>
+  <author>Michael Ferguson</author>
+  <author>Adam Stambler</author>
+  <maintainer email="paul.bouchier@gmail.com">Paul Bouchier</maintainer>
+  <maintainer email="mpurvis@clearpathrobotics.com">Mike Purvis</maintainer>
+  <license>BSD</license>
+  <url>http://ros.org/wiki/rosserial_arduino</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>message_generation</build_depend>
+
+  <run_depend>arduino-core</run_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>rosserial_msgs</run_depend>
+  <run_depend>rosserial_client</run_depend>
+  <run_depend>message_runtime</run_depend>
+</package>
+
+

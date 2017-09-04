@@ -1,0 +1,8 @@
+prefix=/home/ewenwan/ewenwan/catkin_ws/install
+
+Name: cv_camera
+Description: Description of cv_camera
+Version: 0.1.0
+Cflags: -I/home/ewenwan/ewenwan/catkin_ws/install/include
+Libs: -L/home/ewenwan/ewenwan/catkin_ws/install/lib -lcv_camera
+Requires: image_transport roscpp cv_bridge sensor_msgs nodelet camera_info_manager

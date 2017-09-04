@@ -1,0 +1,3 @@
+# Resume current robot motion (e.g. after stop_motion or robot fault) 
+---
+industrial_msgs/ServiceReturnCode code

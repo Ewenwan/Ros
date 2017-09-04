@@ -1,0 +1,22 @@
+<launch>
+  <include file="$(find freenect_launch)/launch/freenect.launch">
+  
+    <!-- Don't publish the camera transforms as these are taken care of by the
+         robot state publisher. -->
+         
+    <arg name="publish_tf" default="false" />
+
+    <!-- use device registration -->
+    <arg name="depth_registration"              value="true" /> 
+
+    <arg name="rgb_processing"                  value="true" />
+    <arg name="ir_processing"                   value="false" />
+    <arg name="depth_processing"                value="false" />
+    <arg name="depth_registered_processing"     value="true" />
+    <arg name="disparity_processing"            value="false" />
+    <arg name="disparity_registered_processing" value="false" />
+    <arg name="sw_registered_processing"        value="false" />
+    <arg name="hw_registered_processing"        value="true" />
+
+  </include>
+</launch>

@@ -1,0 +1,18 @@
+/**
+\mainpage
+\htmlinclude manifest.html
+
+\b industrial_utils contains utility functions and classes for the ROS-Industrial program
+
+<!-- 
+Provide an overview of your package.
+-->
+
+
+\section codeapi Code API
+
+The main APIs of are largely captured in the following interface classes:
+- industrial_utils : General utilities
+- industrial_utils::param : Utilities for parsing ROS parameters
+
+*/

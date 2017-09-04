@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<robot name="turtlebot_head_arm" xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <!-- Included URDF Files -->
+    <xacro:include filename="$(find rbx1_description)/urdf/turtlebot.xacro" />
+    <xacro:include filename="$(find rbx1_description)/urdf/head.xacro" />
+    <xacro:include filename="$(find rbx1_description)/urdf/arm.xacro" />
+
+	<!-- Load the main TurtleBot body -->
+    <turtlebot />
+    
+    <!-- Attach the head -->
+    <turtlebot_head parent="plate_3_link" color="white">
+      <origin xyz="-0.09 0 0.075"/>
+    </turtlebot_head>
+    
+    <!-- Attach the arm -->
+    <!--
+    <turtlebot_arm parent="plate_3_link" color="white" gripper_color="green">
+      <origin xyz="0.12 0 0.0508" rpy="0 0 0" />
+    </turtlebot_arm>
+    -->
+</robot>

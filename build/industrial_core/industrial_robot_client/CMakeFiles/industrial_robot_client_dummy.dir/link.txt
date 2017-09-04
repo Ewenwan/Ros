@@ -1,0 +1,1 @@
+/usr/bin/c++  -fPIC    -shared -Wl,-soname,libindustrial_robot_client_dummy.so -o /home/ewenwan/ewenwan/catkin_ws/devel/lib/libindustrial_robot_client_dummy.so CMakeFiles/industrial_robot_client_dummy.dir/industrial_robot_client_dummy.cpp.o  -L/opt/ros/indigo/lib 

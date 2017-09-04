@@ -1,0 +1,8 @@
+prefix=/home/ewenwan/ewenwan/catkin_ws/devel
+
+Name: rosserial_arduino
+Description: Description of rosserial_arduino
+Version: 0.7.6
+Cflags: -I/home/ewenwan/ewenwan/catkin_ws/devel/include
+Libs: -L/home/ewenwan/ewenwan/catkin_ws/devel/lib 
+Requires: message_runtime

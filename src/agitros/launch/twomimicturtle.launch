@@ -1,0 +1,24 @@
+<launch>
+     <group ns="turtlesim1">
+       <node
+        name="turtlesim_node"
+        pkg="turtlesim"
+        type="turtlesim_node">
+       </node>
+     </group>      
+    <group ns="turtlesim2">
+       <node
+        name="turtlesim_node"
+        pkg="turtlesim"
+        type="turtlesim_node" >
+       </node>
+    </group>
+    
+     <node
+        pkg="turtlesim"
+        type="mimic"
+        name="mimic" >
+        <remap from="input" to="turtlesim1/turtle1" />
+        <remap from="output" to="turtlesim2/turtle1" />
+     </node>
+ </launch>

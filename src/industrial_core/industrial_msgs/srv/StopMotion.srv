@@ -1,0 +1,5 @@
+# Stops current robot motion.  Motion resumed by using start_motion service
+# or by sending a new motion command
+
+---
+industrial_msgs/ServiceReturnCode code

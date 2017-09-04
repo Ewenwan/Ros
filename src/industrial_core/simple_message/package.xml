@@ -1,0 +1,20 @@
+<package>
+  <name>simple_message</name>
+  <version>0.5.1</version>
+  <description>
+	simple_message defines a simple messaging connection and protocol for communicating 
+	with an industrial robot controller.  Additional handler and manager classes are 
+	included for handling connection limited systems.  This package is part of the ROS-Industrial 
+	program.
+  </description>
+  <maintainer email="sedwards@swri.org">Shaun Edwards</maintainer>
+  <license>BSD</license>
+  <url type="website">http://ros.org/wiki/simple_message</url>
+  <author>Shaun Edwards</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend> 
+  <build_depend>industrial_msgs</build_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>industrial_msgs</run_depend>
+</package>

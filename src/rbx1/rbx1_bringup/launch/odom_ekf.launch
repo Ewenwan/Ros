@@ -1,0 +1,6 @@
+<launch>
+  <node pkg="rbx1_bringup" type="odom_ekf.py" name="odom_ekf" output="screen">
+    <remap from="input" to="/odom_combined"/>
+    <remap from="output" to="/odom_ekf"/>
+  </node>
+</launch>

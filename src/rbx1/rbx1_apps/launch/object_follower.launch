@@ -1,0 +1,24 @@
+<launch>  
+  <node pkg="rbx1_apps" name="object_follower" type="object_follower.py" output="screen">
+  
+    <remap from="camera_info" to="/camera/rgb/camera_info" />
+    <remap from="depth_image" to="/camera/depth_registered/image_raw" />
+
+    <rosparam>
+       rate: 10
+       max_z: 1.6  # How far out do we want to detect
+       min_z: 0.2
+       goal_z: 0.7
+       z_threshold: 0.05
+       x_threshold: 0.05
+       z_scale: 1.0 # forward/back scale
+       x_scale: 2.0 # left/right scale
+       max_rotation_speed: 1.0
+       min_rotation_speed: 0.1
+       max_linear_speed: 0.15
+       min_linear_speed: 0.02
+       scale_roi: 0.9
+    </rosparam>
+    
+  </node>
+</launch>

@@ -1,0 +1,31 @@
+#goal definition
+uint8   order_id 
+string  order_argument
+---
+#result definition
+uint8   order_id
+string[]  names
+float32[] confidence
+---
+#feedback
+uint8   order_id
+string[]  names
+float32[] confidence
+
+
+
+
+
+
+################# order_id
+#order_id = 0: recognize_once
+#order_id = 1: recognize_continuous
+#order_id = 2  add_face_images
+#order_id = 3  (re)train
+#order_id = 4  exit
+
+################ order_argument
+# for the add_face_images goal, the order_argument specifies the name of the person for which training images are acquired from the camera.
+
+################ name and confidence in feedback and result
+# for Order_id = 0 or 1, name and confidence are the name and confidence of the recognized person in the video stream.

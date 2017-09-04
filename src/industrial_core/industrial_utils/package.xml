@@ -1,0 +1,16 @@
+<package>
+  <name>industrial_utils</name>
+  <version>0.5.1</version>
+  <description>Industrial utils is a library package that captures common funcitonality for the ROS-Industrial distribution.</description>
+
+  <maintainer email="sedwards@swri.org">Shaun Edwards</maintainer>
+  <license>BSD</license>
+  <url type="website">http://ros.org/wiki/industrial_utils</url>
+  <author>Shaun M. Edwards</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>urdf</build_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>urdf</run_depend>
+</package>

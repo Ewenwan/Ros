@@ -1,0 +1,33 @@
+ROS OpenCV camera driver
+
+It is very easy to capture video device if we use cv::VideoCapture of OpenCV.
+
+节点
+cv_camera_node
+This node uses camera_info_manager for dealing with camera_info. 
+If no calibration data is set, it has dummy values except for width and height.
+
+发布的话题
+Publish
+
+    ~image_raw (sensor_msgs/Image)
+    ~camera_info (sensor_msgs/CameraInfo) 
+提供的服务
+Service
+
+    ~set_camera_info (sensor_msgs/SetCameraInfo) 
+
+可配置的参数
+Parameters
+
+    ~rate (double: default 30.0) publish rate [Hz].  发布速率
+    ~device_id (int: default 0) capture device id.   设备号
+    ~frame_id (string: default "camera") frame_id of message header. 
+    ~image_width (int) try to set capture image width.   图像宽度
+    ~image_height (int) try to set capture image height. 图像高度
+    ~camera_info_url (string) url of camera info yaml.    
+    ~file (string: default "") if not "" then use movie file instead of device. 
+
+Nodelet
+
+This node works as nodelet (cv_camera/CvCameraNodelet). 

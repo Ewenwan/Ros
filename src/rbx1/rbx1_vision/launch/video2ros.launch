@@ -1,0 +1,12 @@
+<launch>
+    <arg name="input" />
+    
+    <node pkg="rbx1_vision" name="video2ros" type="video2ros.py" output="screen">
+	  <remap from="output" to="/camera/rgb/image_raw" />
+	  <param name="input" value="$(arg input)" />
+	  <param name="fps" value="25" />
+	  <param name="loop" value="False" />
+	  <param name="start_paused" value="True" />
+    </node>
+    
+</launch>

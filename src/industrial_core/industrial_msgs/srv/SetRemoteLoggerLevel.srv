@@ -1,0 +1,8 @@
+# Sets logging level for a remote device that is attached to
+# ROS via some communications link.  This service is meant to
+# set the log level on the device directly so that the comms
+# link is not overloaded with messages.
+
+industrial_msgs/DebugLevel level
+---
+industrial_msgs/ServiceReturnCode code

@@ -1,0 +1,22 @@
+<package>
+  <name>rosserial</name>
+  <version>0.7.6</version>
+  <description>
+    Metapackage for core of rosserial.
+  </description>
+  <author>Michael Ferguson</author>
+  <maintainer email="paul.bouchier@gmail.com">Paul Bouchier</maintainer>
+  <maintainer email="mpurvis@clearpathrobotics.com">Mike Purvis</maintainer>
+  <license>BSD</license>
+  <url>http://ros.org/wiki/rosserial</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <run_depend>rosserial_msgs</run_depend>
+  <run_depend>rosserial_client</run_depend>
+  <run_depend>rosserial_python</run_depend>
+
+  <export>
+   <metapackage/>
+  </export>
+</package>

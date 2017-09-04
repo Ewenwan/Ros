@@ -1,0 +1,41 @@
+<launch>
+
+  <!-- Start the nodelet manager -->
+  <node pkg="nodelet" type="nodelet" name="pcl_manager" args="manager" output="screen" />
+
+  <!-- Run a passthrough filter on the z axis -->
+  <node pkg="nodelet" type="nodelet" name="passthrough_z" args="load pcl/PassThrough pcl_manager" output="screen">
+    <remap from="~input" to="/camera/depth_registered/points" />
+    <remap from="~output" to="/z_filtered" />
+    <rosparam>
+      filter_field_name: z
+      filter_limit_min: 1.0
+      filter_limit_max: 1.25
+      filter_limit_negative: False
+    </rosparam>
+  </node>
+  
+  <!-- Run a passthrough filter on the x axis -->
+  <node pkg="nodelet" type="nodelet" name="passthrough_x" args="load pcl/PassThrough pcl_manager" output="screen">
+    <remap from="~input" to="/z_filtered" />
+    <remap from="~output" to="/x_filtered" />
+    <rosparam>
+      filter_field_name: x
+      filter_limit_min: -0.5
+      filter_limit_max: 0.5
+      filter_limit_negative: False
+    </rosparam>
+  </node>
+  
+  <!-- Run a passthrough filter on the y axis -->
+  <node pkg="nodelet" type="nodelet" name="passthrough_y" args="load pcl/PassThrough pcl_manager" output="screen">
+    <remap from="~input" to="/x_filtered" />
+    <remap from="~output" to="/passthrough" />
+    <rosparam>
+      filter_field_name: y
+      filter_limit_min: -1.0
+      filter_limit_max: 0.5
+      filter_limit_negative: False
+    </rosparam>
+  </node>
+</launch>

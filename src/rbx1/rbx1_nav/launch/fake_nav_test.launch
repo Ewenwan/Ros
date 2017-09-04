@@ -1,0 +1,35 @@
+<launch>
+
+  <param name="use_sim_time" value="false" />
+
+  <!-- Start the ArbotiX controller -->  <!-- 开启仿真机器人 -->
+  <include file="$(find rbx1_bringup)/launch/fake_turtlebot.launch" />
+
+  <!-- Run the map server with the desired map --> <!-- 运行地图服务器 -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find rbx1_nav)/maps/test_map.yaml"/>
+
+  <!-- The move_base node --> <!-- 运动控制节点 move_base node -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" clear_params="true" output="screen">
+    <rosparam file="$(find rbx1_nav)/config/fake/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find rbx1_nav)/config/fake/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find rbx1_nav)/config/fake/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find rbx1_nav)/config/fake/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find rbx1_nav)/config/fake/base_local_planner_params.yaml" command="load" />
+    <!-- 需要调整的参数 目的位置方向的容忍度 6.28 360度 -->
+    <rosparam file="$(find rbx1_nav)/config/nav_test_params.yaml" command="load" />
+  </node>
+  
+  <!-- Run fake localization compatible with AMCL output --> <!-- 运行仿真的amcl定位 -->
+  <node pkg="fake_localization" type="fake_localization" name="fake_localization" clear_params="true" output="screen">
+     <remap from="base_pose_ground_truth" to="odom" />
+     <param name="global_frame_id" value="map" />
+     <param name="base_frame_id" value="base_footprint" />
+  </node>
+  
+  <!-- Start the navigation test -->  <!-- 启动 导航节点 -->
+  <node pkg="rbx1_nav" type="nav_test.py" name="nav_test" output="screen">
+    <param name="rest_time" value="1" />
+    <param name="fake_test" value="true" />
+  </node>
+  
+</launch>

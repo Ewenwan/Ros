@@ -1,0 +1,12 @@
+<launch>
+  <node pkg="rbx1_apps" name="object_tracker" type="object_tracker.py" output="screen">
+    <remap from="camera_info" to="/camera/rgb/camera_info" />
+    <rosparam>
+       rate: 10
+       max_rotation_speed: 2.0
+       min_rotation_speed: 0.5
+       x_threshold: 0.1
+       gain: 2.0
+    </rosparam>
+  </node>
+</launch>

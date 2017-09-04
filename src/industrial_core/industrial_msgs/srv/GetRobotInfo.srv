@@ -1,0 +1,7 @@
+# The Get Robot Info service returns vendor specific information about
+# the robot(s) connected by the driver
+
+---
+industrial_msgs/DeviceInfo controller
+industrial_msgs/DeviceInfo[] robots
+industrial_msgs/ServiceReturnCode code

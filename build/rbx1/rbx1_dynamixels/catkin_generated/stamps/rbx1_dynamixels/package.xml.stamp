@@ -1,0 +1,34 @@
+<package>
+  <name>rbx1_dynamixels</name>
+  <version>0.4.0</version>
+
+  <description>ROS by Example Vol 1 Dynamixels Package</description>
+
+  <maintainer email="patrick@pirobot.org">Patrick Goebel</maintainer>
+  <license>BSD</license>
+  <url type="website">http://ros.org/wiki/rbx1_dynamixels</url>
+  <url type="bugtracker">https://github.com/pirobot/rbx1/issues</url>
+  <author email="patrick@pirobot.org">Patrick Goebel</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>dynamixel_controllers</build_depend>
+  <build_depend>dynamixel_driver</build_depend>
+  <build_depend>dynamixel_msgs</build_depend>
+
+  <run_depend>roscpp</run_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>dynamixel_controllers</run_depend>
+  <run_depend>dynamixel_driver</run_depend>
+  <run_depend>dynamixel_msgs</run_depend>
+
+  <export>
+
+  </export>
+</package>

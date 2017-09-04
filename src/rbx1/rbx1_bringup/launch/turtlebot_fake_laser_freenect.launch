@@ -1,0 +1,28 @@
+<launch>
+  <!-- Launch the freenect driver -->
+  <include file="$(find freenect_launch)/launch/freenect.launch">
+    <!-- Don't publish the camera frames when using with the Turtlebot -->
+    <arg name="publish_tf"                      value="false" /> 
+    
+    <!-- use device registration -->
+    <arg name="depth_registration"              value="true" /> 
+
+    <arg name="rgb_processing"                  value="true" />
+    <arg name="ir_processing"                   value="false" />
+    <arg name="depth_processing"                value="false" />
+    <arg name="depth_registered_processing"     value="true" />
+    <arg name="disparity_processing"            value="false" />
+    <arg name="disparity_registered_processing" value="false" />
+    <arg name="sw_registered_processing"        value="false" />
+    <arg name="hw_registered_processing"        value="true" />
+
+  </include>
+  <!-- Run the depthimage_to_laserscan node -->
+  <node pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" name="depthimage_to_laserscan" output="screen">
+    <remap from="image" to="/camera/depth_registered/image_raw" />
+    <remap from="camera_info" to="/camera/depth_registered/camera_info" />
+    <remap from="scan" to="/scan" />
+    <param name="output_frame_id" value="/camera_depth_frame" />
+  </node>
+
+</launch>

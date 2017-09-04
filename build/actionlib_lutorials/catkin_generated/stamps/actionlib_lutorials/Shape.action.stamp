@@ -1,0 +1,9 @@
+#goal definition
+int32 edges
+float32 radius
+---
+#result definition
+float32 interior_angle
+float32 apothem
+---
+#feedback

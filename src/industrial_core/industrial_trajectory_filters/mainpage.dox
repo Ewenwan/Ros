@@ -1,0 +1,14 @@
+/**
+\mainpage
+\htmlinclude manifest.html
+
+\b industrial_trajectory_filters provides robot trajectory filters.  It also includes plugin adapters for the moveit motion planning library.
+
+
+\section codeapi Code API
+
+The main APIs of are largely captured in the following interface classes:
+- industrial_trajectory_filters::NPointFilter : A simple filter that removes trajectory points until the trajectory is N or less points
+- industrial_trajectory_filters::UniformSampleFilter : Resamples a trajectory uniformly (in time).
+- industrial_trajectory_filters::FilterBase : A <a href="http://moveit.ros.org">moveit</a>  adapter class for old <a href="http://wiki.ros.org/arm_navigation">arm navigation</a> packages.
+*/

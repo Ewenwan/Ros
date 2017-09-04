@@ -1,0 +1,11 @@
+<launch>
+  <param name="/use_sim_time" value="false" />
+
+  <!-- Run the Hokuyo laser scanner node -->
+  <node name="hokuyo" pkg="hokuyo_node" type="hokuyo_node">
+    <param name="min_ang" value="-1.7" />
+    <param name="max_ang" value="1.7" />
+    <param name="hokuyo_node/calibrate_time" value="true" />
+    <param name="frame_id" value="/base_laser" />
+  </node>
+</launch>

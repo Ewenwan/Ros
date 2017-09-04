@@ -1,0 +1,22 @@
+<package>
+  <name>rosserial_mbed</name>
+  <version>0.7.6</version>
+  <description>
+    Libraries and examples for ROSserial usage on Mbed Platforms.
+  </description>
+  <author>Gary Servin</author>
+  <maintainer email="garyservin@gmail.com">Gary Servin</maintainer>
+  <license>BSD</license>
+  <url>http://ros.org/wiki/rosserial_mbed</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>message_generation</build_depend>
+
+  <run_depend>rospy</run_depend>
+  <run_depend>rosserial_msgs</run_depend>
+  <run_depend>rosserial_client</run_depend>
+  <run_depend>message_runtime</run_depend>
+</package>
+
+

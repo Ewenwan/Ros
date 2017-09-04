@@ -1,0 +1,16 @@
+<package>
+  <name>industrial_deprecated</name>
+  <version>0.5.1</version>
+  <description>
+  The Industrial deprecated package contains nodes, launch files, etc... that are slated for 
+  deprecation.  This package is the last place something will end up before being deleted.  
+  If you are missing a package/node and find it's contents here, then you should consider 
+  a replacement.
+  </description>
+  <maintainer email="sedwards@swri.org">Shaun Edwards</maintainer>
+  <license>BSD</license>
+  <url type="website">http://ros.org/wiki/industrial_deprecated</url>
+  <author>Shaun M. Edwards</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+</package>

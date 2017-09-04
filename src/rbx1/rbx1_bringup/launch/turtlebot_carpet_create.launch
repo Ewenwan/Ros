@@ -1,0 +1,13 @@
+<launch>
+
+  <param name="/use_sim_time" value="false" />
+
+  <!-- Calibration parameters after calibration of an original Create TurtleBot on low-ply carpet -->
+  <param name="turtlebot_node/gyro_measurement_range" value="150"/>
+  <param name="turtlebot_node/gyro_scale_correction" value="1.43"/>
+  <param name="turtlebot_node/odom_angular_scale_correction" value="1.0	"/>
+  <param name="turtlebot_node/odom_linear_scale_correction" value="0.955"/>
+
+  <include file="$(find rbx1_bringup)/launch/turtlebot_minimal_create.launch" />
+
+</launch>

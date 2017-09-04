@@ -1,0 +1,7 @@
+# Full message datatype, eg "std_msgs/String"
+string type
+---
+# If found, return md5 string of system's version of the message, and 
+# textual definition. If not found, both strings are to be empty.
+string md5
+string definition

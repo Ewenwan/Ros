@@ -1,0 +1,12 @@
+## 会在 /catkin_ws/devel/include/actionlib_lutorials/下生成一系列 以文件名+Action为开头的库文件
+## FibonacciAction.h  FibonacciActionFeedback.h   FibonacciActionGoal.h FibonacciActionResult.h
+# 以及以文件名为开头的库文件
+#FibonacciFeedback.h   FibonacciGoal.h FibonacciResult.h
+#goal definition   定 义 目标 话题 类型 序列的顺序
+int32 order
+---
+#result definition 定义结果 话题类型 最终生成的序列 数组类型
+int32[] sequence
+---
+#feedback          定义反馈 话题类型 计算好的序列  组类型
+int32[] sequence

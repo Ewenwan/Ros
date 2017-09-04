@@ -1,0 +1,18 @@
+<launch>
+  <node pkg="rbx1_vision" name="lk_tracker" type="lk_tracker.py" output="screen">
+    
+    <remap from="input_rgb_image" to="/camera/rgb/image_raw" />
+   
+     <rosparam>
+       show_text: True
+       gf_maxCorners: 200
+       gf_qualityLevel: 0.02
+       gf_minDistance: 7
+       gf_blockSize: 10
+       gf_useHarrisDetector: False
+       gf_k: 0.04
+       feature_size: 1
+    </rosparam>
+    
+  </node>
+</launch>

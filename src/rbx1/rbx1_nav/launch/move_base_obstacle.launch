@@ -1,0 +1,14 @@
+<launch>
+
+  <include file="$(find rbx1_nav)/launch/move_base.launch" />
+  
+  <!-- Run the map server with a blank map -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find rbx1_nav)/maps/blank_map_with_obstacle.yaml"/>
+    
+  <!-- Run a static transform between /odom and /map -->
+  <node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster" args="0 0 0 0 0 0 /map /odom 100" />
+  
+  <!-- For the TurtleBot, we need Run a static transform between /odom and /odom_combined -->
+  <node pkg="tf" type="static_transform_publisher" name="odom_combined_broadcaster" args="0 0 0 0 0 0 /odom /odom_combined 100" />
+    
+</launch>

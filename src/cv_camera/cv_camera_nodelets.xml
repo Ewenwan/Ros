@@ -1,0 +1,10 @@
+<library path="lib/libcv_camera_nodelet">
+
+  <class name="cv_camera/CvCameraNodelet"
+	 type="cv_camera::CvCameraNodelet" base_class_type="nodelet::Nodelet">
+    <description>
+      OpenCV camera driver nodelet.
+    </description>
+  </class>
+
+</library>

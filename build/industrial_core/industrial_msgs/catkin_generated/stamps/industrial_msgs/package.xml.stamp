@@ -1,0 +1,22 @@
+<package>
+  <name>industrial_msgs</name>
+  <version>0.5.1</version>
+  <description>
+	The industrial message package containes industrial specific messages 
+	definitions. This package is part of the ROS-Industrial program.
+  </description>
+  <maintainer email="sedwards@swri.org">Shaun Edwards</maintainer>
+  <license>BSD</license>
+  <url type="website">http://ros.org/wiki/industrial_msg</url>
+  <author>Shaun M. Edwards</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>trajectory_msgs</build_depend>
+  <build_depend>genmsg</build_depend>
+  <build_depend>message_generation</build_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>trajectory_msgs</run_depend>
+  <run_depend>genmsg</run_depend>
+  <run_depend>message_runtime</run_depend>
+</package>

@@ -1,0 +1,40 @@
+<s> PAUSE SPEECH </s>
+<s> CONTINUE SPEECH </s>
+<s> MOVE FORWARD </s>
+<s> MOVE BACKWARD </s>
+<s> MOVE BACK </s>
+<s> MOVE LEFT </s>
+<s> MOVE RIGHT </s>
+<s> GO FORWARD </s>
+<s> GO BACKWARD </s>
+<s> GO BACK </s>
+<s> GO LEFT </s>
+<s> GO RIGHT </s>
+<s> GO STRAIGHT </s>
+<s> COME FORWARD </s>
+<s> COME BACKWARD </s>
+<s> COME LEFT </s>
+<s> COME RIGHT </s>
+<s> TURN LEFT </s>
+<s> TURN RIGHT </s>
+<s> ROTATE LEFT </s>
+<s> ROTATE RIGHT </s>
+<s> FASTER </s>
+<s> SPEED UP </s>
+<s> SLOWER </s>
+<s> SLOW DOWN </s>
+<s> QUARTER SPEED </s>
+<s> HALF SPEED </s>
+<s> FULL SPEED </s>
+<s> STOP </s>
+<s> STOP NOW </s>
+<s> HALT </s>
+<s> ABORT </s>
+<s> KILL </s>
+<s> PANIC </s>
+<s> HELP </s>
+<s> HELP ME </s>
+<s> FREEZE </s>
+<s> TURN OFF </s>
+<s> SHUT DOWN </s>
+<s> CANCEL </s>

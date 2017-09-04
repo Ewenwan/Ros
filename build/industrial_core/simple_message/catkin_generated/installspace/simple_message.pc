@@ -1,0 +1,8 @@
+prefix=/home/ewenwan/ewenwan/catkin_ws/install
+
+Name: simple_message
+Description: Description of simple_message
+Version: 0.5.1
+Cflags: -I/home/ewenwan/ewenwan/catkin_ws/install/include
+Libs: -L/home/ewenwan/ewenwan/catkin_ws/install/lib -lsimple_message_dummy
+Requires: roscpp industrial_msgs

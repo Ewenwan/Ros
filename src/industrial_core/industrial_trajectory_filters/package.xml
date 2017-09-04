@@ -1,0 +1,38 @@
+<package>
+  <name>industrial_trajectory_filters</name>
+  <version>0.5.1</version>
+  <description>
+   <p>
+     ROS Industrial libraries/plugins for filtering trajectories.
+   </p>
+   <p>
+     This package is part of the ROS Industrial program and contains libraries
+     and moveit plugins for filtering robot trajectories.
+   </p>
+  </description>
+  <author email="sedwards@swri.org">Shaun Edwards</author>
+  <author email="jnicho@swri.org">Jorge Nicho</author>
+  <maintainer email="sedwards@swri.org">Shaun Edwards</maintainer>
+  <license>BSD</license>
+  <url type="website">http://ros.org/wiki/industrial_trajectory_filters</url>
+  <url type="bugtracker">https://github.com/ros-industrial/industrial_core/issues</url>
+  <url type="repository">https://github.com/ros-industrial/industrial_core</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>trajectory_msgs</build_depend>
+  <build_depend>pluginlib</build_depend>
+  <build_depend>moveit_core</build_depend>
+  <build_depend>moveit_ros_planning</build_depend>
+  <build_depend>orocos_kdl</build_depend>
+
+  <run_depend>trajectory_msgs</run_depend>
+  <run_depend>pluginlib</run_depend>
+  <run_depend>moveit_core</run_depend>
+  <run_depend>moveit_ros_planning</run_depend>
+  <run_depend>orocos_kdl</run_depend>
+
+  <export>	
+    <moveit_core plugin="${prefix}/planning_request_adapters_plugin_description.xml"/> 
+  </export>
+</package>
