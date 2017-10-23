@@ -1,0 +1,1737 @@
+
+一、语音处理总体框架
+    语音识别（ASR ， Automatic Speech Recognition ）
+    
+——> 语义理解（NLU ， Natural Language Understanding）
+
+    AIML（Artificial Intelligence Markup Language，人工智能标记语言）是一种创建自然语言软件代理的XML语言，由
+    Richard Wallace和世界各地的自由软件社区在1995年至2002年发明。AIML主要用于实现机器人的语言交流功能，用户可以与机器人说话，而
+    机器人通过一个自然语言的软件代理，也可以给出一个聪明的回答。目前AIML已经有了Java，Ruby，Python， C ，C#，Pascal等语言的版本。
+   AIML文件包含一系列已定义的标签。我们通过一个简单的实例学习一下AIML的语法规则。
+
+    <aiml version="1.0.1" encoding="UTF-8">
+      <category>
+        <pattern> HOW ARE YOU </pattern>
+        <template> I AM FINE </template>
+      </category>
+    </aiml>
+    
+——> 语音合成（TTS ， Text To Speech）
+    
+    语音识别 ASR：支持的包：
+        国外：CMU SPhinx  ——>  pocketsphinx
+        国内：科大迅飞等。。
+    语义理解 NLU：
+    语音合成 TTS：
+        国外：Festival    ——> sound_play   是 ros-indigo-audio-common 的一部分
+        国内：科大迅飞等。。。
+    
+二、国外库
+   1、语音识别   pocketsphinx
+   
+    sphinx语音识别其实是基于统计语言模型的
+    它主要靠language model（lm），Hidden Markov Model（hmm）模型识别语音。
+   
+   其中lm模型是统计语料得到的模型，语料就是用于训练的文本库，Dic里面保存的就是训练用的语料库里出现过的语料和对应的发音
+而lm模型里存的是语料的组合概率，
+先设p（w1）是word w1在文章中出现的概率
+
+//很显然有数据的情况下这个很好统计，遍历就行了
+
+P（w1，w2）w1.w2是连续出现的概率
+P（w2|w1）是已知W1已出现的情况下w2
+
+假设识别sentence的概率用P（S）表示
+
+P（S）=P（w1，w2，...wn） 表示单词集w1，w2，。。。wn连续出现并生成S的概率
+
+使用条件概率公式S 把整个公式替换成
+
+P（sentence） = P（w1）*P（w2|w1）*P（w3|w2）。。。P（wn|w1，w2.。。wn-1）
+
+再用马尔科夫假设精简成
+
+P（sentence） = P（w1）*P（w2|w1）*P（w3|w2）。。。P（wn|wn-1）的问题
+
+而
+
+P（wi|wi-1） = P（wi-1，wi） / P（wi）
+
+然后P(wi,|wi-1)和p（wi）都可以从语料统计出来
+
+最终就能得到P（sentence）。而lm模型存储的就是这些p（wi-1，wi）这些概率统计值
+
+实际识别就是算出Max{P(sentence)}的过程
+
+
+然后是hmm 隐马尔科夫模型
+这个模型先不说具体原理，你就知道是声音信号到文字之间映射统计表
+因为同样发音下可能也有很多类似的单词，这时候就靠声音的组合来判断识别的颗粒度和识别了。
+用hmm识别的时候肯定会调用lm模型，因为最终的识别就是声音道文字，先靠hmm模型的统计值计算出最可能出现的一些集合，
+再根据lm模型在这些集合之间计算出概率最高的集合，而那个集合就是输出的语句了。
+
+
+然后再回到pocketSphinx上，我们可以知道识别一条语音至少需要
+
+*.dic   *.lm(或者*.DMP) 还有hmm模型
+
+其中 *.dic是整个语料库，包含了改系统能支持的所有单词和对应的发音(音素组合成单词)
+
+*.lm就是统计语言模型(音素 转移 概率)
+
+hmm是隐马尔科夫模型(得到 音素序列)
+
+
+hmm依赖lm和dic
+
+lm和dic是靠txt生成的
+
+然后hmm对我们录制的音频流，再使用dic和lm识别
+
+而训练需要的分别是wav和语料库
+ 大量的wav用于使系统更准确的弄出
+实际音频到理论音频数据的（也就是训练hmm）
+
+而大量的语料库是用于训练lm
+建立统计模型（训练语言模型）
+
+
+举个例子
+
+
+
+整句和单词举个例子就是
+
+dic里面
+
+open 发音  英语 音素 
+
+close 发音
+
+door 发音
+
+button 发音
+
+
+就是说一句话一个语音流输入它的库可能会把它分离成小的单词流
+
+采样后和语音库（*.dic）匹配
+
+
+这样的话
+
+识别单词是
+
+识别出来close；door；button；open什么的就靠dic发音映射表，对照判断
+
+而你要识别连续的单词、如open door ，close button就需要靠大量数据或者手动的修改语言模型
+
+
+还是open close door button这例子
+
+你在lm里把句首 open / close 出现的概率提高（接近100%）
+
+然后 door / button在句首出现的概率降低到 （接近 0%）
+
+然后在第二个位置的概率弄反
+
+这样的话、他的语法结构就能接近 (open|close) (door|button)
+
+这种形式，可以变相提高整句的识别能力
+
+
+然后第一个有几个备选，再给这些备选+第二个（第二个又是概率里面拿）
+
+得到模糊的串经过语言统计模型然后返回总体可能性最大的。
+
+ 
+所以我们最关键就是准确的单词发音映射表还有统计语言模型（*.lm）
+
+而统计语言模型这需要大量的样例数据获得更为准确的概率，也能进一步获取更为准确的结果
+
+
+中文语言模型库生成
+下面是我的command6.txt
+
+打开 浏览器
+打开 音乐
+打开 记事本
+关闭 窗口
+关闭 音乐
+
+然后直接用生成的6010.lm，因为6010.dic注音表完全是空白的（在线工具不支持中文注音映射到英文）直接扔掉。
+
+然后直接调用了zh_broadcastnews_utf8.dic，发现识别不出来。。。明明和上午的格式一样
+
+然后想起来zh_broadcastnews_utf8.dic这个这么大，lm那么小，是不是太大了，而且文件开头一大段看不懂的东东然后我自己就临时创建了一个6010.dic
+
+内容是
+复制代码
+
+窗口 ch uang k ou
+打开 d a k ai
+关闭 g uan b i
+记事本 j i sh ib b en
+浏览器 l iu l an q i
+音乐 y in uxs uxe
+
+复制代码
+
+这里的发音是怎么出来的？我其实就是在zh_broadcastnews_utf8.dic里面查找到那个单词后，复制过来的
+
+cd /home/ewenwan/catkin_ws/src/voice_system/model/lm/zh
+查找文件内容 grep "任" mandarin_notone.dic
+
+# 其他模型下载    https://packages.debian.org/search?keywords=pocketsphinx-hmm-zh-tdt
+
+     1) 安装
+      sudo apt-get install gstreamer0.10-pocketsphinx   # 原生系统
+      sudo apt-get install ros-indigo-pocketsphinx      # ros接口支持
+      sudo apt-get install ros-indigo-audio-common      # 包含了sound_play TTS
+      sudo apt-get install libasound2                   # 语音驱动
+      sudo apt-get install gstreamer0.10-gconf          # GStreamer组件
+      sudo apt-get install gstreamer0.10-gconf
+     2) 测试
+       pocketsphinx包 包含了 一个 节点  recognizer.py    在 /opt/ros/indigo/lib/pocketsphinx/recognizer.py
+       获取硬件 语音的输入流，在已有的语音库里  匹配语音相应的单词  并发布到 /recognizer/output 话题   
+       适合robotcup的一个语音库测试：
+       roslaunch pocketsphinx robocup.launch
+       说话测试
+       显示 话题消息：
+         rostopic echo /recognizer/output
+       查看语音库：
+       roscd pocketsphinx/demo
+       more robocup.corpus      显示
+       只有说了语音库内的语音才能得到较满意的结果
+  # robocup.launch     
+ <launch>
+  <node name="recognizer" pkg="pocketsphinx" type="recognizer.py" output="screen"> # 识别器
+    <param name="lm" value="$(find pocketsphinx)/demo/robocup.lm"/>                # 语言模型 在线工具根据语言库生成
+    <param name="dict" value="$(find pocketsphinx)/demo/robocup.dic"/>             # 语言词典
+  </node>
+</launch>
+
+# recognizer.py 文件
+
+# -*- coding:utf-8 -*-
+#!/usr/bin/python
+
+import roslib; roslib.load_manifest('pocketsphinx')
+import rospy
+
+import pygtk
+pygtk.require('2.0')
+import gtk
+
+import gobject
+import pygst
+pygst.require('0.10')
+gobject.threads_init()
+import gst
+
+from std_msgs.msg import String
+from std_srvs.srv import *
+import os
+import commands
+
+class recognizer(object):
+    """ GStreamer based speech recognizer. """
+
+    def __init__(self):
+        # Start node
+        rospy.init_node("recognizer")
+
+        self._device_name_param = "~mic_name"  # Find the name of your microphone by typing pacmd list-sources in the terminal
+        self._lm_param = "~lm"
+        self._dic_param = "~dict"
+
+        # Configure mics with gstreamer launch config
+        if rospy.has_param(self._device_name_param):
+            self.device_name = rospy.get_param(self._device_name_param)
+            self.device_index = self.pulse_index_from_name(self.device_name)
+            self.launch_config = "pulsesrc device=" + str(self.device_index)
+            rospy.loginfo("Using: pulsesrc device=%s name=%s", self.device_index, self.device_name)
+        elif rospy.has_param('~source'):
+            # common sources: 'alsasrc'
+            self.launch_config = rospy.get_param('~source')
+        else:
+            self.launch_config = 'gconfaudiosrc'
+
+        rospy.loginfo("Launch config: %s", self.launch_config)
+
+        self.launch_config += " ! audioconvert ! audioresample " \
+                            + '! vader name=vad auto-threshold=true ' \
+                            + '! pocketsphinx name=asr ! fakesink'
+
+        # Configure ROS settings
+        self.started = False
+        rospy.on_shutdown(self.shutdown)
+        self.pub = rospy.Publisher('~output', String)
+        rospy.Service("~start", Empty, self.start)
+        rospy.Service("~stop", Empty, self.stop)
+
+        if rospy.has_param(self._lm_param) and rospy.has_param(self._dic_param):
+            self.start_recognizer()
+        else:
+            rospy.logwarn("lm and dic parameters need to be set to start recognizer.")
+
+    def start_recognizer(self):
+        rospy.loginfo("Starting recognizer... ")
+
+        self.pipeline = gst.parse_launch(self.launch_config)
+        self.asr = self.pipeline.get_by_name('asr')
+        self.asr.connect('partial_result', self.asr_partial_result)
+        self.asr.connect('result', self.asr_result)
+        self.asr.set_property('configured', True)
+        self.asr.set_property('dsratio', 1)
+
+        # Configure language model
+        if rospy.has_param(self._lm_param):
+            lm = rospy.get_param(self._lm_param)
+        else:
+            rospy.logerr('Recognizer not started. Please specify a language model file.')
+            return
+
+        if rospy.has_param(self._dic_param):
+            dic = rospy.get_param(self._dic_param)
+        else:
+            rospy.logerr('Recognizer not started. Please specify a dictionary.')
+            return
+
+        self.asr.set_property('lm', lm)
+        self.asr.set_property('dict', dic)
+
+        self.bus = self.pipeline.get_bus()
+        self.bus.add_signal_watch()
+        self.bus_id = self.bus.connect('message::application', self.application_message)
+        self.pipeline.set_state(gst.STATE_PLAYING)
+        self.started = True
+
+    def pulse_index_from_name(self, name):
+        output = commands.getstatusoutput("pacmd list-sources | grep -B 1 'name: <" + name + ">' | grep -o -P '(?<=index: )[0-9]*'")
+
+        if len(output) == 2:
+            return output[1]
+        else:
+            raise Exception("Error. pulse index doesn't exist for name: " + name)
+
+    def stop_recognizer(self):
+        if self.started:
+            self.pipeline.set_state(gst.STATE_NULL)
+            self.pipeline.remove(self.asr)
+            self.bus.disconnect(self.bus_id)
+            self.started = False
+
+    def shutdown(self):
+        """ Delete any remaining parameters so they don't affect next launch """
+        for param in [self._device_name_param, self._lm_param, self._dic_param]:
+            if rospy.has_param(param):
+                rospy.delete_param(param)
+
+        """ Shutdown the GTK thread. """
+        gtk.main_quit()
+
+    def start(self, req):
+        self.start_recognizer()
+        rospy.loginfo("recognizer started")
+        return EmptyResponse()
+
+    def stop(self, req):
+        self.stop_recognizer()
+        rospy.loginfo("recognizer stopped")
+        return EmptyResponse()
+
+    def asr_partial_result(self, asr, text, uttid):
+        """ Forward partial result signals on the bus to the main thread. """
+        struct = gst.Structure('partial_result')
+        struct.set_value('hyp', text)
+        struct.set_value('uttid', uttid)
+        asr.post_message(gst.message_new_application(asr, struct))
+
+    def asr_result(self, asr, text, uttid):
+        """ Forward result signals on the bus to the main thread. """
+        struct = gst.Structure('result')
+        struct.set_value('hyp', text)
+        struct.set_value('uttid', uttid)
+        asr.post_message(gst.message_new_application(asr, struct))
+
+    def application_message(self, bus, msg):
+        """ Receive application messages from the bus. """
+        msgtype = msg.structure.get_name()
+        if msgtype == 'partial_result':
+            self.partial_result(msg.structure['hyp'], msg.structure['uttid'])
+        if msgtype == 'result':
+            self.final_result(msg.structure['hyp'], msg.structure['uttid'])
+
+    def partial_result(self, hyp, uttid):
+        """ Delete any previous selection, insert text and select it. """
+        rospy.logdebug("Partial: " + hyp)
+
+    def final_result(self, hyp, uttid):
+        """ Insert the final result. """
+        msg = String()
+        msg.data = str(hyp.lower())# 英文的字典里 是大写 这里全部变成小写 再发布消息
+        rospy.loginfo(msg.data)
+        self.pub.publish(msg)
+
+if __name__ == "__main__":
+    start = recognizer()
+    gtk.main()
+
+  
+# 介绍怎样改写    http://www.diegorobot.com/wp/?tag=sound_play&lang=zh 
+#  本地模型库   /usr/share/pocketsphinx/model    hmm   lm
+# 其他模型下载    https://packages.debian.org/search?keywords=pocketsphinx-hmm-zh-tdt
+#  改写  recognizer.py
+  
+注意如果徐哟修改 HMM模型责需要注释掉     #self.asr.set_property('configured', True) # 需要开启配置  hmm模型
+  
+### 修改后的 文件
+#!/usr/bin/python
+# -*- coding:utf-8 -*-
+import roslib
+roslib.load_manifest('pocketsphinx')
+import rospy
+import pygtk # Python轻松创建具有图形用户界面的程序  播放音乐等
+pygtk.require('2.0')
+import gtk   #  GNU Image Manipulation Program (GIMP)   Toolkit
+
+import gobject # 亦称Glib对象系统，是一个程序库，它可以帮助我们使用C语言编写面向对象程序
+import pygst   # 与 pygtk 相关
+pygst.require('0.10')
+gobject.threads_init()# 初始化
+import gst
+
+from std_msgs.msg import String
+from std_srvs.srv import *
+import os
+import commands
+
+class recognizer(object):
+    """GStreamer是一个多媒体框架，它可以允许你轻易地创建、编辑与播放多媒体文件"""
+    # 初始化系统配置
+    def __init__(self):
+        # 创建节点
+        rospy.init_node("recognizer")
+        # 全局参数
+        self._device_name_param = "~mic_name"  # 麦克风
+        self._lm_param = "~lm"                 # 语言模型 language model  
+        self._dic_param = "~dict"              # 语言字典
+        self._hmm_param = "~hmm"               # 识别网络  hiden markov model 隐马尔可夫模型 分中英文模型
+        
+        
+        # 用 gstreamer launch config 配置 麦克风  一些启动信息
+        if rospy.has_param(self._device_name_param):# 按照指定的麦克风
+            self.device_name = rospy.get_param(self._device_name_param)# 麦克风名字
+            self.device_index = self.pulse_index_from_name(self.device_name)# 麦克风编号 ID
+            self.launch_config = "pulsesrc device=" + str(self.device_index)# 启动信息
+            rospy.loginfo("Using: pulsesrc device=%s name=%s", self.device_index, self.device_name)
+        elif rospy.has_param('~source'):
+            # common sources: 'alsasrc'
+            self.launch_config = rospy.get_param('~source')
+        else:
+            self.launch_config = 'gconfaudiosrc'
+
+        rospy.loginfo("麦克风配置: %s", self.launch_config) # "Launch config: %s",self.launch_config
+
+        self.launch_config += " ! audioconvert ! audioresample " \
+                            + '! vader name=vad auto-threshold=true ' \
+                            + '! pocketsphinx name=asr ! fakesink'
+
+        # 配置ros系统设置
+        self.started = False
+        rospy.on_shutdown(self.shutdown)# 自主关闭
+        self.pub = rospy.Publisher('~output', String)# 发布 ~output 参数指定的 话题 类型 tring  似乎缺少 指定发布队列大小 tring
+        
+        rospy.Service("~start", Empty, self.start)   # 开始服务
+        rospy.Service("~stop", Empty, self.stop)     # 结束服务
+        # 检查模型和字典配置
+        if rospy.has_param(self._lm_param) and rospy.has_param(self._dic_param):
+            self.start_recognizer()
+        else:
+            rospy.logwarn("启动语音识别器必须指定语言模型lm,以及语言字典dic.")
+            # rospy.logwarn("lm and dic parameters need to be set to start recognizer.")
+                    
+    def start_recognizer(self):
+        rospy.loginfo("开始语音识别... ")
+        # rospy.loginfo("Starting recognizer... ")
+        
+        self.pipeline = gst.parse_launch(self.launch_config)# 解析 麦克风配置 
+        self.asr = self.pipeline.get_by_name('asr')         # 自动语音识别 模型
+        self.asr.connect('partial_result', self.asr_partial_result)# 后面的函数
+        self.asr.connect('result', self.asr_result)
+        #self.asr.set_property('configured', True) # 需要开启配置  hmm模型
+        self.asr.set_property('dsratio', 1)
+
+        # 配置语言模型
+        if rospy.has_param(self._lm_param):
+            lm = rospy.get_param(self._lm_param)
+        else:
+            rospy.logerr('请配置一个语言模型 lm.')
+            return
+
+        if rospy.has_param(self._dic_param):
+            dic = rospy.get_param(self._dic_param)
+        else:
+            rospy.logerr('请配置一个语言字典 dic.')
+            return
+        
+        if rospy.has_param(self._hmm_param):
+            hmm = rospy.get_param(self._hmm_param)
+        else:
+            rospy.logerr('请配置一个语言识别模型 hmm.')
+            return
+
+
+        self.asr.set_property('lm', lm)   # 设置asr的语言模型
+        self.asr.set_property('dict', dic)# 设置asr的字典
+        self.asr.set_property('hmm', hmm) # 设置asr的识别模型
+        
+
+        self.bus = self.pipeline.get_bus()
+        self.bus.add_signal_watch()
+        self.bus_id = self.bus.connect('message::application', self.application_message)
+        self.pipeline.set_state(gst.STATE_PLAYING)
+        self.started = True
+
+    # 解析 麦克风名称 得到 麦克风ID
+    def pulse_index_from_name(self, name):
+        output = commands.getstatusoutput("pacmd list-sources | grep -B 1 'name: <" + name + ">' | grep -o -P '(?<=index: )[0-9]*'")
+
+        if len(output) == 2:
+            return output[1]
+        else:
+            raise Exception("Error. pulse index doesn't exist for name: " + name)
+        
+    # 停止识别器
+    def stop_recognizer(self):
+        if self.started:
+            self.pipeline.set_state(gst.STATE_NULL)
+            self.pipeline.remove(self.asr)
+            self.bus.disconnect(self.bus_id)
+            self.started = False
+    # 程序关闭
+    def shutdown(self):
+        """ 删除所有的参数，以防影响下次启动"""
+        for param in [self._device_name_param, self._lm_param, self._dic_param]:
+            if rospy.has_param(param):
+                rospy.delete_param(param)
+
+        """ 关闭 GTK 进程. """
+        gtk.main_quit()
+    # 开始
+    def start(self, req):
+        self.start_recognizer()
+        rospy.loginfo("识别器启动")
+        return EmptyResponse()
+    # 停止
+    def stop(self, req):
+        self.stop_recognizer()
+        rospy.loginfo("识别器停止")
+        return EmptyResponse()
+    
+    def asr_partial_result(self, asr, text, uttid):
+        """前线部分结果到主线程. """
+        struct = gst.Structure('partial_result')
+        struct.set_value('hyp', text)
+        struct.set_value('uttid', uttid)
+        asr.post_message(gst.message_new_application(asr, struct))
+
+    def asr_result(self, asr, text, uttid):
+        """ 前线结果到主线程 """
+        struct = gst.Structure('result')
+        struct.set_value('hyp', text)
+        struct.set_value('uttid', uttid)
+        asr.post_message(gst.message_new_application(asr, struct))
+
+    def application_message(self, bus, msg):
+        """ 从总线上接收应用数据. """
+        msgtype = msg.structure.get_name()
+        if msgtype == 'partial_result':
+            self.partial_result(msg.structure['hyp'], msg.structure['uttid'])
+        if msgtype == 'result':
+            self.final_result(msg.structure['hyp'], msg.structure['uttid'])
+    # 部分结果
+    def partial_result(self, hyp, uttid):
+        """ Delete any previous selection, insert text and select it. """
+        rospy.logdebug("Partial: " + hyp)
+        
+    # 最终结果
+    def final_result(self, hyp, uttid):
+        """ Insert the final result. """
+        msg = String()# 话题消息类型
+        msg.data = str(hyp)# 识别语音对于成的文字
+        rospy.loginfo(msg.data)
+        self.pub.publish(msg)
+
+if __name__ == "__main__":
+    start = recognizer()
+    gtk.main()
+
+
+### launch文件
+  <launch>
+
+  <node name="recognizer" pkg="voice_system" type="my_recognizer.py" output="screen">   
+    <param name="lm" value="$(find voice_system)/model/cmd/zh/my_nav_commands.lm"/>
+    <param name="dict" value="$(find voice_system)/model/cmd/zh/my_nav_commands.dic"/>
+    <param name="hmm" value="$(find voice_system)/model/hmm/zh/tdt_sc_8k"/>
+  </node>
+  
+</launch>
+
+
+
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+"""
+根据语言识别结果的发布话题上的控制命令，发布速度命令到cmd_vel话题上，地盘接收到速度命令控制电机转动前进
+"""
+
+import rospy
+from geometry_msgs.msg import Twist # 速度命令消息类型
+from std_msgs.msg import String
+from math import copysign           # 
+
+# 自定义语音控制的类
+class VoiceNav:
+    def __init__(self):
+        rospy.init_node('voice_nav') # 节点名
+        
+        rospy.on_shutdown(self.cleanup)
+        
+        # 一些参数，launch文件或配置文件可修改
+        self.max_speed = rospy.get_param("~max_speed", 0.8)                # 最大线速度 m/s
+        self.max_angular_speed = rospy.get_param("~max_angular_speed", 1.5)# 最大角速度 
+        self.speed = rospy.get_param("~start_speed", 0.1)                  # 前进 开始速度
+        self.angular_speed = rospy.get_param("~start_angular_speed", 0.5)  # 旋转 开始角速度
+        self.linear_increment = rospy.get_param("~linear_increment", 0.05) # 线速度  每次增加
+        self.angular_increment = rospy.get_param("~angular_increment", 0.4)# 角速度  每次增加
+        
+        # 发布频率
+        self.rate = rospy.get_param("~rate", 5)# 指令发布频率
+        r = rospy.Rate(self.rate)       
+        # 语音控制  标志  默认开启
+        self.paused = False      
+        # 初始化要发布在cmd_vel话题上的速度类型
+        self.cmd_vel = Twist()
+        # 发布话题                            话题名    消息类型     队列大小
+        self.cmd_vel_pub = rospy.Publisher('cmd_vel', Twist, queue_size=5)       
+        # 订阅语言识别发布话题                     类型     回调函数
+        rospy.Subscriber('/recognizer/output', String, self.speech_callback)
+        
+        # 控制命令 关键字 
+        self.keywords_to_command = {'停止': ['停止', '停下来', '停止 前进', '关闭', '睡觉', '停', '禁止', '关闭', 'help me'],
+                                    '减速': ['减慢', '慢', '减慢 速度', '变慢', '慢下来', '慢速', '减速'],
+                                    '加速': ['加速', '快', '加快 速度', '加快', '加速上去', '加速 前进'],
+                                    '前进': ['前进', '向前 移动', '向前 走', '过来', '全速 前进'],
+                                    '后退': ['后退', '向后 移动', '向后 走', '倒退','全速 倒退'],
+                                    '正转': ['正转', '正向 自转', '正向 旋转', '原地 自转', '转圈', '正向'],
+                                    '反转': ['反转', '反向 自转', '反向 旋转', '原地 反转', '反向'],
+                                    '左转': ['向左 转弯', '左转', '向左 移动', '向左 走', '左 转弯'],
+                                    '右转': ['向右 转弯', '右转', '向右 移动', '向左 走', '左 转弯'],
+                                    '当前位置': ['位置', '当前 位置', '报告 位置', '汇报 位置'],
+                                    '当前任务': ['任务', '当前 任务', '报告 任务', '回报 任务'],
+                                    '当前状态': ['当前状态', '状态'],
+                                    '关语控': ['关闭 语音 控制', '禁用 语音 控制'],
+                                    '开语控': ['打开 语音 控制', '启用 语音 控制']}
+        
+        rospy.loginfo("已经准备好接受语言控制命令")
+        
+        # 按发送频率发送命令
+        while not rospy.is_shutdown():
+            self.cmd_vel_pub.publish(self.cmd_vel)
+            r.sleep()                       
+    #  查找命令      
+    def get_command(self, data):
+        # 在 控制命令 关键字 中查找 有关控制命令
+        for (command, keywords) in self.keywords_to_command.iteritems():
+            for word in keywords:
+                if data.find(word) > -1:
+                    return command
+                
+    # 回调函数  根据语言命令 执行 发送 速度指令 或其他内容    
+    def speech_callback(self, msg):
+        # 从语音识别话题上 得到指令
+        command = self.get_command(msg.data)# 语言识别话题上的消息        
+        # 现实 信息
+        rospy.loginfo("Command: " + str(command))
+        
+        # 语音控制 开关
+        if command == '关语控':
+            self.paused = True
+        elif command == '开语控':
+            self.paused = False
+        
+        if self.paused:
+            return       
+        
+        if command == '前进':    
+            self.cmd_vel.linear.x = self.speed
+            self.cmd_vel.angular.z = 0
+            
+        elif command == '反转':
+            self.cmd_vel.linear.x = 0
+            self.cmd_vel.angular.z = self.angular_speed
+                
+        elif command == '正转':  
+            self.cmd_vel.linear.x = 0      
+            self.cmd_vel.angular.z = -self.angular_speed
+            
+        elif command == '左转':
+            if self.cmd_vel.linear.x != 0:
+                self.cmd_vel.angular.z += self.angular_increment
+            else:        
+                self.cmd_vel.angular.z = self.angular_speed
+                
+        elif command == '右转':    
+            if self.cmd_vel.linear.x != 0:
+                self.cmd_vel.angular.z -= self.angular_increment
+            else:        
+                self.cmd_vel.angular.z = -self.angular_speed
+                
+        elif command == '后退':
+            self.cmd_vel.linear.x = -self.speed
+            self.cmd_vel.angular.z = 0
+            
+        elif command == '停止': 
+            # Stop the robot!  Publish a Twist message consisting of all zeros.         
+            self.cmd_vel = Twist()
+        
+        elif command == '加速':
+            self.speed += self.linear_increment
+            self.angular_speed += self.angular_increment
+            if self.cmd_vel.linear.x != 0:
+                self.cmd_vel.linear.x += copysign(self.linear_increment, self.cmd_vel.linear.x)
+            if self.cmd_vel.angular.z != 0:
+                self.cmd_vel.angular.z += copysign(self.angular_increment, self.cmd_vel.angular.z)
+            
+        elif command == '减速':
+            self.speed -= self.linear_increment
+            self.angular_speed -= self.angular_increment
+            if self.cmd_vel.linear.x != 0:
+                self.cmd_vel.linear.x -= copysign(self.linear_increment, self.cmd_vel.linear.x)
+            if self.cmd_vel.angular.z != 0:
+                self.cmd_vel.angular.z -= copysign(self.angular_increment, self.cmd_vel.angular.z)
+
+
+        else:
+            return
+
+        self.cmd_vel.linear.x = min(self.max_speed, max(-self.max_speed, self.cmd_vel.linear.x))
+        self.cmd_vel.angular.z = min(self.max_angular_speed, max(-self.max_angular_speed, self.cmd_vel.angular.z))
+
+    def cleanup(self):
+        # 停止速度
+        twist = Twist()
+        self.cmd_vel_pub.publish(twist)
+        rospy.sleep(1)
+
+if __name__=="__main__":
+    try:
+        VoiceNav()
+        rospy.spin()
+    except rospy.ROSInterruptException:
+        rospy.loginfo("语言导航结束")
+
+
+       
+     3) 创建新的语音单词
+      a) 创建语音单词语句文件  一行一句 的 txt文件
+       例如:
+        roscd rbx1_speech/config
+        more nav_commands.txt
+      
+pause speech
+continue speech
+move forward
+move backward
+move back
+move left
+move right
+...
+       b) 编译生成语音库
+        通过在线的一个 语言模型（lm）生成
+        http://www.speech.cs.cmu.edu/tools/lmtool-new.html
+        http://www.speech.cs.cmu.edu/tools/lmtool-new.html
+        上传语言文件  Upload a sentence corpus file: Browse
+        在线编译     COMPILE KNOWLEDGE BASE
+        下载         编译好的文件
+       c) 编写自己的launch启动文件
+<launch>
+ <node name="recognizer" pkg="pocketsphinx" type="recognizer.py" output="screen"> #识别器
+  <param name="lm" value="$(find rbx1_speech)/config/nav_commands.lm"/>           #新的语言模型
+  <param name="dict" value="$(find rbx1_speech)/config/nav_commands.dic"/>        #新的语言单词库
+ </node>
+</launch>
+      
+      d) 运行测试
+             
+       roslaunch bx1_speech voice_nav_commands.launch
+       rostopic  echo /recognizer/output
+
+  4) 编写语音控制 文件
+          需要另外一个节点 订阅 /recognizer/output话题 得到上的文本控制命令
+          根据文本控制命令，给出实际的 机器人控制指令（如简单的发布到 cmd_vel话题上的 Twist移动指令，或者导航命令 move_base_msgs.msg 的 MoveBaseGoal 类型指令
+          
+# voice_cmd_vel.py   发布  cmd_vel/Twist 命令
+import roslib; roslib.load_manifest('pocketsphinx')
+import rospy
+import math
+
+from geometry_msgs.msg import Twist  # cmd_vel/Twist 
+from std_msgs.msg import String
+
+class voice_cmd_vel:
+
+    def __init__(self): # initialized
+        rospy.on_shutdown(self.cleanup) # auto shutdown  清零速度
+        self.speed = 0.2                # 默认速度和速度标志 
+        self.msg = Twist()              # cmd_vel type
+
+        # publish to cmd_vel, subscribe to speech output
+        self.pub_ = rospy.Publisher('cmd_vel', Twist)  # 发布的命令话题
+        #                                      类型      回调函数
+        rospy.Subscriber('recognizer/output', String, self.speechCb) # 订阅的 识别后的文本控制命令
+
+        r = rospy.Rate(10.0)
+        while not rospy.is_shutdown():
+            self.pub_.publish(self.msg) #发布控制命令
+            r.sleep()
+        
+    def speechCb(self, msg):
+        rospy.loginfo(msg.data) #终端显示文本命令
+
+        if msg.data.find("full speed") > -1: #全速
+            if self.speed == 0.2:
+                self.msg.linear.x = self.msg.linear.x*2
+                self.msg.angular.z = self.msg.angular.z*2
+                self.speed = 0.4
+        if msg.data.find("half speed") > -1: #半速
+            if self.speed == 0.4:
+                self.msg.linear.x = self.msg.linear.x/2
+                self.msg.angular.z = self.msg.angular.z/2
+                self.speed = 0.2
+
+        if msg.data.find("forward") > -1:    #直线前进
+            self.msg.linear.x = self.speed   #默认速度0.2 或0.4
+            self.msg.angular.z = 0
+        elif msg.data.find("left") > -1:     #左转
+            if self.msg.linear.x != 0:
+                if self.msg.angular.z < self.speed:
+                    self.msg.angular.z += 0.05
+            else:        
+                self.msg.angular.z = self.speed*2 #线速度为零 左转为逆时针 antcolockwise 逆时针为正方向
+        elif msg.data.find("right") > -1:   #右转
+            if self.msg.linear.x != 0:
+                if self.msg.angular.z > -self.speed:
+                    self.msg.angular.z -= 0.05
+            else:        
+                self.msg.angular.z = -self.speed*2 #线速度为零 右转为顺时针 colockwise 顺时针为反方向
+        elif msg.data.find("back") > -1:   #后退
+            self.msg.linear.x = -self.speed #线速度取反
+            self.msg.angular.z = 0
+        elif msg.data.find("stop") > -1 or msg.data.find("halt") > -1:     #停止      
+            self.msg = Twist()              #速度清零
+        
+        self.pub_.publish(self.msg)         #发布速度命令
+
+    def cleanup(self):
+        # stop the robot!
+        twist = Twist()
+        self.pub_.publish(twist)
+
+if __name__=="__main__":
+    rospy.init_node('voice_cmd_vel')
+    try:
+        voice_cmd_vel()
+    except:
+        pass
+
+     
+     
+   #voice_nav.py 语言导航  还是 cmd_vel/Twist 消息
+   
+import rospy
+from geometry_msgs.msg import Twist #cmd_vel/Twist 消息
+from std_msgs.msg import String     #语音识别
+from math import copysign           # 克隆符号copysign(x,y) 将 y的正负号给x  copysign（1,-5）=-1
+class VoiceNav:
+           #初始化
+    def __init__(self):
+        rospy.init_node('voice_nav')    #创建节点    
+        rospy.on_shutdown(self.cleanup) #自动退出       
+        # Set a number of parameters affecting the robot's speed
+        # 参数设置 可以 rospara set修改 或者 launch文件修改
+        self.max_speed = rospy.get_param("~max_speed", 0.4)
+        self.max_angular_speed = rospy.get_param("~max_angular_speed", 1.5)
+        self.speed = rospy.get_param("~start_speed", 0.1)
+        self.angular_speed = rospy.get_param("~start_angular_speed", 0.5)
+        self.linear_increment = rospy.get_param("~linear_increment", 0.05)
+        self.angular_increment = rospy.get_param("~angular_increment", 0.4)
+        
+        # 执行频率
+        self.rate = rospy.get_param("~rate", 5)
+        r = rospy.Rate(self.rate)        
+        # 是否停止语言控制的标志 
+        self.paused = False        
+        # 初始化命令消息 Initialize the Twist message we will publish.
+        self.cmd_vel = Twist()
+        # 发布命令Publish the Twist message to the cmd_vel topic
+        self.cmd_vel_pub = rospy.Publisher('cmd_vel', Twist, queue_size=5)       
+        # 订阅语音识别的话题获得文本命令 Subscribe to the /recognizer/output topic to receive voice commands.
+        #                                                回调函数
+        rospy.Subscriber('/recognizer/output', String, self.speech_callback)
+        
+        # 关键字到命令的映射 字典 A mapping from keywords or phrases to commands
+        self.keywords_to_command = {'stop': ['stop', 'halt', 'abort', 'kill', 'panic', 'off', 'freeze', 'shut down', 'turn off', 'help', 'help me'],
+                                    'slower': ['slow down', 'slower'],
+                                    'faster': ['speed up', 'faster'],
+                                    'forward': ['forward', 'ahead', 'straight'],
+                                    'backward': ['back', 'backward', 'back up'],
+                                    'rotate left': ['rotate left'],
+                                    'rotate right': ['rotate right'],
+                                    'turn left': ['turn left'],
+                                    'turn right': ['turn right'],
+                                    'quarter': ['quarter speed'],
+                                    'half': ['half speed'],
+                                    'full': ['full speed'],
+                                    'pause': ['pause speech'],
+                                    'continue': ['continue speech']}
+        
+        rospy.loginfo("Ready to receive voice commands")
+        
+        # We have to keep publishing the cmd_vel message if we want the robot to keep moving.
+        while not rospy.is_shutdown():
+            self.cmd_vel_pub.publish(self.cmd_vel) #发布速度命令
+            r.sleep()                       
+            
+    def get_command(self, data):
+        # Attempt to match the recognized word or phrase to the 
+        # keywords_to_command dictionary and return the appropriate
+        # command
+        for (command, keywords) in self.keywords_to_command.iteritems():
+            for word in keywords:
+                if data.find(word) > -1: #如果找到包含相应关键字的语言 就返回对应的命令
+                    return command
+        
+    def speech_callback(self, msg):
+        # Get the motion command from the recognized phrase 得到命令
+        command = self.get_command(msg.data)        
+        # Log the command to the screen
+        rospy.loginfo("Command: " + str(command)) # 终端回显        
+        # If the user has asked to pause/continue voice control,
+        # set the flag accordingly  语音控制 标志
+        if command == 'pause':
+            self.paused = True
+        elif command == 'continue':
+            self.paused = False
+        
+        # If voice control is paused, simply return without
+        # performing any action
+        if self.paused:  #不使用语言控制 则返回
+            return       
+        
+        # The list of if-then statements should be fairly
+        # self-explanatory
+        if command == 'forward':    
+            self.cmd_vel.linear.x = self.speed #前进
+            self.cmd_vel.angular.z = 0
+            
+        elif command == 'rotate left':
+            self.cmd_vel.linear.x = 0
+            self.cmd_vel.angular.z = self.angular_speed  # 原地左转 为正方向 速度为正值
+                
+        elif command == 'rotate right':  
+            self.cmd_vel.linear.x = 0      
+            self.cmd_vel.angular.z = -self.angular_speed # 原地右转 为负值
+            
+        elif command == 'turn left':                     #向左转
+            if self.cmd_vel.linear.x != 0:
+                self.cmd_vel.angular.z += self.angular_increment
+            else:        
+                self.cmd_vel.angular.z = self.angular_speed
+                
+        elif command == 'turn right':                    #向右转
+            if self.cmd_vel.linear.x != 0:
+                self.cmd_vel.angular.z -= self.angular_increment
+            else:        
+                self.cmd_vel.angular.z = -self.angular_speed
+                
+        elif command == 'backward':                      #后退
+            self.cmd_vel.linear.x = -self.speed          #为负数值
+            self.cmd_vel.angular.z = 0
+            
+        elif command == 'stop':                          # 停止
+            # Stop the robot!  Publish a Twist message consisting of all zeros.         
+            self.cmd_vel = Twist()                       #速度清零
+        
+        elif command == 'faster':                        #加速
+            self.speed += self.linear_increment           #记录
+            self.angular_speed += self.angular_increment
+            if self.cmd_vel.linear.x != 0:
+                self.cmd_vel.linear.x += copysign(self.linear_increment, self.cmd_vel.linear.x) #原来是负数 就更负 加速倒退：原来是正数就更大 加速前进
+            if self.cmd_vel.angular.z != 0:
+                self.cmd_vel.angular.z += copysign(self.angular_increment, self.cmd_vel.angular.z) #同上，确保加速正转或加速反转
+            
+        elif command == 'slower':
+            self.speed -= self.linear_increment
+            self.angular_speed -= self.angular_increment
+            if self.cmd_vel.linear.x != 0:
+                self.cmd_vel.linear.x -= copysign(self.linear_increment, self.cmd_vel.linear.x) #同上，确保减速前进或减速倒退
+            if self.cmd_vel.angular.z != 0:
+                self.cmd_vel.angular.z -= copysign(self.angular_increment, self.cmd_vel.angular.z) #同上，确保减速正转或减速反转
+                
+        elif command in ['quarter', 'half', 'full']:
+            if command == 'quarter':
+                self.speed = copysign(self.max_speed / 4, self.speed) #最大速度的 1/4 确保和原来方向一样
+        
+            elif command == 'half':
+                self.speed = copysign(self.max_speed / 2, self.speed) #最大速度的 1/2 确保和原来方向一样
+            
+            elif command == 'full':
+                self.speed = copysign(self.max_speed, self.speed)     #最大速度  确保和原来方向一样
+            
+            if self.cmd_vel.linear.x != 0:
+                self.cmd_vel.linear.x = copysign(self.speed, self.cmd_vel.linear.x)
+
+            if self.cmd_vel.angular.z != 0:
+                self.cmd_vel.angular.z = copysign(self.angular_speed, self.cmd_vel.angular.z)
+                
+        else:
+            return
+        #确保速度不要超过最大速度限制
+        self.cmd_vel.linear.x = min(self.max_speed, max(-self.max_speed, self.cmd_vel.linear.x)) 
+        self.cmd_vel.angular.z = min(self.max_angular_speed, max(-self.max_angular_speed, self.cmd_vel.angular.z))
+
+    def cleanup(self):
+        # When shutting down be sure to stop the robot!
+        twist = Twist()
+        self.cmd_vel_pub.publish(twist)
+        rospy.sleep(1)
+
+if __name__=="__main__":
+    try:
+        VoiceNav()
+        rospy.spin()
+    except rospy.ROSInterruptException:
+        rospy.loginfo("Voice navigation terminated.")
+   
+   5) 进行语言控制实验
+      a) 仿真实验
+        1运行机器人   roslaunch rbx1_bringup fake_turtlebot.launch
+        2rviz       rosrun rviz rviz -d `rospack find rbx1_nav`/sim.rviz
+        3控制台      rqt_console &
+        4运行语音识别 roslaunch rbx1_speech voice_nav_commands.launch
+        5运行文本控制 roslaunch rbx1_speech turtlebot_voice_nav.launch
+      b) 实体机器人实验
+        1运行机器人   roslaunch rbx1_bringup turtlebot_minimal_create.launch
+        2控制台       rqt_console &
+        3运行语音识别 roslaunch rbx1_speech voice_nav_commands.launch
+        4运行文本控制 roslaunch rbx1_speech turtlebot_voice_nav.launch
+      c) 视频解说
+         http://www.youtube.com/watch?v=10ysYZUX_jA
+         
+  2、语音合成  Festival    sound_play   是 ros-indigo-audio-common 的一部分
+      1) 安装
+       sudo apt-get install ros-indigo-audio-common
+       sudo apt-get install libasound2
+      2) 测试
+         运行服务节点  rosrun sound_play soundplay_node.py
+         添加发音文本  rosrun sound_play say.py "Greetings Humans. Take me to your leader."
+         默认发音： voice_kal_diphone
+         
+      3) 添加新的发音库 
+         a) 查看已经安装的发音库
+           ls /usr/share/festival/voices/english >>> 就一个 voice_kal_diphone
+         b) 查看全部的 Festival语言库
+           sudo apt-cache search --names-only festvox-*
+                >>>
+festvox-don - minimal British English male speaker for festival
+festvox-ellpc11k - Castilian Spanish male speaker for Festival
+festvox-en1 - mbrola-en1 voice support for festival
+festvox-rablpc16k - British English male speaker for festival, 16khz sample rate
+festvox-rablpc8k - British English male speaker for festival, 8khz sample rate
+festvox-us1 - mbrola-us1 voice support for festival
+festvox-us2 - mbrola-us2 voice support for festival
+festvox-us3 - mbrola-us3 voice support for festival
+festvox-ca-ona-hts - Catalan female speaker for festival, 16kHz HTS
+festvox-czech-dita - Czech adult female speaker "dita" for Festival
+festvox-czech-krb - Czech child male speaker "krb" for Festival
+festvox-czech-machac - Czech adult male speaker "machac" for Festival
+festvox-czech-ph - Czech male speaker for Festival
+festvox-hi-nsk - Hindi male speaker for festival
+festvox-italp16k - Italian female speaker for Festival
+festvox-itapc16k - Italian male speaker for Festival
+festvox-kallpc16k - American English male speaker for festival, 16khz sample rate
+festvox-kallpc8k - American English male speaker for festival, 8khz sample rate
+festvox-kdlpc16k - American English male speaker for festival, 16khz sample rate
+festvox-kdlpc8k - American English male speaker for festival, 8khz sample rate
+festvox-mr-nsk - Marathi male speaker for festival
+festvox-ru - Russian male speaker for Festival
+festvox-suopuhe-common - Common files for Festival Finnish speakers
+festvox-suopuhe-lj - Finnish female speaker for Festival
+festvox-suopuhe-mv - Finnish male speaker for festival
+festvox-te-nsk - Telugu (te) male speaker for festival
+
+         c) 安装指定的语音库
+            sudo apt-get install festvox-don
+         d) 测试新的发音 指定发音源
+            rosrun sound_play say.py "Welcome to the future" voice_don_diphone
+         e) 播放语言文件 声音
+            rosrun sound_play play.py `rospack find rbx1_speech`/sounds/R2D2a.wav
+         f) 播放内建音乐 数字1~5
+            rosrun sound_play playbuiltin.py 4
+            
+        4) 使用ros节点
+       # talkback.py
+import rospy
+from std_msgs.msg import String
+from sound_play.libsoundplay import SoundClient # SoundClient 客户端  
+import sys
+
+class TalkBack:
+    def __init__(self, script_path): #初始化 类
+        rospy.init_node('talkback')  #新建节点
+        rospy.on_shutdown(self.cleanup)#自尽
+        
+        # Set the default TTS voice to use  声音源
+        self.voice = rospy.get_param("~voice", "voice_don_diphone")       
+        # Set the wave file path if used    文件路径
+        self.wavepath = rospy.get_param("~wavepath", script_path + "/../sounds")
+        
+        # Create the sound client object
+        self.soundhandle = SoundClient() #客户端
+        
+        # Wait a moment to let the client connect to the
+        # sound_play server
+        rospy.sleep(1)
+        
+        # Make sure any lingering sound_play processes are stopped.
+        self.soundhandle.stopAll()      # 终止发音
+        
+        # Announce that we are ready for input
+        self.soundhandle.playWave(self.wavepath + "/R2D2a.wav") #播放声音文件
+        rospy.sleep(1)
+        self.soundhandle.say("Ready", self.voice)               #发音
+        
+        rospy.loginfo("Say one of the navigation commands...")
+
+        # Subscribe to the recognizer output and set the callback function
+        rospy.Subscriber('/recognizer/output', String, self.talkback) #订阅语音识别话题
+        
+    def talkback(self, msg):
+        # Print the recognized words on the screen
+        rospy.loginfo(msg.data)      #回显   
+        # Speak the recognized words in the selected voice
+        self.soundhandle.say(msg.data, self.voice)   #发音  
+        # Uncomment to play one of the built-in sounds
+        #rospy.sleep(2)
+        #self.soundhandle.play(5)
+        
+        # Uncomment to play a wave file
+        #rospy.sleep(2)
+        #self.soundhandle.playWave(self.wavepath + "/R2D2a.wav")
+
+    def cleanup(self):
+        self.soundhandle.stopAll()
+        rospy.loginfo("Shutting down talkback node...")
+
+if __name__=="__main__":
+    try:
+        TalkBack(sys.path[0])
+        rospy.spin()
+    except rospy.ROSInterruptException:
+        rospy.loginfo("Talkback node terminated.")
+
+         
+        5) 测试
+         roslaunch rbx1_speech talkback.launch
+    
+    
+    
+    开源   人工智能标记语言——AIML 
+    
+    AIML（Artificial Intelligence Markup Language，人工智能标记语言）是一种创建自然语言软件代理的XML语言，
+    由Richard Wallace和世界各地的自由软件社区在1995年至2002年发明。AIML主要用于实现机器人的语言交流功能，
+    用户可以与机器人说话，而机器人通过一个自然语言的软件代理，也可以给出一个聪明的回答。目前AIML已经有了Java，Ruby，Python， C ，C#，Pascal等语言的版本。
+
+AIML文件包含一系列已定义的标签。我们通过一个简单的实例学习一下AIML的语法规则。
+
+    <aiml version="1.0.1" encoding="UTF-8">
+      <category>
+        <pattern> HOW ARE YOU </pattern>
+        <template> I AM FINE </template>
+      </category>
+    </aiml>
+
+1.        <aiml>标签：所有的aiml代码都需要介于<aiml>和</aiml>标签之间，该标签包含文件的版本号和编码格式。
+2.        <category>标签：表示一个基本的知识块，包含一条输入语句和一条输出语句，用来匹配机器人和人交流过程中的一问一答和一问多种应答，但不允许多种提问匹配。
+3.        <pattern>标签：表示用户的输入语句的匹配，在上边的例子中，用户一旦输入 “How are you” ，机器人就会找到这个匹配。注意，<pattern>标签内的语句必须大写。
+4.        <template>标签：表示机器人应答语句，机器人找到相应的匹配语句之后，会输出匹配语句对应的应答语句。
+
+有了这几个简单的元素理论上就可以写出任意匹配模式，达到一定智能，但实际应用当中只有这些元素是不够的，我们在通过另一个示例略微深入的理解一下AIML。
+
+
+    <aiml version="1.0.1" encoding="UTF-8">
+    
+      <category>
+        <pattern> WHAT IS A ROBOT? </pattern>
+        <template>
+        A ROBOT IS A MACHINE MAINLY DESIGNED FOR EXECUTING REPEATED TASK WITH SPEED AND PRECISION.
+        </template>
+      </category>
+
+      <category>
+        <pattern> DO YOU KNOW WHAT A * IS ? </pattern>
+        <template>
+          <srai> WHAT IS A <star/> </srai>
+        </template>
+      </category>
+
+    </aiml>
+
+1.  <star/>标签：表示*，这里pattern元素里的匹配模式是用*号表示任意匹配的，但在其他元素里面不能用*号，而用<star/>这个元素来表示。在该示例中，当用户输入“Do you know what a robot is?”后，机器人会使用*匹配输入的“robot”，然后将<star/>替换为“robot”。
+2.   <srai>标签：表示<srai>里面的话会被当作是用户输入，从新查找匹配模式，直到找到非<srai>定义的回复。用户输入 “Do you know what a robot is?”后，机器人会把“what is a robot”作为用户输入，
+然后查找到匹配的输出是“A ROBOT IS A MACHINE MAINLY DESIGNED FOR EXECUTING REPEATED TASK WITH SPEED AND PRECISION.”
+当然，AIML支持的标签和用法远远不止这些，这里只作为背景知识进行了简单的介绍，如果你想深入的了解、学习AIML，可以访问网站http://www.alicebot.org/aiml.html。
+
+
+4.2 Python中的AIML解析器
+
+Python有针对AIML的开源解析模块—— PyAIML，该模块可以通过扫描AIML文件，建立一个定向模式树，然后通过深度搜索来匹配用户的输入。
+我们会使用该模块解析AIML文件，构建我们的机器人AI平台，所以先对该模块进行简单的介绍。
+
+在ubuntu14.04上安装PyAIML的方法很简单，一句话搞定：
+  sudo apt-get install python-aiml
+  想要确定PyAIML是否安装成功，在python终端中输入“import aiml”，如果没有初相任何错误，则安装成功。
+    >>> import aiml
+
+aiml模块中最重要的类是Kernel()，我们必须创建一个aiml.Kernel()对象，来进行对AIML文件的操作。
+    >>> mybot = aiml.Kernel()
+
+下一步我们来加载一个AIML文件：
+    >>> mybot.learn('sample.aiml')
+如果是加载多个AIML文件，可以在使用下边的命令：
+
+    >>> mybot.learn('startup.xml')
+    
+    <aiml version="1.0">
+        <category>
+            <pattern>LOAD AIML B</pattern>
+            <template>
+            <!-- 加载 AIML 学习集 -->
+                <learn>*.aiml</learn>
+            </template>
+        </category>
+    </aiml>
+  
+  我们需要出发一条指令，这个命令会把当前路径下的所有aiml文件加载，并且生成模式匹配树。
+    >>> mybot.respond("load aiml b")
+现在系统已经记住了所有的匹配语句，我们尝试出发一条定义的输入语句：
+    >>> while True: print k.respond(raw_input("> "))
+  
+  
+    
+         
+  二、国内语音识别
+     1、科大讯飞  TTS 部分
+     进去官网 http://www.xfyun.cn/index.php/mycloud/app/appManage
+     注册帐号下载 ＳＤＫ 解压
+
+     示例目录下：
+     /voice/samples/tts_sample
+     含有 .c源文件
+     一个 编译文件 Ｍakefile
+     
+     #common makefile header
+
+DIR_INC = ../../include  # 包含文件 路径变量
+DIR_BIN = ../../bin      # 二进制文件库 路径变量
+DIR_LIB = ../../libs     # 依赖库 路径变量
+# executive file name
+TARGET	= tts_sample     # 目标文件 编译生成的可执行文件名
+BIN_TARGET = $(DIR_BIN)/$(TARGET) # 可执行文件保存路径 在bin目录下
+
+CROSS_COMPILE =                   # 交叉编译
+CFLAGS = -g -Wall -I$(DIR_INC)
+
+# 根据 系统设置想要的 可执行文件依赖 路径  可直接修改为（本系统64位）  LDFLAGS := -L$(DIR_LIB)/x64
+ifdef LINUX64
+LDFLAGS := -L$(DIR_LIB)/x64
+else
+LDFLAGS := -L$(DIR_LIB)/x86 
+endif
+
+# 编译系统依赖
+LDFLAGS += -lmsc -lrt -ldl -lpthread 
+
+OBJECTS := $(patsubst %.c,%.o,$(wildcard *.c))
+
+$(BIN_TARGET) : $(OBJECTS)
+	$(CROSS_COMPILE)gcc $(CFLAGS) $^ -o $@ $(LDFLAGS)
+# executive file type
+%.o : %.c
+	$(CROSS_COMPILE)gcc -c $(CFLAGS) $< -o $@
+clean:
+	@rm -f *.o $(BIN_TARGET)
+
+.PHONY:clean
+
+64bit_make.sh  编译环境设置脚本
+#common makefile foot 
+  #编译64位可执行文件
+make clean;make LINUX64=1  #设置64为标志
+#设置libmsc.so库搜索路径
+export LD_LIBRARY_PATH=$(pwd)/../../libs/x64/   #拓展搜索库路径
+
+省去 source 64bit_make.sh
+     将 /lib/x64/libmsc.so 拷贝到系统搜索库路径下
+    sudo  cp /lin/x64/libmsc.so /usr/bin
+    
+    并修改 Ｍakefile 文件
+    
+    
+    2、将科大 tts 应用到ros节点上
+     1)创建包
+       cd catkin_ws/src  
+       catkin_creat_pkg voice_system roscpp rospy std_msgs
+       将科大迅飞 包下 include目录下 的 头文件拷贝到 刚刚创建的包voice下的include内
+        msp_cmn.h
+        msp_errors.h
+        msp_types.h
+        qise.h
+        qisr.h
+        qtts.h
+      2)创建节点文件
+        根据  tts.sample.c文件修改创建  kdxf_ttf.cpp文件
+        主要就是订阅一个自定义话题上的文本消息 传给科大tts 播放wav文件
+        /*
+* 语音合成（Text To Speech，TTS）技术能够自动将任意文字实时转换为连续的
+* 自然语音，是一种能够在任何时间、任何地点，向任何人提供语音信息服务的
+* 高效便捷手段，非常符合信息时代海量数据、动态更新和个性化查询的需求。
+*/
+#include "ros/ros.h"         //ros系统头文件
+#include "std_msgs/String.h" 
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+#include "qtts.h"
+#include "msp_cmn.h"
+#include "msp_errors.h"
+
+const char* filename = "/home/ewenwan/ME/music/music.wav";
+const char* playwavpath = "play /home/ewenwan/ME/music/music.wav";
+/* wav音频头部格式 */
+typedef struct _wave_pcm_hdr
+{
+	char            riff[4];                // = "RIFF" RIFF(Resource Interchange File Format) 资源交换 文件规范
+	int		        size_8;                 // = FileSize - 8 从下个地址开始到文件尾的总字节数
+	char            wave[4];                // = "WAVE"  WAV文件标志（WAVE）
+	char            fmt[4];                 // = "fmt "  波形格式标志（fmt ），最后一位空格。
+	int		        fmt_size;		        // = 下一个结构体的大小 : 16  过滤字节（一般为00000010H，16d），若为00000012H则说明数据头携带附加信息（见“附加信息”）。
+
+	short int       format_tag;             // = PCM : 1       格式种类（值为1时，表示数据为线性PCM编码）
+	short int       channels;               // = 通道数 : 1     通道数，单声道为1，双声道为2
+	int		        samples_per_sec;        // = 采样率 : 8000 | 6000 | 11025 | 16000
+	int		        avg_bytes_per_sec;      // = 每秒字节数 : samples_per_sec * bits_per_sample / 8
+	short int       block_align;            // = 每采样点字节数 : wBitsPerSample / 8
+	short int       bits_per_sample;        // = 量化比特数: 8 | 16
+
+	char            data[4];                // = "data";
+	int		        data_size;              // = 纯数据长度 : FileSize - 44 
+} wave_pcm_hdr;
+
+/* 默认wav音频头部数据 */
+wave_pcm_hdr default_wav_hdr = 
+{
+	{ 'R', 'I', 'F', 'F' }, //文件规范
+	0,                      //后面数据的大小（前面有4个字节）
+	{'W', 'A', 'V', 'E'},   //文件格式
+	{'f', 'm', 't', ' '},   //波形格式标志 最后一位 空
+	16,                     //过滤字节数
+	1,                      //格式种类（值为1时，表示数据为线性PCM编码）
+	1,                      //通道数，单声道为1，双声道为2
+	16000,                  //采样率 : 8000 | 6000 | 11025 | 16000
+	32000,                  //每秒字节数 : samples_per_sec * bits_per_sample / 8
+	2,                      //每采样点字节数 : wBitsPerSample / 8
+	16,                     //量化比特数: 8 | 16
+	{'d', 'a', 't', 'a'},   //"data";
+	0                       //纯音频数据长度 数据长度 : FileSize - 44 （前面有40个字节）
+};
+/* 文本合成 函数  text, filename, session_begin_params */
+int text_to_speech(const char* src_text, const char* des_path, const char* params)
+{
+	int          ret          = -1;    //返回参数
+	FILE*        fp           = NULL;  //文件句柄 文件头
+	const char*  sessionID    = NULL;  //
+	unsigned int audio_len    = 0;
+	wave_pcm_hdr wav_hdr      = default_wav_hdr; //wav文件头
+	int          synth_status = MSP_TTS_FLAG_STILL_HAVE_DATA;
+
+	if (NULL == src_text || NULL == des_path)  //原文本空或者 生成的文件名路径为空 返回
+	{
+		printf("params is error!\n");
+		return ret;
+	}
+	fp = fopen(des_path, "wb");                //二进制格式写入
+	if (NULL == fp)
+	{
+		printf("open %s error.\n", des_path);  //打开文件失败
+		return ret;
+	}
+	/* 开始合成 合成语音参数 标志*/
+	sessionID = QTTSSessionBegin(params, &ret);//开始一次语音合成，分配语音合成资源。
+	if (MSP_SUCCESS != ret)                    //参数不合规范
+	{
+		printf("QTTSSessionBegin failed, error code: %d.\n", ret);
+		fclose(fp);                           //关闭文件
+		return ret;
+	}
+	  // int MSPAPI QTTSTextPut 	( const char * sessionID, const char * textString, unsigned int  textLen, const char *  params ) 	
+	  // 由QTTSSessionBegin返回的句柄  字符串指针,指向待合成的文本字符串    合成文本长度,最大支持8192个字节（2730个汉字）   本次合成所用的参数，只对本次合成的文本有效。      
+	ret = QTTSTextPut(sessionID, src_text, (unsigned int)strlen(src_text), NULL);//写入待合成的文本。
+	if (MSP_SUCCESS != ret)
+	{
+		printf("QTTSTextPut failed, error code: %d.\n",ret);
+		QTTSSessionEnd(sessionID, "TextPutError"); //发生错误的话 就结束本次语音合成。 
+		fclose(fp);                                //关闭文件
+		return ret;
+	}
+	printf("正在合成 ...\n");
+	//写入文件  头信息     大小    写入次数   文件名
+	fwrite(&wav_hdr, sizeof(wav_hdr) ,1, fp); //添加wav音频头，使用采样率为16000
+	while (1) 
+	{
+		/* 获取合成音频 */ //    由QTTSSessionBegin返回的句柄   合成音频长度,单位字节   合成音频状态  成功与否 
+		const void* data = QTTSAudioGet(sessionID, &audio_len, &synth_status, &ret); //获取合成音频。 
+		if (MSP_SUCCESS != ret) //为成功
+			break;
+		if (NULL != data)       //合成的音频有内容
+		{
+			fwrite(data, audio_len, 1, fp);        //写入内容 长度 次数 文件名
+		    wav_hdr.data_size += audio_len;        //总音频长度计算data_size大小  用于记录头文件 size_8 大小  
+		}
+		if (MSP_TTS_FLAG_DATA_END == synth_status) //合成的音频已经取完
+			break;
+		printf(">");
+		usleep(150*1000);                          //防止频繁占用CPU
+	}
+	printf("\n");
+	if (MSP_SUCCESS != ret)                        //获取音频未成功
+	{
+		printf("QTTSAudioGet failed, error code: %d.\n",ret);
+		QTTSSessionEnd(sessionID, "AudioGetError");//发生错误的话 就结束本次语音合成。
+		fclose(fp);
+		return ret;
+	}
+	/* 修正wav文件头数据的大小 */
+	wav_hdr.size_8 += wav_hdr.data_size + (sizeof(wav_hdr) - 8); //头文件长度+音频长度 -8 
+	
+	/* 将修正过的数据写回文件头部,音频文件为wav格式 */
+	fseek(fp, 4, 0);  //偏移4个字节 从第4个字节开始写入 size_8
+	fwrite(&wav_hdr.size_8,sizeof(wav_hdr.size_8), 1, fp);       //写入size_8的值
+	fseek(fp, 40, 0); //偏移4个字节                                //将文件指针偏移到存储data_size值的位置
+	fwrite(&wav_hdr.data_size,sizeof(wav_hdr.data_size), 1, fp); //写入data_size的值
+	fclose(fp);                                                  //关闭文件
+	fp = NULL;
+	/* 合成完毕 */
+	ret = QTTSSessionEnd(sessionID, "Normal");                   //结束本次语音合成。
+	if (MSP_SUCCESS != ret)
+	{
+		printf("QTTSSessionEnd failed, error code: %d.\n",ret);
+	}
+
+	return ret;
+}
+/*
+make topic Text To Wave file
+*/
+int makeTextToWave(const char* text, const char* filename)
+{
+	int         ret                  = MSP_SUCCESS;                     //默认返回参数
+	/* appid 	应用ID。*/
+	const char* login_params         = "appid = 58dbcf6e, work_dir = .";//登录参数,appid与msc库绑定,请勿随意改动
+	/*
+	* rdn:           合成音频数字发音方式 0：数值优先（车牌号报读）,1：完全数值(1000 一千),2：完全字符串，3：字符串优先。 默认为0 
+	* volume:        合成音频的音量     [0,100]，数值越大音量越大。默认为50 
+	* pitch:         合成音频的音调     [0,100]，数值越大音调越高。默认为50 
+	* speed:         合成音频对应的语速 [0,100]，数值越大语速越快。默认为50 
+	* voice_name:    合成发音人        xiaoyan yanping jinger yufeng donaldduck babyxu nannan xiaoqian（东北话）
+	* sample_rate:   合成音频采样率     
+	* text_encoding: 合成文本编码格式   GB2312；GBK；BIG5；UNICODE；GB18030；UTF8 
+	* background_sound 	合成音频中的背景音 0：无背景音乐 1：有背景音乐。默认为0 
+	* 详细参数说明请参阅《讯飞语音云MSC--API文档》
+	*/
+	const char* session_begin_params = "voice_name = donaldduck, text_encoding = utf8, sample_rate = 16000, speed = 50, volume = 50, pitch = 50, rdn = 0";
+	//const char* filename             = "tts_sample.wav"; //合成的语音文件名称
+	//const char* text                 = "大家好，我叫小明，车牌号沪A1005，两套房子，五百万存款"; //合成文本
+	/* 用户登录 int MSPAPI MSPLogin ( const char *  usr,const char *  pwd,const char *  params )*/
+	ret = MSPLogin(NULL, NULL, login_params);//第一个参数是用户名，第二个参数是密码，第三个参数是登录参数，用户名和密码可在http://www.xfyun.cn注册获取
+	if (MSP_SUCCESS != ret)
+	{
+		printf("MSPLogin failed, error code: %d.\n", ret);
+		goto exit ;//登录失败，退出登录
+	}
+	
+		/* 文本合成 */
+	  printf("开始合成 ...\n");
+	  /*要合成语音的文本  合成后的语音文件wav名字  合成语音的参数*/
+	  ret = text_to_speech(text, filename, session_begin_params);
+	  if (MSP_SUCCESS != ret)
+	   {
+		printf("text_to_speech failed, error code: %d.\n", ret);
+	   }
+	   else{
+	     printf("合成完毕\n");
+	    }
+exit:
+	MSPLogout(); //退出登录
+	
+	//return 0;
+}
+/*播放 wav文件*/
+void playWav()
+{
+	system(playwavpath);
+}
+  /*subcribe topic callbace function*/
+void chatterCallback(const std_msgs::String::ConstPtr&  msg)
+{
+    //ROS_INFO("I heard: [%s]", msg->data.c_str());
+	//const char* text=msg->data.c_str();
+    std::cout << " I hear topic text:" << msg->data.c_str() << std::endl;
+	makeTextToWave( msg->data.c_str() , filename );
+	playWav();
+	ROS_INFO("READY TO DO TTS");
+}
+   
+int main(int argc, char** argv)
+{
+	 const char* start_voice ="科大讯飞在线语音合成启动成功";
+	 makeTextToWave( start_voice , filename );
+	 playWav();
+	 ROS_INFO("READY TO TTS");
+	 
+	 ros::init(argc, argv, "tts"); //初始化ros系统 ，在roscore节点管理器注册节点
+     ros::NodeHandle nhd;                   //节点句柄
+	 //节点创建一个发布者
+     //ros::Publisher chatter_pub = nh.advertise<std_msgs::String>("pub_hello_ros", 1000);
+	 //创建一个订阅者sub     节点句柄         话题            缓存区    函数指针   &callbackfunc 得到
+     ros::Subscriber sub = nhd.subscribe("voice/tts", 100, &chatterCallback);
+	 
+	 //ros::spin();
+     ros::Rate  rate(5);              //发布频率
+     while(ros::ok()){
+       ros::spinOnce();               //给ROS控制权  可以调用一次回调函数
+       rate.sleep();
+     }	 
+	return 0;
+}
+        
+        3)修改CMakeLists 文件
+            共有三个部分：
+            a) 添加 头文件搜索 .h文件
+include_directories(    #头文件路径
+  include               #cpp文件自建的头文件         
+  ${catkin_INCLUDE_DIRS})
+            b) 添加编译源文件信息
+               add_executable(xftts src/xf_ttf.cpp)
+            c) 添加动态搜索库 .o文件  可执行文件名
+               target_link_libraries(xftts ${catkin_LIBRARIES}  -lmsc -lrt -ldl -lpthread ) #系统库 和外库（由原先的 make文件得来）
+        4) 编译
+           cd catkin_ws
+           catkin_make
+        5) 实验
+           rosrun  voice_system  xftts
+           发布话题 数据
+           rostopic pub -1 voice/xf_tts_topic  std_msgs/String "你帅呆了"
+   
+   
+           
+  2、图灵  NLU 部分  语意理解  会结合科大tts直接对话交流
+    1)安装依赖库
+    sudo apt-get install libcurl3 libcurl4-openssl-dev    //curl httppose访问
+    sudo apt-get install libjsoncpp1 libjsoncpp-dev       //json字符串
+    
+    2)源文件编写
+    cd  catkin_ws/src/voice_system
+    新建 tl_nlu.cpp
+    /*
+* 图灵 NLU 在线语意理解
+*/
+#include "ros/ros.h"           //ros系统头文件
+#include "std_msgs/String.h" 
+#include <sstream>
+#include <jsoncpp/json/json.h> //json字符串
+#include <curl/curl.h>         //curl http访问
+#include <string>
+#include <exception>
+
+using namespace std;
+//全局变量
+int flag = 0;
+string result;
+
+/*解析图灵服务器返回的json字符串*/
+int parseJsonResonse(string input_str)
+{
+	Json::Value root;
+	Json::Reader reader;
+	bool parsingSuccessful = reader.parse(input_str, root);
+	if( !parsingSuccessful )
+	{
+		std::cout << "Fail to parse the response data"  << std::endl;
+		return -1;
+	}
+    const Json::Value code = root["code"];//文本类型标识吗
+    const Json::Value text = root["text"];//返回的结果
+	result = text.asString();             //返回文本内容
+	flag = 1;
+	std::cout << "response code: " << code << std::endl;
+	std::cout << "response text: " << result << std::endl;
+	return 0;	
+}
+
+/*将接收到的返回数据写如内存*/
+int writer(char *data, size_t size, size_t number, string *writerData)
+{
+   if ( writerData == NULL)
+   {
+	 return -1;
+   }
+	unsigned long len = size * number;
+	writerData->append(data, len);
+	return len;	
+}
+
+/*HTTP 请求*/
+int HttpPostRequest(string input_str)
+{
+	string buffer;
+	
+	std::string strJson = "{" ;
+	strJson += "\"key\" : \"fcabefe6a6ca48ff8c7d4f5dfccf0627\",";
+	strJson += "\"info\" : ";
+	strJson += "\"";
+	strJson += input_str;
+	strJson += "\"";
+	strJson += "}";
+	
+	std::cout << "post json string: " << strJson << std::endl;
+	try
+	{
+		CURL *pCurl = NULL;
+		CURLcode res;                      //返回状态
+		curl_global_init(CURL_GLOBAL_ALL); //初始化 pCurl
+		pCurl = curl_easy_init();          //头
+		
+		if( NULL != pCurl)
+		{
+			curl_easy_setopt(pCurl, CURLOPT_TIMEOUT,5); //延迟时间
+			curl_easy_setopt(pCurl, CURLOPT_URL,"http://www.tuling123.com/openapi/api");
+			// http头 // 设置http发送的内容类型为JSON
+			curl_slist *plist = curl_slist_append(NULL, "Content-Type:application/json;charset=UTF-8");			
+			curl_easy_setopt(pCurl, CURLOPT_HTTPHEADER, plist);
+			
+			// 设置要POST的JSON数据
+			curl_easy_setopt(pCurl, CURLOPT_POSTFIELDS,strJson.c_str());
+			curl_easy_setopt(pCurl, CURLOPT_WRITEFUNCTION, &writer);
+			curl_easy_setopt(pCurl, CURLOPT_WRITEDATA, &buffer);
+			
+			//执行http请求
+			res = curl_easy_perform(pCurl);
+			//检查错误
+			if (res != CURLE_OK)
+			{
+				printf("curl_easy_perform failed:%s\n", curl_easy_strerror(res));
+			}
+			curl_easy_cleanup(pCurl);	//清除当前http请求		
+		}
+		curl_global_cleanup();          //全部清除   
+	}
+	catch (std::exception &ex)
+	{
+		printf("!!! curl exception: %s.\n", ex.what());
+	}
+	if(buffer.empty())
+	{
+		std::cout << "!!! ERROR The Tuling server response NULL" << std::endl;
+	}
+	else
+	{
+		parseJsonResonse(buffer);
+	}
+	return 0;
+}
+/*
+*   当voice/tl_nlu 话题有消息时，调用HttpPostRequest向图灵服务器发送内容，返回结果。
+*/
+void nluCallback(const std_msgs::String::ConstPtr&  msg)
+{
+
+    std::cout << " Your question is :" << msg->data << std::endl;
+    HttpPostRequest(msg->data);
+	ROS_INFO("READY TO DO NLU");
+}
+   
+int main(int argc, char** argv)
+{
+	 ros::init(argc, argv, "tl_nlu_node"); //初始化ros系统 ，在roscore节点管理器注册节点
+     ros::NodeHandle nhd;                   //节点句柄
+	 //创建一个订阅者sub     节点句柄         话题            缓存区    函数指针   &callbackfunc 得到
+     ros::Subscriber sub = nhd.subscribe("voice/tl_nlu_topic", 20, &nluCallback);
+	 //节点创建一个发布者
+	 ros::Publisher pub = nhd.advertise<std_msgs::String>("voice/xf_tts_topic", 20);
+	 ROS_INFO("READY TO DO NLU");
+	 //ros::spin();
+     ros::Rate  rate(10);              //频率
+     while(ros::ok()){
+		if(flag)                       //成功获取到返回数据
+		{
+			std_msgs::String msg;
+			msg.data = result;
+			pub.publish(msg); 
+			flag = 0 ;
+		}
+       ros::spinOnce();               //给ROS控制权  可以调用一次回调函数
+       rate.sleep();
+     }	 
+	return 0;
+}
+
+
+    3)修改CMakeLists 文件
+    
+# NLU
+add_executable(tlnlu src/tl_nlu.cpp)
+target_link_libraries(tlnlu ${catkin_LIBRARIES} -lcurl -ljsoncpp)            #系统库 和外库 curl jsoncpp
+   
+   4) 编译
+    cd catkin_ws
+    catkin_make
+    
+   5) 实验
+   roscore
+   rosrun voice_system xftts    // 文本转换成语言
+   rosrun voice_system tlnu     // 语意理解
+   
+  rostopic pub -1 /voice/tl_nlu_topic std_msgs/String "给我说一个绕口令吧"
+  
+  
+ 3、科大讯飞   ASR部分
+      示例目录下：
+     /voice/samples/ita_record_sample
+      .c源文件 拷贝到  包的源文件下   catkin_ws/src/voice_system/src
+      .h源文件 拷贝到  包的包含文件下 catkin_ws/src/voice_system/include
+      
+      修改 ita_record_sample.c文件至 xf_asr.cpp
+
+      
+       
+
+    
+      
+           

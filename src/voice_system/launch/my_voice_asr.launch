@@ -1,11 +1,9 @@
-  <launch>
+<launch>
 
   <node name="recognizer" pkg="voice_system" type="my_recognizer.py" output="screen">   
-    <param name="lm" value="$(find voice_system)/model/lm/zh/zh_MY/my_nav_commands.lm"/>
-    <param name="dict" value="$(find voice_system)/model/lm/zh/zh_MYmy_nav_commands.dic"/>
+    <param name="lm" value="$(find voice_system)/model/lm/zh/zh_MY/voice_ctr.lm"/>
+    <param name="dict" value="$(find voice_system)/model/lm/zh/zh_MY/voice_ctr.dic"/>
     <param name="hmm" value="$(find voice_system)/model/hmm/zh/tdt_sc_8k"/>
   </node>
-  <node name="recognizer" pkg="voice_system" type="voice_nav.py" output="screen">   
-  </node>
-  
+
 </launch>

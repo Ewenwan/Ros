@@ -5,7 +5,7 @@
  #include <stdlib.h>
 
  int main( int argc , char** argv ) {
- ros::init ( argc , argv , "publish_velocity") ;//决定参数的 类名
+ ros::init ( argc , argv , "publish_velocity") ;
  ros::NodeHandle nh ;
  ros::Publisher pub = nh.advertise<geometry_msgs::Twist>( "turtle1/cmd_vel", 1000) ;
  //生成产生随机数的种子点

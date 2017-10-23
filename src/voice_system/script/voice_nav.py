@@ -19,7 +19,7 @@ class VoiceNav:
         # 一些参数，launch文件或配置文件可修改
         self.max_speed = rospy.get_param("~max_speed", 0.8)                # 最大线速度 m/s
         self.max_angular_speed = rospy.get_param("~max_angular_speed", 1.5)# 最大角速度 
-        self.speed = rospy.get_param("~start_speed", 0.1)                  # 前进 开始速度
+        self.speed = rospy.get_param("~start_speed", 0.3)                  # 前进 开始速度
         self.angular_speed = rospy.get_param("~start_angular_speed", 0.5)  # 旋转 开始角速度
         self.linear_increment = rospy.get_param("~linear_increment", 0.05) # 线速度  每次增加
         self.angular_increment = rospy.get_param("~angular_increment", 0.4)# 角速度  每次增加
@@ -70,7 +70,7 @@ class VoiceNav:
     def speech_callback(self, msg):
         # 从语音识别话题上 得到指令
         command = self.get_command(msg.data)# 语言识别话题上的消息        
-        # 现实 信息
+        # 显示 语言识别信息
         rospy.loginfo("Command: " + str(command))
         
         # 语音控制 开关

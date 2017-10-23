@@ -1,0 +1,61 @@
+Language model created by QuickLM on Sun Oct 22 10:04:52 EDT 2017
+Copyright (c) 1996-2010 Carnegie Mellon University and Alexander I. Rudnicky
+
+The model is in standard ARPA format, designed by Doug Paul while he was at MITRE.
+
+The code that was used to produce this language model is available in Open Source.
+Please visit http://www.speech.cs.cmu.edu/tools/ for more information
+
+The (fixed) discount mass is 0.5. The backoffs are computed using the ratio method.
+This model based on a corpus of 9 sentences and 11 words
+
+\data\
+ngram 1=11
+ngram 2=18
+ngram 3=9
+
+\1-grams:
+-0.7782 </s> -0.3010
+-0.7782 <s> -0.2218
+-1.7324 停止 -0.2218
+-1.7324 减速 -0.2218
+-1.7324 前进 -0.2218
+-1.7324 加速 -0.2218
+-1.7324 右转 -0.2218
+-1.7324 后退 -0.2218
+-1.7324 向右转 -0.2218
+-1.7324 向左转 -0.2218
+-1.7324 左转 -0.2218
+
+\2-grams:
+-1.2553 <s> 停止 0.0000
+-1.2553 <s> 减速 0.0000
+-1.2553 <s> 前进 0.0000
+-1.2553 <s> 加速 0.0000
+-1.2553 <s> 右转 0.0000
+-1.2553 <s> 后退 0.0000
+-1.2553 <s> 向右转 0.0000
+-1.2553 <s> 向左转 0.0000
+-1.2553 <s> 左转 0.0000
+-0.3010 停止 </s> -0.3010
+-0.3010 减速 </s> -0.3010
+-0.3010 前进 </s> -0.3010
+-0.3010 加速 </s> -0.3010
+-0.3010 右转 </s> -0.3010
+-0.3010 后退 </s> -0.3010
+-0.3010 向右转 </s> -0.3010
+-0.3010 向左转 </s> -0.3010
+-0.3010 左转 </s> -0.3010
+
+\3-grams:
+-0.3010 <s> 停止 </s>
+-0.3010 <s> 减速 </s>
+-0.3010 <s> 前进 </s>
+-0.3010 <s> 加速 </s>
+-0.3010 <s> 右转 </s>
+-0.3010 <s> 后退 </s>
+-0.3010 <s> 向右转 </s>
+-0.3010 <s> 向左转 </s>
+-0.3010 <s> 左转 </s>
+
+\end\

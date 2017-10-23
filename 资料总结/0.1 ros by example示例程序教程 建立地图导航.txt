@@ -1,0 +1,1992 @@
+一、安装
+ 1、安装系统依赖
+ sudo apt-get install ros-indigo-turtlebot-bringup \
+ros-indigo-turtlebot-create-desktop ros-indigo-openni-* \
+ros-indigo-openni2-* ros-indigo-freenect-* ros-indigo-usb-cam \
+ros-indigo-laser-* ros-indigo-hokuyo-node \
+ros-indigo-audio-common gstreamer0.10-pocketsphinx \
+ros-indigo-pocketsphinx ros-indigo-slam-gmapping \
+ros-indigo-joystick-drivers python-rosinstall \
+ros-indigo-orocos-kdl ros-indigo-python-orocos-kdl \
+python-setuptools ros-indigo-dynamixel-motor-* \
+libopencv-dev python-opencv ros-indigo-vision-opencv \
+ros-indigo-depthimage-to-laserscan ros-indigo-arbotix-* \
+ros-indigo-turtlebot-teleop ros-indigo-move-base \
+ros-indigo-map-server ros-indigo-fake-loc
+
+
+2、 安装程序包
+cd ~/catkin_ws/src
+git clone https://github.com/pirobot/rbx1.git
+cd rbx1
+git checkout indigo-devel
+git pull                   //同步
+cd ~/catkin_ws
+catkin_make
+source ~/catkin_ws/devel/setup.bash
+rospack profile
+
+
+3、安装仿真机器人   arbotix_python 并测试
+   a ） 安装
+    sudo apt-get install ros-indigo-arbotix-*    //中间indigo 换成自己的ros版本
+    rospack profile
+    
+   b )测试  运行 turtlebot仿真机器人
+    roscore
+    roslaunch rbx1_bringup fake_turtlebot.launch
+   c) 运行rviz
+   rosrun rviz rviz -d `rospack find rbx1_nav`/sim.rviz
+  RViz  在 Panels 菜单下 可以选择视角
+     或者 点击 工具栏 右键 选者显示 Views 视角菜单
+   
+   或者直接运行  rviz
+    将 Global Option  的Fixed Frame 选择为 odom 里程记
+    点击 ADD  添加  RobotModel 对象 以及 Odometry 对象（显示姿态箭头里程记信息估计出来的 poes姿态（位置和方向））
+    或者添加 Odometry EKF   卡尔曼滤波 得到到 poes姿态（位置和方向）） 显示姿态箭头
+    
+    
+    
+    d） 发布话题
+    rostopic pub -r 10 /cmd_vel geometry_msgs/Twist '{linear: {x: 0.2, y: 0, z: 0}, angular: {x: 0, y: 0, z: 0.5}}'
+    或者
+    rostopic pub -r 10 /cmd_vel geometry_msgs/Twist  '[0.2,0,0]' '[0,0,0.5]'
+     
+     在 发送命令的终端 Ctrl + C 终止话题的发布
+     然后在键入命令
+     rostopic pub -1 /cmd_vel geometry_msgs/Twist '{}'
+     turtlebot仿真机器人 停止运动
+     
+     类似小乌龟的发布话题 运动
+     rostopic pub -r 1 /turtle1/cmd_vel geometry_msgs/Twist ’[1,0,0]’ ’[0,0,2]’
+     
+  
+运行自己的 机器人仿真模型   
+ fake_turtlebot.launch
+$ roscd rbx1_bringup/launch
+$ cp fake_turtlebot.launch fake_my_robot.launch
+
+
+<launch>
+	<param name="/use_sim_time" value="false" />
+
+	<!-- Load the URDF/Xacro model of our robot 机器人三D模型 -->
+	<arg name="urdf_file" default="$(find xacro)/xacro.py '$(find
+	rbx1_description)/urdf/turtlebot.urdf.xacro'" />
+
+//这里可以换成自己的机器人模型
+<arg name="urdf_file" default="$(find xacro)/xacro.py '$(find
+YOUR_PACKAGE_NAME)/YOUR_URDF_PATH'" />
+
+
+
+	<param name="robot_description" command="$(arg urdf_file)" />
+	<node name="arbotix" pkg="arbotix_python" type="arbotix_driver"
+	output="screen">
+	<rosparam file="$(find rbx1_bringup)/config/fake_turtlebot_arbotix.yaml"
+	command="load" />
+	<param name="sim" value="true"/>
+
+	</node>
+		<node name="robot_state_publisher" pkg="robot_state_publisher"
+		type="state_publisher">
+		<param name="publish_frequency" type="double" value="20.0" />
+	</node>
+</launch>
+
+
+
+
+
+     
+     二、ros系统知识介绍
+        总括：ROS系统可用于地面机器人、空中机器人以及水下机器人
+        首先：坐标系统   右手坐标系    食指：x轴正方向   中指：y轴正方向   拇指：z轴正方向     对应线速度
+             旋转坐标系 右手螺旋      大拇指指向轴的正方向   四指指向为 旋转的正方向          对应角速度
+             其中 机器人 x轴正方向 为前进方向   y轴正方向为左转方向   z轴正方向为向上方向
+             z轴的旋转正方向为 逆时针旋转
+        单位： 线速度为： 米/秒（ m/s ）  室内 0.3m/s 就很快了  室内不要 超过 0.5m/s
+        角速度为： 弧度/秒 （ rad/s ）   室内 1rad/s 也就比较快了   57度/秒
+       
+        运动控制等级：
+        1、编码器测轮子的转速  通过轮子的直径和两轮之间的距离
+           可以测算出 移动的距离（米） 以及 旋转的角度（弧度）
+           通过一定时间内的移动距离可以得到 线速度（m/s）
+           通过一定时间内的旋转角度可以得到 角速度（rad/s）
+            里程记（odometry） 也可以得到 速度、距离、叫速度等信息
+            陀螺仪（guro）     可以得到旋转角度信息
+        2、电机控制器和电机驱动
+           Arduino, ArbotiX, Serializer, Element, LEGO® NXT
+   例如   ros上 Arduino的开发支持（通信支持）           
+       ros支持arduino的包
+       cd catkin_ws/src
+       git clone git://github.com/ros-drivers/rosserial.gitgit
+       cd catkin_ws
+       catkin_make
+       source devel/setup.bash
+       rospack profil
+        
+        需要在linux上安装开发arduino的ide 安装相应的ros_Arduino 库文件 编译下载    arduino就可以和ros通信了
+        
+        3、基础的控制模型 Base Controller
+           ——PID控制器 实现 精准的 速度和角度控制  主要利用 编码器 的信息
+           包含在一个单一的节点内 ——base controller 节点   是第一个的启动的节点
+           base controller 节点 发布里程记信息 到 /odom 话题上
+           base controller 节点 订阅/cmd_vel 话题 监听 运动控制命令
+          base controller 节点   同时也发布（不是所有） 发布
+          坐变换信息（/odom 坐标到 base frame（底座坐标系）） 到/base_link or 或者 /base_footprint 话题上
+          
+     之所以说不是所有， TurtleBot, 使用 robot_pose_ekf （包含卡尔曼滤波）
+包结合 里程记信息（wheel odometry）和 陀螺仪数据（ gyro data ）
+来融合得到更精确的 机器人位置和方向信息，进而发布到相应的话题上。
+
+      4、基于坐标系的运动控制  move_base 包
+         按照目标位置和方向根据地图信息选择合理路径，控制线速度、角速度以及加、减速度
+         
+      5、地图建模局规划   adaptive Monte Carlo localization 自适应蒙特卡洛定位
+         AMCAL
+          通过 激光雷达（laser scanner） 或者 Kinect、 Asus Xtion 深度相机
+          
+      6、语言（语义）目标   Semantic Goals
+       "go to the kitchen and bring me a beer", or simply, "bring me a beer".
+       可用的包
+         smach , behavior trees , executive_teer , and knowrob .
+         
+总结：
+---->  GOAL(6 目标) ----> AMCAL(5 地图建模与定位)----> 路径规划(move_base 4  Path Planner ）
+---->  move_base(4 移动指令)  ---->  话题（ 3 /cmd_vel + /odom）  ---->  Base Controller（3 电机控制指令）
+---->  Motor Controller（2 控制电机速度）
+
+
+   三、指令解析
+      1、移动指令  消息类型
+        话题发布移动指令  频率    话题     消息类型
+        rostopic pub -r 10 /cmd_vel geometry_msgs/Twist '{linear: {x: 0.2, y: 0, z: 0}, angular: {x: 0, y: 0, z: 0.5}}'
+         或者
+        rostopic pub -r 10 /cmd_vel geometry_msgs/Twist  '[0.2,0,0]' '[0,0,0.5]'
+        
+        Base Controller 节点订阅 /cmd_vel 上的 geometry_msgs/Twist 消息  ，将Twist消息 转换成 电机（motor）
+        控制信号，最终驱动轮子
+        
+        查看移动指令 消息类型
+        rosmsg show geometry_msgs/Twist
+        >>>>>>>>
+geometry_msgs/Vector3 linear
+  float64 x
+  float64 y
+  float64 z
+geometry_msgs/Vector3 angular
+  float64 x
+  float64 y
+  float64 z
+  
+  包含两个子消息 类型为 geometry_msgs/Vector3
+   linear 代表线速度
+          沿 x、y、z轴行驶的线速度大小  单位 米/秒 （m/s）  
+          正值代表沿轴 的正方向 行进  右手坐标系  x轴正方向 代表前进方向
+   angular 代表角速度
+          沿 x、y、z轴 旋转的角速度大小 单位 弧度/秒   正值 代表 正方向旋转 
+          例如 z轴 逆时针方向代表 正方向 右手螺旋定则
+   1两维平面 只需要两个值  linear.x（负责前进后退） 以及angular.z（负责负责旋转）   其他值均为零
+   2全方向的机器人 再添加一个 linear.y
+   3空中机器人和水下机器人 6个参数都要使用
+   
+   2、指令示例
+    a) 以 0.2m/s 的速度 笔直 前进   // x: 0.2 冒号后面有空格（必须）
+ '{linear: {x: 0.2, y:0, z: 0}, angular: {x: 0, y: 0, z: 0}}'
+     消息指令比较长，用其他节点发布控制消息
+    b） 以 1 rad/s的速度 逆时针旋转
+ '{linear: {x: 0, y:0, z: 0}, angular: {x: 0, y: 0, z: 1.0}}'
+   
+    c）以 0.2m/s 的速度 前进的同时以 1 rad/s的速度 逆时针旋转
+   '{linear: {x: 0.2, y:0, z: 0}, angular: {x: 0, y: 0, z: 1.0}}'
+   
+          
+    3、机器人仿真实验
+    a) 1运行 TurtleBot 机器人
+     roslaunch rbx1_bringup fake_turtlebot.launch
+      以配置好打开 RViz
+     rosrun rviz rviz -d `rospack find rbx1_nav`/sim.rviz
+      或者 rviz
+      b)2rviz 参数讲解
+      将 Global Option  的Fixed Frame 选择为 odom 里程记
+    点击 ADD  添加  RobotModel 对象 以及 Odometry 对象（显示姿态箭头里程记信息估计出来的 poes姿态（位置和方向））
+       Odometry 下
+         1 Keep 对象值 为保持记录显示的最近最多的姿态箭头 例如100
+         2 Position Tolerance(单位米） 大小 控制 位置变化了多少 显示一次 姿态箭头
+         3 Angle Tolerance （单位 弧度 ）  大小控制 角度变化了多少 显示一次 姿态箭头 
+         4 Length 对象 控制 姿态箭头长度
+    或者添加 Odometry EKF   卡尔曼滤波 得到到 poes姿态（位置和方向）） 显示姿态箭头
+       控制参数 同 Odometry 下      
+       重新勾选 Odometry EKF 或 Odometry 对象可清楚 姿态箭头
+       
+       c)3结束运动
+       在 发送命令的终端 Ctrl + C 终止话题的发布
+       然后在键入命令
+       rostopic pub -1 /cmd_vel geometry_msgs/Twist '{}'
+       turtlebot仿真机器人 停止运动
+     
+     四、真实机器人  系统参数矫正  及控制
+        安装矫正系统？？   orocos运动学 包
+        sudo apt-get install ros-indigo-orocos-kdl ros-indigo-python-orocos-kdl
+        
+        1、线速度的矫正
+          a) 1对于基于 TurtleBot 创建的 iRobot ,远程  ssh 登陆 机器人的 终端 运行:
+             roslaunch rbx1_bringup turtlebot_minimal_create.launch
+       
+          b) 2开启线速度的矫正节点 ：
+           rosrun rbx1_nav calibrate_linear.py
+           
+           c) 3运行重配置
+           rosrun rqt_reconfigure rqt_reconfigure
+           
+           For a TurtleBot, add the following line to your turtlebot.launch file:
+              <param name="turtlebot_node/odom_linear_scale_correction" value="X"/>
+            where X is your correction factor.
+             更新配置参数
+         2、角速度矫正
+           a) 1对于基于 TurtleBot 创建的 iRobot ,远程  ssh 登陆 机器人的 终端 运行:
+             roslaunch rbx1_bringup turtlebot_minimal_create.launch
+          b) 2开启角速度的矫正节点 ：
+           rosrun rbx1_nav calibrate_angular.py 
+           c) 3运行重配置
+           rosrun rqt_reconfigure rqt_reconfigure
+           
+           
+         3、ros节点发布 Twist Messages 控制机器人完成指定的任务
+           仿真环境
+           roslaunch rbx1_bringup fake_turtlebot.launch
+           rosrun rviz rviz -d `rospack find rbx1_nav`/sim.rviz  // /odom which only shows the encoder data
+            //rosrun rviz rviz -d `rospack find rbx1_nav`/nav_ekf.rviz
+            // odom_ekf  combined odometry data (encoders + gyro)
+           //ros Twist Messages 节点发布
+           rosrun rbx1_nav odom_out_and_back.py
+           
+#odom_out_and_back.py                   
+import rospy #ros system depends
+from geometry_msgs.msg import Twist, Point, Quaternion
+# Twist:linear.x linear.y linear.z    Point: x,y,z   Quaternion: x,y,z,w 
+import tf   # transform betwween two axis
+from rbx1_nav.transform_utils import quat_to_angle, normalize_angle
+# Quaternion to eulerian angleand and constarin the angle to -180-180
+from math import radians, copysign, sqrt, pow, pi # mathematical function and parameter
+
+# defining it as a Python class
+class OutAndBack():
+    # standard class initialization
+    def __init__(self):
+        # Creat a node named out_and_back
+        rospy.init_node('out_and_back', anonymous=False)
+        # Set rospy to execute a shutdown function when exiting       
+        rospy.on_shutdown(self.shutdown)
+        # Creat a Publisher, to control the robot's speed  topic  message_type  buffer_size
+        self.cmd_vel = rospy.Publisher('/cmd_vel', Twist, queue_size=5)
+        
+        # variable definition
+        rate = 30                    # moving friquency ,How fast will we update the robot's movement?      
+        r = rospy.Rate(rate)         # friquency variable,   Set the equivalent ROS rate variable       
+        linear_speed = 0.15          # forward linear speed, Set the forward linear speed to  0.15 m/s
+        goal_distance = 2.0          # travelled distance,   Set the travel distance in meters
+        angular_speed = 0.5          # rotation speed,       Set the rotation speed in radians per second 
+        angular_tolerance = radians(2.5) # Set the angular tolerance in degrees converted to radians
+        goal_angle = pi              # rotation angle,       Set the rotation angle to Pi radians (180 degrees)
+        
+        # Creat a tf listener
+        self.tf_listener = tf.TransformListener()       
+        # let ROS rest for 2 seconds,so can give tf some time to fill its buffer
+        rospy.sleep(2)       
+        self.odom_frame = '/odom'   # Set the robot's odometery frame   
+        
+        # Find the reference frame
+        # Find out if the robot uses /base_link or /base_footprint
+        # /base_footprint frame used by the TurtleBot
+        # /base_link frame      used by Pi Robot and Maxwell
+        try:
+            self.tf_listener.waitForTransform(self.odom_frame, '/base_footprint', rospy.Time(), rospy.Duration(1.0)) #wait for tramsrform
+            self.base_frame = '/base_footprint' # the robot uses /base_footprint frame   
+        except (tf.Exception, tf.ConnectivityException, tf.LookupException): # Exception = error state 
+            try:
+                self.tf_listener.waitForTransform(self.odom_frame, '/base_link', rospy.Time(), rospy.Duration(1.0))
+                self.base_frame = '/base_link'  # the robot uses /base_footprint frame
+            except (tf.Exception, tf.ConnectivityException, tf.LookupException):
+                rospy.loginfo("Cannot find transform between /odom and /base_link or /base_footprint")
+                rospy.signal_shutdown("tf Exception")  
+               
+        # Initialize the position variable as a Point type(comes from geometry_msgs.msg which has x,y,z)
+        position = Point()
+            
+        # Loop once for each leg of the trip, back and forth 
+        for i in range(2):
+         # Straight forward
+            # initialize the movement command with linear velocity
+            move_cmd = Twist() # Initialize the movement command to zero , Twist:linear.x linear.y linear.z    Point: x,y,z         
+            move_cmd.linear.x = linear_speed            # Set the movement command to forward motion with desired speed
+            #record the starting position(loop once and loop twice were different)
+            (position, rotation) = self.get_odom()      # Get the starting position values                        
+            x_start = position.x  
+            y_start = position.y
+            distance = 0                                # traveled  distance 
+            
+            # travel with a linear  speed
+            while distance < goal_distance and not rospy.is_shutdown(): # hasno't reached the desired distance       
+                self.cmd_vel.publish(move_cmd)                          # Publish the Twist message velocity comannd  until reached the destination               
+                r.sleep()
+                (position, rotation) = self.get_odom()                  # Get the current position               
+                # Compute the Euclidean distance from the start         
+                distance = sqrt(pow((position.x - x_start), 2) +        # update the traveled  distance 
+                                pow((position.y - y_start), 2))
+                
+            # Stop the robot before the rotation
+            #stop()
+            move_cmd = Twist()             # Initialize the movement command  to zero
+            self.cmd_vel.publish(move_cmd) # publish the stop movement command
+            rospy.sleep(1)                 # sleeping
+            
+        # rotate
+            move_cmd.angular.z = angular_speed      # Set the movement command to a rotation        
+            last_angle = rotation                   # starting angle, odometry record  the last angle measured(starting angle)        
+            turn_angle = 0                          # traveled angle 
+            
+            while abs(turn_angle + angular_tolerance) < abs(goal_angle) and not rospy.is_shutdown():# hasno't reached the desired goal_angle     
+                self.cmd_vel.publish(move_cmd)                 # Publish the Twist message velocity comannd angular_speed until reached the desired goal_angle                   
+                r.sleep()                                      # sleep with rate
+                (position, rotation) = self.get_odom()         # Get the current rotation angle        
+                delta_angle = normalize_angle(rotation - last_angle) # compute the the delt_angel  constraint with in -pi to pi       
+                turn_angle += delta_angle                      # update the traveled turn_angle
+                last_angle = rotation                          # update the last_angle
+                
+            # Stop the robot before the next leg
+            #stop()
+            move_cmd = Twist()
+            self.cmd_vel.publish(move_cmd)
+            rospy.sleep(1)
+            
+        # Stop the robot for good
+        self.cmd_vel.publish(Twist())
+        
+    # get the location ang angel information from odometry    
+    def get_odom(self):
+        # Get the current transform between the odom and base frames
+        try:
+            (trans, rot)  = self.tf_listener.lookupTransform(self.odom_frame, self.base_frame, rospy.Time(0))
+        except (tf.Exception, tf.ConnectivityException, tf.LookupException):
+            rospy.loginfo("TF Exception")
+            return
+        # used * is Python's a notion for passing a list of numbers to a function
+        # trans is a list of x, y, and z coordinates
+        # rot is a list of x, y, z and w quaternion components.
+        return (Point(*trans), quat_to_angle(Quaternion(*rot))) #current location Point and the current angel
+    
+    # stop and close automatically when shutting down the node
+    def shutdown(self):
+        # Always stop the robot when shutting down the node.
+        rospy.loginfo("Stopping the robot...")
+        self.cmd_vel.publish(Twist())
+        rospy.sleep(1)
+    # stop the robot    
+    def stop(self):
+        move_cmd = Twist()
+        self.cmd_vel.publish(move_cmd)
+        rospy.sleep(1)
+ 
+if __name__ == '__main__':
+    try:
+        OutAndBack()
+    except:
+        rospy.loginfo("Out-and-Back node terminated.")
+        
+        
+        
+//正方形导航      
+#nav_square.py     
+import rospy #ros system depends
+from geometry_msgs.msg import Twist, Point, Quaternion
+# Twist:linear.x linear.y linear.z    Point: x,y,z   Quaternion: x,y,z,w 
+import tf  # transform betwween two axis
+from rbx1_nav.transform_utils import quat_to_angle, normalize_angle
+# Quaternion to eulerian angle and constarin the angle to -180-180
+from math import radians, copysign, sqrt, pow, pi  # mathematical function and parameter
+
+# defining it as a Python class
+class NavSquare():
+    # standard class initialization
+    def __init__(self): 
+        # Creat a node named out_and_back
+        rospy.init_node('nav_square', anonymous=False)
+        # Set rospy to execute a shutdown function when exiting 
+        rospy.on_shutdown(self.shutdown)
+        
+        # variable definition
+        rate = 20             # moving friquency ,How fast will we update the robot's movement?      
+        r = rospy.Rate(rate)  # friquency variable,   Set the equivalent ROS rate variable       
+        # Set the parameters for the target square  ~ private paramters
+        goal_distance = rospy.get_param("~goal_distance", 1.0)      # meters
+        goal_angle = radians(rospy.get_param("~goal_angle", 90))    # degrees converted to radians
+        linear_speed = rospy.get_param("~linear_speed", 0.2)        # meters per second
+        angular_speed = rospy.get_param("~angular_speed", 0.7)      # radians per second
+        angular_tolerance = radians(rospy.get_param("~angular_tolerance", 1)) # degrees to radians
+        
+        # Creat a Publisher, to control the robot's speed  topic  message_type  buffer_size
+        self.cmd_vel = rospy.Publisher('/cmd_vel', Twist, queue_size=5)   
+        # The base frame is base_footprint for the TurtleBot but base_link for Pi Robot
+        self.base_frame = rospy.get_param('~base_frame', '/base_link')
+        # The odom frame is usually just /odom
+        self.odom_frame = rospy.get_param('~odom_frame', '/odom')
+        # Initialize the tf listener
+        self.tf_listener = tf.TransformListener()       
+        # Give tf some time to fill its buffer
+        rospy.sleep(2)
+        
+        # Set the odom frame
+        self.odom_frame = '/odom'  # world-fixed frame  自身 的坐标系系
+        
+        # Find the reference frame
+        # Find out if the robot uses /base_link or /base_footprint
+        # /base_footprint frame used by the TurtleBot
+        # /base_link frame      used by Pi Robot and Maxwell
+        try:
+            self.tf_listener.waitForTransform(self.odom_frame, '/base_footprint', rospy.Time(), rospy.Duration(1.0)) #wait for tramsrform
+            self.base_frame = '/base_footprint' # the robot uses /base_footprint frame   
+        except (tf.Exception, tf.ConnectivityException, tf.LookupException): # Exception = error state 
+            try:
+                self.tf_listener.waitForTransform(self.odom_frame, '/base_link', rospy.Time(), rospy.Duration(1.0))
+                self.base_frame = '/base_link'
+            except (tf.Exception, tf.ConnectivityException, tf.LookupException):
+                rospy.loginfo("Cannot find transform between /odom and /base_link or /base_footprint")
+                rospy.signal_shutdown("tf Exception")  
+                
+        # Initialize the position variable as a Point type(comes from geometry_msgs.msg which has x,y,z)
+        position = Point()
+
+        # Cycle through the four sides of the square
+        for i in range(4):
+        # Straight forward
+            # initialize the movement command with linear velocity
+            move_cmd = Twist() # Initialize the movement command to zero , Twist:linear.x linear.y linear.z    Point: x,y,z         
+            move_cmd.linear.x = linear_speed            # Set the movement command to forward motion with desired speed
+            #record the starting position
+            (position, rotation) = self.get_odom()      # Get the starting position values                        
+            x_start = position.x  
+            y_start = position.y
+            distance = 0                                # traveled  distance            
+            # travel with a linear  speed
+            while distance < goal_distance and not rospy.is_shutdown(): # hasno't reached the desired distance       
+                self.cmd_vel.publish(move_cmd)                          # Publish the Twist message velocity comannd  until reached the destination               
+                r.sleep()
+                (position, rotation) = self.get_odom()                  # Get the current position               
+                # Compute the Euclidean distance from the start         
+                distance = sqrt(pow((position.x - x_start), 2) +        # update the traveled  distance 
+                                pow((position.y - y_start), 2))
+                
+        # Stop the robot before rotating
+            # stop()
+            move_cmd = Twist()
+            self.cmd_vel.publish(move_cmd)
+            rospy.sleep(1.0)
+            
+        # rotate
+            move_cmd.angular.z = angular_speed      # Set the movement command to a rotation        
+            last_angle = rotation                   # starting angle, odometry record  the last angle measured(starting angle)        
+            turn_angle = 0                          # traveled angle           
+            while abs(turn_angle + angular_tolerance) < abs(goal_angle) and not rospy.is_shutdown():# hasno't reached the desired goal_angle     
+                self.cmd_vel.publish(move_cmd)                 # Publish the Twist message velocity comannd angular_speed until reached the desired goal_angle                   
+                r.sleep()                                      # sleep with rate
+                (position, rotation) = self.get_odom()         # Get the current rotation angle        
+                delta_angle = normalize_angle(rotation - last_angle) # compute the the delt_angel  constraint with in -pi to pi       
+                turn_angle += delta_angle                      # update the traveled turn_angle
+                last_angle = rotation                          # update the last_angle
+                
+        # Stop the robot before the next leg
+            # stop()
+            move_cmd = Twist()
+            self.cmd_vel.publish(move_cmd)
+            rospy.sleep(1.0)
+            
+        # Stop the robot when we are done
+        self.cmd_vel.publish(Twist())
+   
+    # get the location ang angel information from odometry    
+    def get_odom(self):
+        # Get the current transform between the odom and base frames
+        try:
+            (trans, rot)  = self.tf_listener.lookupTransform(self.odom_frame, self.base_frame, rospy.Time(0))
+        except (tf.Exception, tf.ConnectivityException, tf.LookupException):
+            rospy.loginfo("TF Exception")
+            return
+        # used * is Python's a notion for passing a list of numbers to a function
+        # trans is a list of x, y, and z coordinates
+        # rot is a list of x, y, z and w quaternion components.
+        return (Point(*trans), quat_to_angle(Quaternion(*rot))) #current location Point and the current angel     
+          
+    # stop and close automatically when shutting down the node
+    def shutdown(self):
+        # Always stop the robot when shutting down the node.
+        rospy.loginfo("Stopping the robot...")
+        self.cmd_vel.publish(Twist())
+        rospy.sleep(1)
+    # stop the robot    
+    def stop(self):
+        move_cmd = Twist()
+        self.cmd_vel.publish(move_cmd)
+        rospy.sleep(1)
+        
+if __name__ == '__main__':
+    try:
+        NavSquare()
+    except rospy.ROSInterruptException:
+        rospy.loginfo("Navigation terminated.")
+
+    3、ros节点键盘控制机器人
+      类似 键盘控制小乌龟  rosrun turtlesim turtle_teleop_key
+      我们使用launch文件来启动
+      
+      turtlebot_teleop 包 包含了通过 键盘、遙控杆、PS3游戏手柄等设备发送 Twist commands 控制命令到 /cmd_vel 话题上
+      然后  base controller 节点订阅/cmd_vel 话题，得到控制命令 在映射成电机的控制命令驱动机器人前进
+      
+      roslaunch rbx1_nav keyboard_teleop.launch
+      i 键 直线前进（头部在前 （不带ros标志的？））
+    ，  键  直线后进（尾部在前（带ros标志的为尾部））
+      u 键 逆时针转圈（有半径 头部在前）
+      o 键 顺时针转圈（有半径 头部在前）
+      m 键 顺时针转圈（有半径 尾部在前）
+      。键 逆时针转圈（有半径 尾部在前）
+      j 键 逆时针转圈（原地打转）
+      l 键 顺时针转圈（原地打转）
+      
+      keyboard_teleop.launch 文件 如下
+<launch>      <!-- 包名  -->       <!-- 可执行文件名 -->        <!-- 启动后的节点名 -->     <!-- 信息输出到屏幕-->
+  <node pkg="turtlebot_teleop" type="turtlebot_teleop_key" name="turtlebot_teleop_keyboard" output="screen">
+    <param name="scale_linear" value="0.1" type="double"/>   <!-- 先速度大小 -->
+    <param name="scale_angular" value="0.4" type="double"/>  <!-- 角速度大小 -->
+    <remap from="turtlebot_teleop_keyboard/cmd_vel" to="cmd_vel" /> <!-- 发布的话题改为 /cmd_vel-->
+  </node>
+  
+</launch>
+            
+            4、游戏手柄控制  joystick
+            roslaunch rbx1_nav joystick_teleop.launch
+             a)1 joystick 手柄测试
+            sudo apt-get install joystick
+            jstest /dev/input/js0
+            
+            
+            5、图形界面控制
+              arbotix_gui
+              
+            6、交互式marker控制
+              在rviz中 指定运动方向 速度等
+              安装工具
+              sudo apt-get install ros-indigo-turtlebot-interactive-markers
+              开启机器人
+              roslaunch rbx1_bringup fake_turtlebot.launch
+              开启交互式marker 配置的rviz 3d可视化界面
+              rosrun rviz rviz -d `rospack find rbx1_nav`/interactive_markers.rviz
+              开启 交互式marker控制
+              roslaunch rbx1_nav interactive_markers.launch
+              
+              
+              点击左上角 Move Camera 旁边 的Interact 按钮 就会看到 机器人周围多了一个交互式的控制环
+
+      
+ 
+
+####################################################################
+######################################################################     
+    五、导航Navigation 和路径规划Path Planning   SLAM  建地图与定位
+        所用传感器 比较昂贵的 激光雷达 Laser scann
+        替换：
+                  微软的 Kinect   华硕的 Xtion 深度摄像机
+        所用算法  3D 点云库   3D point cloud   来模仿 激光雷达
+        可用算法包
+        depthimage_to_laserscan   http://wiki.ros.org/depthimage_to_laserscan
+        kinect_2d_scanner         http://wiki.ros.org/kinect_2d_scanner
+        教程：
+        1、navigation Tutorials RobotSetup TF  机器人 坐标变换信息
+          http://wiki.ros.org/navigation/Tutorials/RobotSetup/TF
+           mobile base 移动底座 的旋转中心 的坐标系（coordinate frame ）  "base_link"
+           放置于顶部的激光雷达   中心坐标  "base_laser"
+           
+        TF包的作用类似于 已知 "base_link"坐标系与"base_laser"坐标系的位置 和 物体 与"base_laser"坐标的相对位置
+        求解 "base_link" 与 物体 的相对位置
+        
+        odom 坐标系 为  world-fixed frame  自身 的坐标系 来源里程记的计算  
+        1信息来源 1轮子的编码器、视觉测速、内部的惯性测量单元
+             内部本地运动、位置等信息参考，时间一长 数据会有偏移 变得不准确       
+        map   world fixed frame z轴朝上   不连续 会有不连续的数据变换
+             长时间的全局信息参考，但是会有不连续的数据变换跳跃
+        earth  地球坐标系
+        
+算法：
+http://wiki.ros.org/move_base   用于移动机器人
+http://wiki.ros.org/gmapping    用于建立地图
+http://wiki.ros.org/amcl        用于定位
+
+http://wiki.ros.org/navigation/Tutorials/RobotSetup   导航机器人 从零开始
+http://www.udacity.com/overview/Course/cs373/CourseRev/apr2012 优达学城课程
+
+
+  2、传感器数据的发布 
+           a) sensor_msgs/LaserScan 消息类型 
+                 Header 消息类型 来标准化这些信息
+                 #sequence ID: consecutively increasing ID
+                 # 序列   会自动添加
+                 uint32 seq
+                 # time-handling sugar is provided by the client library
+                 # 时间戳
+                 time stamp
+                 #Frame this data is associated with
+                 # 0: no frame
+                 # 1: global frame
+                 # 坐标类型
+                 string frame_id
+                 
+           b)  LaserScan 消息类型      
+      Header header            # 消息头
+      float32 angle_min        # 扫描的开始角度 [弧度]
+      float32 angle_max        # 扫描的结束角度 [弧度]
+      float32 angle_increment  # 扫描的角度增量 [弧度]
+      float32 time_increment   # 扫描的时间增量 [秒]
+      float32 scan_time        # 总扫描时间     [秒]
+      float32 range_min        # 距离范围最小值 [米]
+      float32 range_max        # 距离范围最大值 [米]
+      float32[] ranges         # 距离数据      [米] (超过范围的数据都是错误的数据)
+      float32[] intensities    # 数据强度      [device-specific units]
+      
+         c) 创建LaserScan 消息类型发布节点
+         cd catkin_ws/src/
+         catkin_create_pkg learn_nav_msg sensor_msgs roscpp rospy
+         
+//fake_laser_msg_pub.cpp
+ #include <ros/ros.h>  //系统
+ #include <sensor_msgs/LaserScan.h> //传感器消息类型
+ 
+  int main(int argc, char** argv){
+    ros::init(argc, argv, "laser_scan_publisher"); // 创建节点
+    ros::NodeHandle nh;                            // 节点句柄
+    //  创建发布者                               消息类型             话题     缓存区大小
+    ros::Publisher scan_pub = nh.advertise<sensor_msgs::LaserScan>("scan", 50);
+    unsigned int num_readings = 100;               // 激光雷达消息 量
+    double laser_frequency = 40;                   // 频率 计算时间增量等信息
+    double ranges[num_readings];                   // 距离数据
+    double intensities[num_readings];              // 数据密度
+    
+    int count = 0;                                 // 计数 数据
+    ros::Rate rate(1.0);                           // 消息发布频率
+    while(nh.ok()){
+        
+       for(unsigned int i = 0; i < num_readings; ++i){
+           ranges[i] = count;                      // 产生假的激光雷达数据
+           intensities[i] = 100 + count;
+        }
+       ros::Time scan_time = ros::Time::now();     // 时间戳
+       sensor_msgs::LaserScan scan;                // 创建雷达消息
+       scan.header.stamp = scan_time;              // 定义消息头文件里的时间戳
+       scan.header.frame_id = "laser_frame";       // 定义消息头文件里的 坐标
+       scan.angle_min = -1.57;                     // 开始的扫描 角度 弧度  -90
+       scan.angle_max = 1.57;                      // 结束的扫描 角度 弧度  +90
+       scan.angle_increment = 3.14 / num_readings; // 角度增量 总共旋转 180度 分 100个数据
+       scan.time_increment = (1 / laser_frequency) / (num_readings); //发送一次数据的时间 为1 / laser_frequency 总共100个数据
+       scan.range_min = 0.0;                       // 最小距离范围
+       scan.range_max = 100.0;                     // 最大距离范围
+       scan.ranges.resize(num_readings);           // 数据量规整 调整大小
+       scan.intensities.resize(num_readings);
+       // 将产生的数据 赋值给 激光雷达数据
+       for(unsigned int i = 0; i < num_readings; ++i){
+          scan.ranges[i] = ranges[i];
+          scan.intensities[i] = intensities[i];
+        }
+       scan_pub.publish(scan);                      // 发布消息
+       ++count;                                     // 数据 加1
+       rate.sleep();                                // 休息
+    }
+ }
+ 
+      c)  sensor_msgs/PointCloud 消息类型
+      
+ Header 消息类型 来标准化这些信息
+                 #sequence ID: consecutively increasing ID
+                 # 序列  会自动添加
+                 uint32 seq   
+                 # time-handling sugar is provided by the client library
+                 # 时间戳
+                 time stamp
+                 #Frame this data is associated with
+                 # 0: no frame
+                 # 1: global frame
+                 # 坐标类型
+                 string frame_id
+                 
+     Header header                     # 消息头
+     geometry_msgs/Point32[] points    # 三维点（x,y,z） 数组 (以消息头里的坐标系为参考) 
+     ChannelFloat32[]        channels  # 每个点的附加信息 例如 "intensity" channel
+     # cloud.channels[0].name = "intensities";    // 附加信息名字
+     # cloud.channels[0].values.resize(num_points);//附加信息值
+     
+      d) 创建PointCloud 消息类型发布节点
+ //fake_PointCloud_msg_pub.cpp           
+ #include <ros/ros.h>   // 系统
+ #include <sensor_msgs/PointCloud.h>// 消息头文件
+ int main(int argc, char** argv){
+ ros::init(argc, argv, "point_cloud_publisher");// 创建节点
+ ros::NodeHandle nh;                            // 节点句柄
+ //  创建发布者                               消息类型              话题     缓存区大小
+ ros::Publisher cloud_pub = nh.advertise<sensor_msgs::PointCloud>("cloud", 50);
+ unsigned int num_points = 100;                 // 总点数
+ int count = 0;                                 // 数据
+ ros::Rate rate(1.0);                           // 发布频率
+ while(nh.ok()){
+     sensor_msgs::PointCloud cloud;             // 创建点云 数据变量
+     cloud.header.stamp = ros::Time::now();     // 创建header 时间戳
+     cloud.header.frame_id = "sensor_frame";    // 创建header 坐标州
+     cloud.points.resize(num_points);           // 点数据
+     cloud.channels.resize(1);                  // 点附加消息 点密度 一个 "intensity" channel
+     cloud.channels[0].name = "intensities";    // 附加信息名字
+     cloud.channels[0].values.resize(num_points);//附加信息值
+     for(unsigned int i = 0; i < num_points; ++i){
+          cloud.points[i].x = 1 + count;        //产生假的 点 坐标数据
+          cloud.points[i].y = 2 + count;
+          cloud.points[i].z = 3 + count;
+          cloud.channels[0].values[i] = 100 + count; //产生假的 点 附加信息 密度信息
+        }
+     cloud_pub.publish(cloud);                  //发布点云消息
+     ++count;
+     rate.sleep();
+    }
+}
+
+   3、里程记消息的发布
+   
+     a) 消息类型
+      nav_msgs/Odometry   包含机器人自身的 坐标变换  位置坐标(参考 header.frame_id )  速度等信息
+    
+   Header header                # 消息头
+   string child_frame_id        # 目标坐标系
+   geometry_msgs/PoseWithCovariance pose   # 位置（相对 header.frame_id ）
+   geometry_msgs/TwistWithCovariance twist # 速度  线速度 + 角速度
+   
+   b) 修改 CMakeList.txt文件 和 package.xml 文件
+   
+   CMakeList.txt文件:  
+   find_package(catkin REQUIRED COMPONENTS
+   roscpp
+   rospy
+   sensor_msgs    # 雷达 点云数据
+   tf             # 里程记 坐标变换信息
+   nav_msgs       # 里程记 信息
+   )
+ package.xml 文件:  
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>tf</build_depend>
+  <build_depend>nav_msgs</build_depend>
+
+  <run_depend>roscpp</run_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>tf</run_depend>
+  <run_depend>nav_msgs</run_depend>
+  
+  c) 编写 发布里程记消息的节点
+  //fake_Odometry_msg_pub.cpp
+ #include <ros/ros.h>                  // 系统
+ #include <tf/transform_broadcaster.h> // 坐标变换
+ #include <nav_msgs/Odometry.h>        // 里程记
+ int main(int argc, char** argv){
+    ros::init(argc, argv, "odometry_publisher"); // 建节点
+    ros::NodeHandle nh;                          // 节点句柄
+    //  创建发布者                            消息类型            话题   缓存区大小
+    ros::Publisher odom_pub = nh.advertise<nav_msgs::Odometry>("odom", 50);
+    tf::TransformBroadcaster odom_tf_bc;            // 创建里程记 的坐标变换广播变量
+    double x = 0.0;   // 坐标 x轴
+    double y = 0.0;   // 坐标 y轴
+    double th = 0.0;  // 偏航角度
+    double vx = 0.1;  // 机器人 x轴（前向）速度 分量  来源与 轮子编码器 或者 惯性测量单元 这里 虚拟创建一个
+    double vy = -0.1; // 机器人 y轴（左向）速度 分量
+    double vth = 0.1; // 角速度
+    // 或者对应速度控制命令 (vx, vy, vth) <==> (cmd_vel.linear.x, cmd_vel.linear.y, cmd_vel.angular.z)
+    ros::Time current_time, last_time;           // 时间 变量
+    current_time = ros::Time::now();             // 当前时间 时间戳
+    last_time = ros::Time::now();                // 上次时间
+    ros::Rate rate(1.0);                         // 发布频率
+    while(nh.ok()){
+       ros::spinOnce();                          // 检查
+       current_time = ros::Time::now();          // 当前时间
+       //计算 根据 机器人自身 线速度 和 角速度 得到 机器人位置坐标和偏行角
+       double dt = (current_time - last_time).toSec();       // 单位时间 时间差
+       double delta_x = (vx * cos(th) - vy * sin(th)) * dt;  // 等效到 map固定坐标系上 的前向速度vx * cos(th) - vy * sin(th)
+       double delta_y = (vx * sin(th) + vy * cos(th)) * dt;
+       double delta_th = vth * dt;
+       x += delta_x;   //位置
+       y += delta_y;
+       th += delta_th; //偏行角
+       // 根据偏行角得到四元素信息
+       geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(th); //根据偏行角创建 四元素
+       // 创建坐标变换信息
+       geometry_msgs::TransformStamped odom_trans; // 创建带时间戳的 坐标变换变量
+       odom_trans.header.stamp = current_time;     // 添加header 时间戳
+       odom_trans.header.frame_id = "odom";        // 添加header 坐标系
+       odom_trans.child_frame_id = "base_link";    // 添加坐标变换 子坐标系
+       odom_trans.transform.translation.x = x;     // 里程记坐标系到 机器人底座坐标系的一个变换
+       odom_trans.transform.translation.y = y;
+       odom_trans.transform.translation.z = 0.0;
+       odom_trans.transform.rotation = odom_quat;  // 添加四元素信息
+       // 广播坐标变换信息
+       odom_tf_bc.sendTransform(odom_trans);       // 发送
+       // 创建 里程记信息
+       nav_msgs::Odometry odom;                    // 创建里程记信息变量
+       odom.header.stamp = current_time;           // 添加header 时间戳
+       odom.header.frame_id = "odom";              // 添加header 坐标系
+            // 设置姿态
+       odom.pose.pose.position.x = x;              // 添加位置坐标
+       odom.pose.pose.position.y = y;
+       odom.pose.pose.position.z = 0.0;
+       odom.pose.pose.orientation = odom_quat;     // 添加方位信息 四元素 
+            // 设置速度
+       odom.child_frame_id = "base_link";          // 添加子坐标系
+       odom.twist.twist.linear.x = vx;             // 机器人自身的 坐标线速度
+       odom.twist.twist.linear.y = vy;             //
+       odom.twist.twist.angular.z = vth;           // 自身叫角速度
+       //发 布里程记消息
+       odom_pub.publish(odom);
+       last_time = current_time;                   // 更新时间
+       rate.sleep();                               // 睡觉
+     }
+  }
+  
+四、使用内建的 move_base  节点 进行 路径规划 和 避障  基础介绍
+http://wiki.ros.org/move_base
+ 【1】move_base  节点介绍
+    move_base  使用 ROS action 消息框架类型 来应对 给出导航目标
+
+    http://wiki.ros.org/actionlib/Tutorials
+
+    1、提供的action API
+     a) 订阅的话题  Action Subscribed Topics
+         1) move_base/goal (move_base_msgs/MoveBaseActionGoal)  目标位置  重要
+         2) move_base/cancel (actionlib_msgs/GoalID)            请求取消某个目标
+     b)  发布的话题 Action Published Topics
+         1) move_base/feedback (move_base_msgs/MoveBaseActionFeedback) 反馈信息——当前的位置
+         2) move_base/status (actionlib_msgs/GoalStatusArray)   目标的状态信息  （取消、未完成、已完成。。。）
+         3) move_base/result (move_base_msgs/MoveBaseActionResult)     空的结果信息
+    2、节点订阅的话题 Subscribed Topics
+      move_base_simple/goal (geometry_msgs/PoseStamped)         非 action 接口 目标位置 话题消息
+    3、节点发布的话题 Published Topics
+      cmd_vel (geometry_msgs/Twist)                             控制命令 线速度和角速度
+        由 Base Controller 节点订阅 /cmd_vel 上的 geometry_msgs/Twist 消息
+        将Twist消息 转换成 电机（motor） 控制信号，最终驱动轮子
+    4、节点提供的服务
+       a) 制定 路径规划计划  ~make_plan (nav_msgs/GetPlan)  制定路线的服务 外部请求 不用去执行的
+       b) 探索位未知区域     ~clear_unknown_space (std_srvs/Empty)
+       c) 清理障碍物        ~clear_costmaps (std_srvs/Empty)
+    5、相关参数
+      a) 全局规划    ~base_global_planner (string, default: "navfn/NavfnROS" ) 依附于 nav_core::BaseGlobalPlanner 接口
+      b) 本地规划    ~base_local_planner (string, default: "base_local_planner/TrajectoryPlannerROS")
+         依附于 nav_core::BaseLocalPlanner 接口
+      c) 修复 行为  当建地图不成功时 的对策 后再试图建地图
+        ~recovery_behaviors
+        (list, default: [{name: conservative_reset, type: clear_costmap_recovery/ClearCostmapRecovery},
+                         {name: rotate_recovery, type: rotate_recovery/RotateRecovery},
+                         {name: aggressive_reset, type: clear_costmap_recovery/ClearCostmapRecovery}]
+        )
+      d) 控制频率  ~controller_frequency (double, default: 20.0)  闭环控制以及发送控制指令到 /cmd_vel 话题的频率
+      e) 地图规划 的 容忍时间  ~planner_patience (double, default: 5.0)  在空间清理操作前等待的 时间 来试图找到可用的规划
+      f) 控制器的 容忍时间    ~controller_patience (double, default: 15.0) 在空间清理操作前等待的 时间来等待有效的控制命令
+      g) 修复 行为  的 清理 范围  ~conservative_reset_dist (double, default: 3.0)   清理障碍物的 前向 距离范围（前提 修复行为被启用）
+      h) 修复 行为 启用标志       ~recovery_behavior_enabled (bool, default: true)  是否启用修复行为
+      i) 修复 行为 时 是否 允许原地打转  ~clearing_rotation_allowed (bool, default: true) （前提 修复行为被启用）
+      j) 休眠时是否关闭 地图      ~shutdown_costmaps (bool, default: false)        当 move_base 节点不活跃时 是否关闭 地图
+      k) 修复 行为前的摇摆晃动时间 ~oscillation_timeout (double, default: 0.0)
+      l) 全局路径 规划 频率       ~planner_frequency (double, default: 0.0)  为0 表示 发出新目标位置、本地规划报告被阻挡了 才 进行全局路径规划
+      m) 试图进行路径规划的最大次数~max_planning_retries (int32_t, default: -1)   -1 表示无限次
+         
+ 【2】base_local_planner  节点介绍  本地路径规划  
+      方法：Dynamic Window Approach（DWA）   随即模拟多个路径  然后评分 选出 评分最高的一条路径
+      示例程序：
+     #include <tf/transform_listener.h>
+     #include <costmap_2d/costmap_2d_ros.h>
+     #include <base_local_planner/trajectory_planner_ros.h>
+     ...
+     tf::TransformListener tf(ros::Duration(10));       //坐标转换监听
+     costmap_2d::Costmap2DROS costmap("my_costmap", tf);//地图
+    
+     base_local_planner::TrajectoryPlannerROS tp;       //路径规划
+     tp.initialize("my_trajectory_planner", &tf, &costmap);//初始化
+       
+       1、发布的话题
+         ~<name>/global_plan (nav_msgs/Path)    全局路径规划 主要用于可视化
+         ~<name>/local_plan (nav_msgs/Path)     本地路径规划 主要用于可视化    示例路径模拟
+         ~<name>/cost_cloud (sensor_msgs/PointCloud2)   路径规划的  评分示例
+                设置 参数 publish_cost_grid_pc   可关闭或打开 这个可视化
+       2、订阅的话题
+         odom (nav_msgs/Odometry)
+         提供机器人当前的速度 robot_base_frame  注意 参考坐标系
+         
+       3、参数
+        a) 机器人配置参数
+          ~<name>/acc_lim_x (double, default: 2.5) 机器人前向 x 加速度 acceleration 最大限制 m/s2
+          ~<name>/acc_lim_y (double, default: 2.5) 机器人左向 y 加速度 acceleration 最大限制 m/s2
+          ~<name>/acc_lim_theta (double, default: 3.2) 机器人角加速度 rotational acceleration 最大限制 弧度/s2
+          ~<name>/max_vel_x (double, default: 0.5) 机器人前向 x 速度 forward velocity  最大限制 m/s
+          ~<name>/min_vel_x (double, default: 0.1) 机器人前向 x 速度 forward velocity  最小限制 m/s  避免摩擦
+          ~<name>/max_vel_theta (double, default: 1.0) 机器人角速度 rotational  velocity  最大限制 弧度/s
+          ~<name>/min_vel_theta (double, default: -1.0) 机器人角速度 rotational  velocity 最小限制 弧度/s
+          ~<name>/min_in_place_vel_theta (double, default: 0.4) 机器人最小的 in-place 工作模式 角速度 限制  弧度/s
+          ~<name>/backup_vel (double, default: -0.1)   机器人后退速度  （必须为负数值 才能后退逃跑）
+          ~<name>/escape_vel (double, default: -0.1)   同 ~<name>/backup_vel 不推荐使用  新版本有的
+          ~<name>/holonomic_robot (bool, default: true) 是否是完整的机器人
+        b) 目标误差参数
+          ~<name>/yaw_goal_tolerance (double, default: 0.05)  偏行 角度允许误差        弧度
+          ~<name>/xy_goal_tolerance (double, default: 0.10)   位置 坐标（x,y）允许误差  米 
+          ~<name>/latch_xy_goal_tolerance (bool, default: false)  误差上索
+        c) 前进路径模拟参数
+           ~<name>/sim_time (double, default: 1.0)  总时间  秒
+           ~<name>/sim_granularity (double, default: 0.025) 行径步长 间隔尺寸  米
+           ~<name>/angular_sim_granularity (double, default: ~<name>/sim_granularity) 旋转 布长 弧度
+           ~<name>/vx_samples (integer, default: 3)      前向速度   采样 数量
+           ~<name>/vtheta_samples (integer, default: 20) 旋转角速度  采样 数量
+           ~<name>/controller_frequency (double, default: 20.0)   控制器执行命令 频率
+        d) 模拟路径 优劣 评分标准
+           评价函数:
+           cost = 
+    pdist_scale *   (distance to path         meter_scoring parameter) 
+  + gdist_scale *   (distance to local goal   meter_scoring parameter) 
+  + occdist_scale * (maximum obstacle cost along the trajectory in obstacle cost (0-254))
+  
+          ~<name>/meter_scoring (bool, default: false)   评定依据（ 米 还是 单元 cells）
+          ~<name>/pdist_scale (double, default: 0.6)     与路径的距离               权重 最大 5.0 
+          ~<name>/gdist_scale (double, default: 0.8)     与目标的（速度、目的地）距离  权重 最大 5.0 
+          ~<name>/occdist_scale (double, default: 0.01)  避免障碍物的权重
+          ~<name>/heading_lookahead (double, default: 0.325) ？？ 向前看 远近 米
+          ~<name>/heading_scoring (bool, default: false)   heading to the path or its distance from the path
+          ~<name>/heading_scoring_timestep (double, default: 0.8)  时间长度 when using heading scoring 
+          ~<name>/dwa (bool, default: true)      算法来源： Dynamic Window Approach 还是 Trajectory Rollout 
+          ~<name>/publish_cost_grid_pc (bool, default: false)
+                    When true, a sensor_msgs/PointCloud2 will be available on the ~<name>/cost_cloud topic. 
+          ~<name>/global_frame_id (string, default: odom)
+    The frame to set for the cost_cloud. Should be set to the same frame as the local costmap's global frame.
+       E) 避免障碍物 参数
+          ~<name>/oscillation_reset_dist (double, default: 0.05) 
+       F) 全局规划参数
+          ~<name>/prune_plan (bool, default: true)   当机器人执行 最有路径 时 是否清除 显示 路径（1米后的路径）
+        
+  【4】 地图相关 costmap_2d::Costmap2DROS
+    #include <tf/transform_listener.h>
+    #include <costmap_2d/costmap_2d_ros.h>
+    ...
+    tf::TransformListener tf(ros::Duration(10));
+    costmap_2d::Costmap2DROS costmap("my_costmap", tf);
+       1、订阅的话题
+          ~<name>/footprint (geometry_msgs/Polygon)
+       2、发布的话题
+          ~<name>/grid (nav_msgs/OccupancyGrid)                           The values in the costmap 
+          ~<name>/grid_updates (map_msgs/OccupancyGridUpdate)    更新区域  The value of the updated area of the costmap 
+          ~<name>/voxel_grid (costmap_2d/VoxelGrid)                       Optionally advertised when the underlying occupancy grid uses voxels and the user requests the voxel grid be published. 
+       3、参数
+         a) plugins parameter.
+              ~<name>/plugins (sequence, default: pre-Hydro behavior)  Sequence of plugin specifications, one per layer. 
+                 例如： plugins: 
+                      - {name: static_map,       type: "costmap_2d::StaticLayer"}
+                      - {name: obstacles,        type: "costmap_2d::VoxelLayer"}
+                      
+         b)坐标系和坐标变换参数 Coordinate frame and tf parameters
+            ~<name>/global_frame (string, default: "/map")           地图全局坐标系 The global frame for the costmap to operate in. 
+            ~<name>/robot_base_frame (string, default: "base_link")  机器人底座 坐标系
+            ~<name>/transform_tolerance (double, default: 0.2)       可容忍的最大坐标转换延迟时间Specifies the delay in transform (tf) data that is tolerable in seconds
+         c)频率参数  Rate parameters
+            ~<name>/update_frequency (double, default: 5.0)          地图更新频率 
+            ~<name>/publish_frequency (double, default: 0.0)         地图信息发布展示频率
+         d) 地图管理参数 Map management parameters
+            ~<name>/rolling_window (bool, default: false)            动态地图？ if static_map parameter is set to true, this parameter must be set to false. 
+            ~<name>/always_send_full_costmap (bool, default: false)  全部地图信息（发布在 "~<name>/grid"） 部分地图信息（发布在"~<name>/grid_updates" 话题）
+         e) 静态地图 雷达 配置参数
+            ~<name>/width (int, default: 10)            地图宽度
+            ~<name>/height (int, default: 10)           地图高度 
+            ~<name>/resolution (double, default: 0.05)  地图分辨率  meters/cell. 
+            ~<name>/origin_x (double, default: 0.0)     坐标原点 The x origin of the map in the global frame in meters. 
+            ~<name>/origin_y (double, default: 0.0)             The y origin of the map in the global frame in meters. 
+            
+     【5】自适应蒙特卡洛定位  amcl  locational
+http://wiki.ros.org/amcl
+         amcl 运用 基于雷达建立的地图, 激光雷达信息, 以及坐标变换信息, 输出 估计的位置坐标.
+       1、订阅的话题
+        scan (sensor_msgs/LaserScan)   激光雷达信息
+        tf (tf/tfMessage)              坐标转换信息
+        initialpose (geometry_msgs/PoseWithCovarianceStamped)   定位算法 粒子滤波器初始化参数 均值协方差
+        map (nav_msgs/OccupancyGrid)   地图信息       
+       2、发布的话题
+       amcl_pose (geometry_msgs/PoseWithCovarianceStamped)   ，带有协方差 的 估计的 机器人位置
+       particlecloud (geometry_msgs/PoseArray)                 粒子滤波器点云
+       tf (tf/tfMessage)                                       坐标转换信息 from odom (which can be remapped via the ~odom_frame_id parameter) to map.       
+       3、提供服务  Services
+        global_localization (std_srvs/Empty)                  初始化全局定位   Initiate global localization, 
+       4、调用的服务 Services Called
+       static_map (nav_msgs/GetMap)                           调用此服务来重新得到地图   
+       5、参数 parameters
+         a) 滤波器参数
+            ~min_particles (int, default: 100)  粒子数量下限
+            ~max_particles (int, default: 5000) 粒子数量上限
+            ~kld_err (double, default: 0.01)    估计分布 和 真是分布 的最大误差
+            ~kld_z (double, default: 0.99)      上限 1-p  p <= kld_err 
+            ~update_min_d (double, default: 0.2 meters)    粒子滤波更新前 转换 运动 下限
+            ~update_min_a (double, default: π/6.0 radians)  粒子滤波更新前 旋转 运动 下限  
+            ~resample_interval (int, default: 2) 重新采样的滤波器更新数量
+            ~transform_tolerance (double, default: 0.1 seconds)  转换信息有效 的时间限制
+            ~recovery_alpha_slow (double, default: 0.0 (disabled))  指数下降率 Exponential decay rate for the slow average weight filter, used in deciding when to recover by adding random poses. A good value might be 0.001. 
+            ~recovery_alpha_fast (double, default: 0.0 (disabled))  Exponential decay rate for the fast average weight filter, used in deciding when to recover by adding random poses. A good value might be 0.1. 
+            ~initial_pose_x (double, default: 0.0 meters)  高斯分布初始化 滤波器 的位置x均值
+            ~initial_pose_y (double, default: 0.0 meters)  高斯分布初始化 滤波器 的位置y均值
+            ~initial_pose_a (double, default: 0.0 radians) 高斯分布初始化 滤波器 的 偏行角度 yaw 均值
+            ~initial_cov_xx (double, default: 0.5*0.5 meters) 高斯分布初始化 滤波器 的位置协方差 x*x 
+            ~initial_cov_yy (double, default: 0.5*0.5 meters) 高斯分布初始化 滤波器 的位置协方差 y*y 
+            ~initial_cov_aa (double, default: (π/12)*(π/12) radian) 高斯分布初始化 滤波器 的 偏行角度 协方差 yaw*yaw 
+            ~gui_publish_rate (double, default: -1.0 Hz)      可视化频率 -1.0 to disable. 
+            ~save_pose_rate (double, default: 0.5 Hz)         保存位置和 协方差 配置 的最大频率 ，-1.0 to disable.
+            ~use_map_topic (bool, default: false)             是否通过订阅话题来获得地图     调用服务获得
+            ~first_map_only (bool, default: false)            是否只使用第一次获得的地图     不更新 定位 地图       
+          b)雷达模型参数 Laser model parameters
+            ~laser_min_range (double, default: -1.0)          使用的最小扫描角度，-1.0 进行汇报最小角度
+            ~laser_max_range (double, default: -1.0)          使用的最小扫描角度，-1.0 进行汇报最大角度
+            ~laser_max_beams (int, default: 30)               使用的光束数量
+            ~laser_z_hit (double, default: 0.95)              混合权重 z_hit   Mixture weight for the z_hit part of the model.
+            ~laser_z_short (double, default: 0.1)             混合权重 z_short Mixture weight for the z_short part of the model.
+            ~laser_z_max (double, default: 0.05)              混合权重 z_max   Mixture weight for the z_max part of the model.
+            ~laser_z_rand (double, default: 0.05)             混合权重 z_rand Mixture weight for the z_rand part of the model.
+            ~laser_sigma_hit (double, default: 0.2 meters)    高斯模型 标准差 z_hit
+            ~laser_lambda_short (double, default: 0.1)        指数下降参数    z_short  Exponential decay parameter for z_short part of model.
+            ~laser_likelihood_max_dist (double, default: 2.0 meters) 障碍物位置浮动范围 Maximum distance to do obstacle inflation on map, for use in likelihood_field model. 
+            ~laser_model_type (string, default: "likelihood_field")  雷达模型  Which model to use, either beam, likelihood_field, or likelihood_field_prob (same as likelihood_field but incorporates the beamskip feature, if enabled). 
+          c) 里程记模型参数 Odometry model parameters
+            ~odom_model_type (string, default: "diff")        里程记模型  "diff", "omni", "diff-corrected" or "omni-corrected".
+            ~odom_alpha1 (double, default: 0.2)               期望的噪声  旋转角度估计
+            ~odom_alpha2 (double, default: 0.2)               期望的噪声  旋转角度估计2
+            ~odom_alpha3 (double, default: 0.2)               期望的噪声  转换估计  
+            ~odom_alpha4 (double, default: 0.2)               期望的噪声  转换估计2
+            ~odom_alpha5 (double, default: 0.2)               期望的噪声  转换估计3 (only used if model is "omni").
+            ~odom_frame_id (string, default: "odom")          里程记        坐标系
+            ~base_frame_id (string, default: "base_link")     机器人移动底盘 坐标系
+            ~global_frame_id (string, default: "map")         定位系统的 坐标系
+            ~tf_broadcast (bool, default: true)               Set this to false to prevent amcl from publishing the transform between the global frame and the odomet
+             
+ 【6】slam_gmapping 建立地图 和定位 节点
+http://wiki.ros.org/gmapping
+    建立一张地图 (nav_msgs/OccupancyGrid)：
+     rosrun gmapping slam_gmapping scan:=base_scan
+     
+       1、订阅的话题
+         tf (tf/tfMessage)             坐标变换信息 tf of laser, base, and odometry
+         scan (sensor_msgs/LaserScan)  雷达信息 深度信息等
+       2、发布的话题
+         map_metadata (nav_msgs/MapMetaData)  发布地图数据   周期更新
+         map (nav_msgs/OccupancyGrid)         同上
+         ~entropy (std_msgs/Float64)           位置的混乱程度  越大 信息越不准确      
+       3、服务  Services
+         dynamic_map (nav_msgs/GetMap)  获取地图数据的服务
+       4、参数 parameters
+         ~inverted_laser (string, default: "false")  是否需要反转 雷达信息
+         ~throttle_scans (int, default: 1)           扫描最小的阈值   越大 忽略的信息越多      
+         ~base_frame (string, default: "base_link")  机器人移动底座 坐标系 mobile base. 
+         ~map_frame (string, default: "map")         地图的坐标系
+         ~odom_frame (string, default: "odom")       里程记消息的 坐标系
+         ~map_update_interval (float, default: 5.0)  地图更新时间间隔  越高低 cpu 占用就越高
+         ~maxUrange (float, default: 80.0)           雷达最大可用范围
+         ~sigma (float, default: 0.05)               误差程度？   The sigma used by the greedy endpoint matching 
+         ~kernelSize (int, default: 1)               通信内核？   The kernel in which to look for a correspondence 
+         ~lstep (float, default: 0.05)               转变（线性运动？）的最优步长  The optimization step in translation 
+         ~astep (float, default: 0.05)               旋转的最优步长   The optimization step in rotation 
+         ~iterations (int, default: 5)               扫描？循环次数   The number of iterations of the scanmatcher 
+         ~lsigma (float, default: 0.075)             波长系数  ？     The sigma of a beam used for likelihood computation 
+         ~ogain (float, default: 3.0)                平滑（滤波）增益  smoothing the resampling effects 
+         ~lskip (int, default: 0)                    每次扫描间隔的光束数量？ Number of beams to skip in each scan. 
+         ~minimumScore (float, default: 0.0)         跳跃误差处理      Minimum score for considering the outcome of the scan matching good. Can avoid jumping pose estimates in large open spaces when using laser scanners with limited range (e.g. 5m). Scores go up to 600+, try 50 for example when experiencing jumping estimate issues. 
+         ~srr (float, default: 0.1)                  里程记 消息转换 误差 Odometry error in translation (rho/rho) 
+         ~srt (float, default: 0.2)                  里程记 消息转换 误差 Odometry error in translation as a function of rotation (rho/theta) 
+         ~str (float, default: 0.1)                  里程记 旋转角度 误差 Odometry error in rotation (theta/rho)  
+         ~stt (float, default: 0.2)                  里程记 旋转角度 误差 (theta/theta) 
+         ~linearUpdate (float, default: 1.0)         线距离 更新处理值 Process a scan each time the robot translates this far 
+         ~angularUpdate (float, default: 0.5)        角行程 更新处理值 Process a scan each time the robot rotates this far 
+         ~temporalUpdate (float, default: -1.0)      更新 Process a scan if the last scan processed is older than the update time in seconds. A value less than zero will turn time based updates off. 
+         ~resampleThreshold (float, default: 0.5)    重新建地图 阈值The Neff based resampling threshold 
+         ~particles (int, default: 30)               粒子滤波器 参数 粒子个数 Number of particles in the filter 
+         ~xmin (float, default: -100.0)              初始化的地图尺寸
+         ~ymin (float, default: -100.0)
+         ~xmax (float, default: 100.0)
+         ~ymax (float, default: 100.0)
+         ~delta (float, default: 0.05)               地图分辨率
+         ~llsamplerange (float, default: 0.01)       可能的转换采样范围  Translational sampling range for the likelihood 
+         ~llsamplestep (float, default: 0.01)        转换采样间隔  Translational sampling step for the likelihood 
+         ~lasamplerange (float, default: 0.005)      角度采样范围 Angular sampling range for the likelihood 
+         ~lasamplestep (float, default: 0.005)       角度采样间隔
+         ~transform_publish_period (float, default: 0.05) 转换信息发布 周期 秒 s
+         ~occ_thresh (float, default: 0.25)          占有率阈值
+         ~maxRange (float)                          传感器范围 set maxUrange < maximum range of the real sensor <= maxRange. 
+ 
+    【7】  模仿acml的 假的定位 fake_localization 仿真定位节点
+         1、订阅的话题
+            base_pose_ground_truth (nav_msgs/Odometry)   仿真器发布的机器人的位置. 
+            initialpose (geometry_msgs/PoseWithCovarianceStamped)   初始化的位置
+         2、发布的话题
+            amcl_pose (geometry_msgs/PoseWithCovarianceStamped)    发布位置
+            particlecloud (geometry_msgs/PoseArray)                机器人位置可视化 点云数据  rviz and nav_view. 
+         3、参数Parameters
+            ~odom_frame_id (string, default: "odom")     里程记参考坐标系
+            ~delta_x (double, default: 0.0)              坐标系偏移 The x offset between the origin of the simulator coordinate frame and the map coordinate frame published by fake_localization. 
+            ~delta_y (double, default: 0.0)              The y offset between the origin of the simulator coordinate frame and the map coordinate frame published by fake_localization. 
+            ~delta_yaw (double, default: 0.0)            The yaw offset between the origin of the simulator coordinate frame and the map coordinate frame published by fake_localization. 
+            ~global_frame_id (string, default: /map)     坐标变换  The frame in which to publish the global_frame_id→odom_frame_id transform over tf. New in 1.1.3 
+            ~base_frame_id (string, default: base_link)  机器人底座坐标系 The base frame of the robot. New in 1.1.3 
+         4、 Provided tf Transforms
+            /map → <value of odom_frame_id parameter>   Passed on from the simulator over tf. 
+       
+       
+       
+       
+   【8】关于 目标命令
+        move_base/goal (move_base_msgs/MoveBaseActionGoal)  目标位置  重要
+        >>>>>
+        show MoveBaseActionGoal
+        >>>>>
+std_msgs/Header header                    标准信息头
+  uint32 seq
+  time stamp
+  string frame_id
+actionlib_msgs/GoalID goal_id             目标编号
+  time stamp
+  string id
+move_base_msgs/MoveBaseGoal goal          目标内容
+  geometry_msgs/PoseStamped target_pose       类型 PoseStamped
+    std_msgs/Header header                    标准信息头
+      uint32 seq
+      time stamp
+      string frame_id
+    geometry_msgs/Pose pose                   姿态  方位
+      geometry_msgs/Point position               位置
+        float64 x
+        float64 y
+        float64 z
+      geometry_msgs/Quaternion orientation       方向角度
+        float64 x
+        float64 y
+        float64 z
+        float64 w
+        
+        控制命令借口话题消息类型
+        也是  move_base_simple/goal (geometry_msgs/PoseStamped) 话题的接受消息类型
+         节点订阅的话题 Subscribed Topics
+         move_base_simple/goal (geometry_msgs/PoseStamped)         非 action 接口 目标位置 话题消息
+        
+  【9】 路径规划 参数配置文件  rbx1_nav/config/fake下
+     • base_local_planner_params.yaml       本地路径规划参数配置文件 base_local_planner  节点
+     • costmap_common_params.yaml           地图常用参数配置文件     http://wiki.ros.org/costmap_2d#Parameters 
+     • global_costmap_params.yaml           全局地图配置文件 
+     • local_costmap_params.yaml            本地地图配置文件
+     
+     1、路径规划参数文解析
+       base_local_planner_params.yaml
+       
+controller_frequency: 3.0                  # 发送控制命令 的频率 3~5合适
+recovery_behavior_enabled: false           # 修复 行为 启用标志   move_base  节点节点参数
+clearing_rotation_allowed: false           # 前提 修复 行为 启用
+
+TrajectoryPlannerROS:
+   max_vel_x: 0.3  # 最大前进线速度  0.5m/s在室内已经很快了
+   min_vel_x: 0.1  # 最小前进线速度  0.5m/s在室内已经很快了
+   max_vel_y: 0.0  # 对于非完成机器人 没有平移运动自由度
+   min_vel_y: 0.0  #
+   max_vel_theta: 1.0  # 最大旋转角速度 1 rad/s  57度/s
+   min_vel_theta: -1.0 # 最小旋转角速度 
+   min_in_place_vel_theta: 0.4 # 原地旋转 最小角速度 
+   escape_vel: -0.1            # 逃跑后退速度
+   acc_lim_x: 1.5              # 最大线性加速度限制
+   acc_lim_y: 0.0              # 同 对于非完成机器人 没有平移运动自由度
+   acc_lim_theta: 1.2          # 最大角加速度限制
+
+   holonomic_robot: false      # 是否完成机器人 （是否 全自由度）
+   yaw_goal_tolerance: 0.1     # 目标方向偏差范围 6 度
+   xy_goal_tolerance: 0.05     # 目标距离偏差范围 5 cm  过小的化 机器人一直会进行调整  不要小于地图的精度
+   latch_xy_goal_tolerance: false # 不是用目标误差容忍？
+   pdist_scale: 0.4            # 路径评价系数  path distance   会影响 最终的 local path
+   gdist_scale: 0.8            # 路径评价系数  goal distance 
+   meter_scoring: true         # 按距离来评定
+
+   heading_lookahead: 0.325    # 
+   heading_scoring: false      # 
+   heading_scoring_timestep: 0.8 # 评分时间间隔
+   occdist_scale: 0.05           # 避障 权重 avoiding obstacles
+   oscillation_reset_dist: 0.05  # 避障
+   publish_cost_grid_pc: false   # 发布点云 PointCloud2  ？ 可视化
+   prune_plan: true              # 是否清除显示 路径轨迹
+
+   sim_time: 1.0                 # 前进路径模拟参数 总时间
+   sim_granularity: 0.05         # 行径步长 间隔尺寸  米
+   angular_sim_granularity: 0.1  # 角度 间隔尺寸  米
+   vx_samples: 8                 # 前进 线速度 采样 数量
+   vy_samples: 0  # zero for a differential drive robot
+   vtheta_samples: 20            # 旋转叫角速度 采样数量
+   dwa: true                     # 算法来源： Dynamic Window Approach 还是 Trajectory Rollout 
+   simple_attractor: false       # 
+     
+      • costmap_common_params.yaml           地图常用参数配置文件
+      
+obstacle_range: 2.5 # 障碍物检测范围角度？  360+
+raytrace_range: 3.0 # 光线角度
+#footprint: [[0.175, 0.175], [0.175, -0.175], [-0.175, -0.175], [-0.175, 0.175]]
+# 多边形轮廓的机器人 外形尺寸设置参数  以中心为原点（0，0） 外形轮廓拐点 坐标  顺时针或逆时针标注都可
+#footprint_inflation: 0.01
+robot_radius: 0.175 # 对于圆形机器人  设置其半径 米  对于非圆形机器人  设置 footprint: 参数
+inflation_radius: 0.2 # 通过狭窄的通道可适当降低数值   想快速奔跑 可适当增加数值
+max_obstacle_height: 0.6 # 障碍物的 尺寸大小
+min_obstacle_height: 0.0 #
+observation_sources: scan # 数据来源
+scan: {data_type: LaserScan, topic: /scan, marking: true, clearing: true, expected_update_rate: 0}
+
+
+
+ • global_costmap_params.yaml           全局地图配置文件   与cpu能力和通信质量（无线）相关 
+ 
+ global_costmap:                  
+   global_frame: map                 # 全局参考坐标系
+   robot_base_frame: base_footprint  # 机器人底座参考系  TurtleBot it is /base_footprint
+                                     # /base_link frame      used by Pi Robot and Maxwell
+   update_frequency: 1.0             # 根据传感器信息 更新地图的频率 1~5 即可   与cpu能力相关
+   publish_frequency: 0              # 静态地图不需要发布  动态地图 需要发布最新的地图信息 1.0
+   static_map: true                  # 全局地图 通常是 静态的 设置与 static_map:相反
+   rolling_window: false             # 地图不会随着i其人移动而改变
+   resolution: 0.01                  # 地图分辨率   base_local_planner_params.yaml 中  xy_goal_tolerance: 0.05  要小与地图分辨率
+   transform_tolerance: 1.0          # 坐标转换 延迟时间限  与无线通信质量相关    
+   map_type: costmap
+   
+   
+  • local_costmap_params.yaml            本地地图配置文件
+  
+  local_costmap:
+   global_frame: map   # global_frame: /odom – For the local cost map, we use the odometry frame as the global frame
+   robot_base_frame: base_footprint  # 机器人底座参考系  TurtleBot it is /base_footprint
+                                     # /base_link frame      used by Pi Robot and Maxwell
+   update_frequency: 3.0             # 根据传感器信息 更新地图的频率 1~5 即可   与cpu能力相关
+   publish_frequency: 1.0            # 机器人移动速度比较快的话，频率需要设置高一些 
+   static_map: false                 # true
+   rolling_window: true              # false
+   width: 6.0                        # 滚动更新地图的窗口大小
+   height: 6.0
+   resolution: 0.01                  # 地图分辨率   base_local_planner_params.yaml 中  xy_goal_tolerance: 0.05  要小与地图分辨率
+   transform_tolerance: 1.0          # 坐标转换 延迟时间限  与无线通信质量相关    通信不好的话 适当增加延迟时间
+   
+   
+   
+   
+   
+   
+   四、使用内建的 move_base  节点 进行 路径规划 和 避障 仿真实验
+【1】 运行一个空白地图 测试 move_base 节点
+文件解析：
+a)1地图和移动文件 fake_move_base_blank_map.launch in the launch file
+
+<launch>
+  <!-- 运行一个空白地图的地图服务器  map_server -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find rbx1_nav)/maps/blank_map.yaml"/>
+  
+  <!-- 包含其他launch文件 即打开move_base节点 -->
+  <include file="$(find rbx1_nav)/launch/fake_move_base.launch" />
+
+  <!-- 模拟发布一个标准的静态坐标转换  /odom and /map 里程记相对 地图（原传感器信息得到） -->
+  <node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster" args="0 0 0 0 0 0 /map /odom 100" />
+</launch>
+
+b)2地图描述文件  maps/blank_map.yaml
+
+image: blank_map.pgm    # 地图源文件
+resolution: 0.01        # 精度
+origin: [-2.5, -2.5, 0] # 尺 寸
+occupied_thresh: 0.65
+free_thresh: 0.196 # Taken from the Willow Garage map in the turtlebot_navigation package
+negate: 0
+
+c)3移动文件 move_base节点启动launch文件
+launch/fake_move_base.launch
+
+<launch>
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" clear_params="true">
+    <!-- rosparam 载入参数配置文件 分别在两个命名空间下载入 常用地图参数配置文件 -->
+    <rosparam file="$(find rbx1_nav)/config/fake/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find rbx1_nav)/config/fake/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find rbx1_nav)/config/fake/local_costmap_params.yaml"  command="load" />
+    <rosparam file="$(find rbx1_nav)/config/fake/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find rbx1_nav)/config/fake/base_local_planner_params.yaml" command="load" />
+  </node>
+</launch>
+
+
+d)4机器人启动文件解析：
+fake_turtlebot.launch
+   
+<launch>
+  <param name="/use_sim_time" value="false" />
+
+  <!-- Load the URDF/Xacro model of our robot 空间模型 -->
+  <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find rbx1_description)/urdf/turtlebot.urdf.xacro'" />
+   
+  <param name="robot_description" command="$(arg urdf_file)" />
+  <!-- 雷达或深度传感器 -->
+  <node name="arbotix" pkg="arbotix_python" type="arbotix_driver" output="screen" clear_params="true">
+      <rosparam file="$(find rbx1_bringup)/config/fake_turtlebot_arbotix.yaml" command="load" />
+      <param name="sim" value="true"/>
+  </node>
+  
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+      <param name="publish_frequency" type="double" value="20.0" />
+  </node>
+  
+</launch>
+
+
+实验步骤：
+   1) 运行仿真机器人：
+      roslaunch rbx1_bringup fake_turtlebot.launch
+   2) 运行move_base节点以及载入空白地图
+      roslaunch rbx1_nav fake_move_base_blank_map.launch
+   3) 运行rviz可视化界面
+      rosrun rviz rviz -d `rospack find rbx1_nav`/nav.rviz
+   4) 不简单发布 Twist 消息来控制 机器人移动 而使用 move_base 来控制机器人
+      即发布消息到 /move_base_simple/goal geometry_msgs/PoseStamped  来控制机器人移动
+      rostopic pub /move_base_simple/goal geometry_msgs/PoseStamped \
+'{ header: { frame_id: "map" }, pose: { position: { x: 1.0, y: 0, z: 0 }, orientation: { x: 0, y: 0, z: 0, w: 1 } } }'
+
+   5) 解析
+      绿色箭头(若目标位置有里程记箭头显示，则绿色箭头不显示)是目标位置
+      控制命令  pose姿态 position 目标位置  orientation 目标方向
+   6) 返回原点
+   rostopic pub /move_base_simple/goal geometry_msgs/PoseStamped \
+'{ header: { frame_id: "map" }, pose: { position: { x: 0, y: 0, z: 0 }, orientation: { x: 0, y: 0, z: 0, w: 1 } } }'
+   
+   7) 查看全局路径和局部路径
+      rviz中 将 Odometry 、Goal Pose 、 Mouse Pose（鼠标指定的目标方位箭头） 显示按钮去掉 ，重新执行上述 两个命令
+      可以看出 全局路径（绿色）：直接从当前位置指向目标位置，；局部路径（红色）；根据路径规划 逐步调整
+      影响 局部路径的参数有   base_local_planner_params.yaml 内的 
+        pdist_scale (0.4)        #  pdist_scale 小 gdist_scale 大 局部路径离全局路径越远
+        gdist_scale (0.8)
+        max_vel_x  (0.3)         the max linear speed of the robot
+        
+   8) 动态调整参数
+      打开动态参数配置界面
+      rosrun rqt_reconfigure rqt_reconfigure
+      move_base >>> TrajectoryPlannerROS  设置
+        pdist_scale (0.8)
+        gdist_scale (0.4)
+      重新运行上述两个移动命令，会看到 局部路径更靠近 全局路径
+        
+   9) 在rviz中指定目标位置
+      使用鼠标指定目标方位（位置和方向）   在RVIZ中点击 2D Nav Goal 然后在坐标上指定 目标方位
+      可以看到机器人向目标位置进行了移动
+   10) rvzi 相关导航元素显示介绍
+       http://wiki.ros.org/navigation/Tutorials/Using%20rviz%20with%20the%20Navigation%20Stack
+  
+   11) 使用脚本文件进行机器人控制  空白地图  正方形路径
+       rosrun rbx1_nav move_base_square.py
+
+#!/usr/bin/env python
+#-*- coding:utf-8 -*-       
+import rospy      # ros system depends roscpp 系统文件
+import actionlib  # 运动库
+from actionlib_msgs.msg import * #运动消息
+from geometry_msgs.msg import Pose, Point, Quaternion, Twist
+             # Twist:linear.x linear.y linear.z    Point: x,y,z   Quaternion: x,y,z,w 
+from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal  # move_base 消息
+from tf.transformations import quaternion_from_euler         # 坐标转换 里的 角度转换成四元素
+from visualization_msgs.msg import Marker                    # 目标点的可视化 marker 消息库
+from math import radians, pi                                 # 数学常量
+
+class MoveBaseSquare():
+    # standard class initialization  标准类的初始化
+    def __init__(self):
+        # Creat a node named nav_test 
+        rospy.init_node('nav_test', anonymous=False) #创建节点
+         # Set rospy to execute a shutdown function when exiting    
+        rospy.on_shutdown(self.shutdown)             #自动结束
+        # How big is the square we want the robot to navigate?
+        square_size = rospy.get_param("~square_size", 2.0) # meters 参数
+        
+        # Create a list to hold the target quaternions (orientations)
+        quaternions = list()     # target uaternions (orientations)   四元素方向
+        # First define the corner orientations as Euler angles
+        euler_angles = (pi/2, pi, 3*pi/2, 0) # location orientations  角度方向    
+        # Then convert the angles to quaternions
+        for angle in euler_angles:
+            q_angle = quaternion_from_euler(0, 0, angle, axes='sxyz') #得到四元素
+            q = Quaternion(*q_angle)
+            quaternions.append(q)  # generate the target quaternions (orientations)
+        
+        # Create a list to hold the waypoint poses           
+        waypoints = list()  # target pose(position +  quaternions (orientations) )    目标位置姿态（ 四个 方位 ）  
+        # Append each of the four waypoints to the list.  Each waypoint
+        # is a pose consisting of a position and orientation in the map frame.
+        waypoints.append(Pose(Point(square_size, 0.0, 0.0), quaternions[0]))
+        waypoints.append(Pose(Point(square_size, square_size, 0.0), quaternions[1]))
+        waypoints.append(Pose(Point(0.0, square_size, 0.0), quaternions[2]))
+        waypoints.append(Pose(Point(0.0, 0.0, 0.0), quaternions[3]))
+        
+        # Initialize the visualization markers for RViz
+        self.init_markers()  #初始化 可视化marker  大小颜色 时间戳 坐标。。。
+        
+        # Set a visualization marker at each waypoint        
+        for waypoint in waypoints:           
+            p = Point()            # initialize the variable
+            p = waypoint.position  # copy the position 
+            self.markers.points.append(p)
+            
+        # Publisher to manually control the robot (e.g. to stop it, queue_size=5)
+        self.cmd_vel_pub = rospy.Publisher('cmd_vel', Twist, queue_size=5)      
+        # Subscribe to the move_base action server
+        self.move_base = actionlib.SimpleActionClient("move_base", MoveBaseAction)      
+        rospy.loginfo("Waiting for move_base action server...")       
+        # Wait 60 seconds for the action server to become available
+        self.move_base.wait_for_server(rospy.Duration(60))       
+        rospy.loginfo("Connected to move base server")
+        rospy.loginfo("Starting navigation test")
+        
+        # Initialize a counter to track waypoints
+        i = 0        
+        # Cycle through the four waypoints
+        while i < 4 and not rospy.is_shutdown():
+            # Update the marker display
+            self.marker_pub.publish(self.markers)  #一次性全部显示目标位置（四个点） marker
+            
+            # Intialize the waypoint goal
+            goal = MoveBaseGoal()           
+            # Use the map frame to define goal poses
+            goal.target_pose.header.frame_id = 'map'           
+            # Set the time stamp to "now"
+            goal.target_pose.header.stamp = rospy.Time.now()            
+            # Set the goal pose to the i-th waypoint
+            goal.target_pose.pose = waypoints[i]            
+            # Start the robot moving toward the goal
+            self.move(goal)
+            
+            i += 1
+        
+    def move(self, goal):
+            # Send the goal pose to the MoveBaseAction server
+            self.move_base.send_goal(goal)     # 发布目标方位命令        
+            # Allow 1 minute to get there
+            finished_within_time = self.move_base.wait_for_result(rospy.Duration(60)) 
+            
+            # If we don't get there in time, abort the goal
+            if not finished_within_time:
+                self.move_base.cancel_goal()
+                rospy.loginfo("Timed out achieving goal")
+            else:
+                # We made it!
+                state = self.move_base.get_state()
+                if state == GoalStatus.SUCCEEDED:
+                    rospy.loginfo("Goal succeeded!")
+                    
+    def init_markers(self):
+        # Set up our waypoint markers
+        marker_scale = 0.2
+        marker_lifetime = 0 # 0 is forever
+        marker_ns = 'waypoints'
+        marker_id = 0
+        marker_color = {'r': 1.0, 'g': 0.7, 'b': 1.0, 'a': 1.0} #dictionary
+        
+        # Define a marker publisher.
+        self.marker_pub = rospy.Publisher('waypoint_markers', Marker, queue_size=5)
+        
+        # Initialize the marker points list.
+        self.markers = Marker()
+        self.markers.ns = marker_ns
+        self.markers.id = marker_id
+        self.markers.type = Marker.CUBE_LIST
+        self.markers.action = Marker.ADD
+        self.markers.lifetime = rospy.Duration(marker_lifetime)
+        self.markers.scale.x = marker_scale
+        self.markers.scale.y = marker_scale
+        self.markers.color.r = marker_color['r']
+        self.markers.color.g = marker_color['g']
+        self.markers.color.b = marker_color['b']
+        self.markers.color.a = marker_color['a']
+        
+        self.markers.header.frame_id = 'odom'
+        self.markers.header.stamp = rospy.Time.now()
+        self.markers.points = list()
+
+    def shutdown(self):
+        rospy.loginfo("Stopping the robot...")
+        # Cancel any active goals
+        self.move_base.cancel_goal()
+        rospy.sleep(2)
+        # Stop the robot
+        self.cmd_vel_pub.publish(Twist())
+        rospy.sleep(1)
+
+if __name__ == '__main__':
+    try:
+        MoveBaseSquare()
+    except rospy.ROSInterruptException:
+        rospy.loginfo("Navigation test finished.")
+        
+              
+        11) 带有障碍物的地图  正方形路径 避障前行
+           a) 启动仿真机器人
+              roslaunch rbx1_bringup fake_turtlebot.launch
+           b) 删除之前的地图 move_base控制等参数
+              rosparam delete /move_base控制等参数
+              或者在 move_base launch 文件中 设置 clear_params="true" 清除之前的设置
+           c) 运行move_base 和 带有障碍物的地图配置文件
+              roslaunch rbx1_nav fake_move_base_map_with_obstacles.launch
+           d) 运行配置好的rviz文件
+              rosrun rviz rviz -d `rospack find rbx1_nav`/nav_obstacles.rviz
+       
+           e) 正方形导航
+              rosrun rbx1_nav move_base_square.py
+       
+     12) 带障碍物的 move_base  map_with_obstacle
+      fake_move_base_map_with_obstacles.launch
+      
+<launch>
+  <include file="$(find rbx1_nav)/launch/fake_move_base_obstacles.launch" /> 
+  <!-- 带障碍物的地图-->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find rbx1_nav)/maps/blank_map_with_obstacle.yaml"/>
+ 
+  <!-- Run a static transform between /odom and /map -->
+  <node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster" args="0 0 0 0 0 0 /map /odom 100" />
+</launch>
+
+  带障碍物的move_base启动文件
+  launch/fake_move_base_obstacles.launch
+
+<launch>
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" clear_params="true"> 
+    <rosparam file="$(find rbx1_nav)/config/fake/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find rbx1_nav)/config/fake/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find rbx1_nav)/config/fake/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find rbx1_nav)/config/fake/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find rbx1_nav)/config/fake/base_local_planner_params.yaml" command="load" />
+    <!-- 针对障碍物需要 修改的参数文件 -->
+    <rosparam file="$(find rbx1_nav)/config/nav_obstacles_params.yaml" command="load" />
+  </node> 
+</launch>
+
+config/nav_obstacles_params.yaml
+
+TrajectoryPlannerROS:
+  max_vel_x: 0.3        # 线速度减小来适应障碍物
+  pdist_scale: 0.8      # 局部路径更靠近全局路径   路径权重加大
+  gdist_scale: 0.4      # 距离权重较小
+  
+  
+  带障碍物的地图文件 
+/maps/blank_map_with_obstacle.yaml
+
+image: blank_map_with_obstacle.pgm  #导入 原始地图文件
+resolution: 0.01
+origin: [-2.5, -2.5, 0]
+occupied_thresh: 0.65
+free_thresh: 0.195 # Taken from the Willow Garage map in the turtlebot_navigation package
+negate: 0
+
+
+13 ) 真实机器人 实验
+   不带障碍物
+    a) 机器人          roslaunch rbx1_bringup turtlebot_minimal_create.launch
+    b) 里程记卡尔曼滤波  roslaunch rbx1_bringup odom_ekf.launch
+    c) 启动移动节点     roslaunch rbx1_nav tb_move_base_blank_map.launch
+    d) 仿真路径查看     rosrun rviz rviz -d `rospack find rbx1_nav`/nav.rviz
+    e) 目标位置文件     rosrun rbx1_nav move_base_square.py
+   有障碍物
+    使用雷达或深度传感器来进行扫描 见图 避免障碍物
+     a) 机器人          roslaunch rbx1_bringup turtlebot_minimal_create.launch
+     b) 发布深度数据     roslaunch freenect_launch freenect-registered-xyzrgb.launch       （使用 kineat）
+                   或者 roslaunch openni2_launch openni2.launch depth_registration:=true  （使用 Asus Xtion, Xtion Pro, or Primesense 1.08/1.09 camera）
+        发布深度数据 至话题 /camera/depth_registered/image_rect
+     c) 深度数据转换至雷达信息    roslaunch rbx1_bringup depthimage_to_laserscan.launch
+        订阅话题 /camera/depth_registered/image_rect 上的深度数据  发布雷达信息 至 话题 /scan 
+     d) 启动移动节点      roslaunch rbx1_nav tb_move_base_blank_map.launch
+     e) 仿真路径查看      rosrun rviz rviz -d `rospack find rbx1_nav`/nav_obstacles.rviz
+     
+    
+   五、建立地图   使用gmapping包
+     1、总体概述
+       白色像素代表空旷空间  黑色像素代表障碍物  灰色像素代表未知空间
+       建立地图步骤：
+       1) 在目标区域遥控机器人
+       2) 通过雷达或者深度图像传感器获取的数据记录在 rosbag 文件里
+       3) 使用slam_gmapping 节点 通过上面记录的数据建立地图
+     2、关于传感器
+       1) 雷达 laser
+          安装驱动：
+          sudo apt-get install ros-indigo-laser-* ros-indigo-hokuyo-node
+       2) 机器人启动文件包含雷达驱动节点
+      如 Pi Robot 使用一个 Hokuyo 的雷达扫描仪
+   rbx1_bringup/launch/hokuyo.launch 
+<launch>
+  <node name="hokuyo" pkg="hokuyo_node" type="hokuyo_node">
+   <param name="min_ang" value="-1.7" />
+   <param name="max_ang" value="1.7" />
+   <param name="hokuyo_node/calibrate_time" value="true" />
+   <param name="frame_id" value="/base_laser" />
+  </node>
+</launch>
+
+     3、时时建立地图
+           若是 深度传感器如 Kinect or Xtion  扫描范围57度  而雷达能够达到 240度  
+           即使这样使用深度传感器也能达到很好的效果
+           例如TurtleBot机器人使用的就是  Kinect
+           a) 1机器人启动文件
+              roslaunch rbx1_bringup turtlebot_minimal_create.launch
+           b) 2运行深度传感器驱动文件 
+              1kinect传感器驱动freenect
+                 roslaunch rbx1_bringup turtlebot_fake_laser_freenect.launch
+              2Asus Xtion, Xtion Pro, or Primesense 1.08/1.09 camera 驱动 openni2
+                 roslaunch rbx1_bringup turtlebot_fake_laser_openni2.launch
+           c) 运行深度数据到雷达数据节点
+              roslaunch rbx1_bringup depthimage_to_laserscan.launch
+           d) 运行建立地图节点
+              roslaunch rbx1_nav gmapping_demo.launch       建立地图       
+        4) rviz
+           rosrun rviz rviz -d `rospack find rbx1_nav`/gmapping.rviz
+           
+        5) 运行遥控节点
+              roslaunch rbx1_nav keyboard_teleop.launch
+          或者
+              roslaunch rbx1_nav joystick_teleop.launch
+        6) 记录雷达数据 为后面建立各种参数配置的地图
+           进入日志文件夹  roscd rbx1_nav/bag_files
+           记录数据       rosbag record -O my_scan_data /scan /tf    记录雷达话题数据 和 坐标变换话题数据 /scan /tf 
+        7) 保存地图
+           进入地图文件夹  roscd rbx1_nav/maps
+           保存地图       rosrun map_server map_saver -f my_map   会生成地图图片my_map.pgm 和my_map.yaml地图描述文件
+           可使用照片查软件 查看地图图片  如 eog viewer ("eye of Gnome")  $  eog my_map.pgm
+        8) 建立地图的视频
+           http://youtu.be/7iIDdvCXIFM
+     4、根据雷达数据建立地图
+       可以设置不同的参数 根据相同的雷达数据建立地图，而不需要再次运行机器人
+       
+          1) 1机器人启动文件
+              roslaunch rbx1_bringup turtlebot_minimal_create.launch
+          2) 运行建立地图节点
+              roslaunch rbx1_nav gmapping_demo.launch       建立地图 
+          3) 设置仿真参数
+             rosparam set use_sim_time true
+          4) 进一步
+             删除move_base参数   rosparam delete /move_base
+             重启gmapping_demo  roslaunch rbx1_nav gmapping_demo.launch
+          5) rviz
+             rosrun rviz rviz -d `rospack find rbx1_nav`/gmapping.rviz
+          6) 回放雷达数据
+             roscd rbx1_nav/bag_files
+             rosbag play my_scan_data.bag
+          7) 保存地图
+              roscd rbx1_nav/maps
+              rosrun map_server map_saver -f my_map
+          8) 重置仿真参数
+              rosparam set use_sim_time false
+       5、文件解析
+##### gmapping_demo.launch#### 
+<launch>
+  <include file="$(find rbx1_nav)/launch/gmapping.launch"/>
+  <include file="$(find rbx1_nav)/launch/tb_move_base.launch"/>
+</launch>
+
+##### /launch/gmapping.launch ######
+<launch>
+  <arg name="scan_topic" default="scan" />            <!-- 订阅的话题-->
+  <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen" clear_params="true">
+    <param name="odom_frame" value="odom"/>           <!-- 坐标系-->
+    <param name="map_update_interval" value="30.0"/>  <!-- 地图更新时间间隔  越高低 cpu 占用就越高 -->
+    <!-- Set maxUrange < actual maximum range of the Laser -->
+    <param name="maxRange" value="5.0"/>              <!-- 传感器检测角度范围 硬件要求 -->
+    <param name="maxUrange" value="4.5"/>             <!-- 最大可用范围 < maxRange   -->
+    <param name="sigma" value="0.05"/>
+    <param name="kernelSize" value="1"/>
+    <param name="lstep" value="0.05"/>
+    <param name="astep" value="0.05"/>
+    <param name="iterations" value="5"/>
+    <param name="lsigma" value="0.075"/>
+    <param name="ogain" value="3.0"/>
+    <param name="lskip" value="0"/>
+    <param name="srr" value="0.01"/>
+    <param name="srt" value="0.02"/>
+    <param name="str" value="0.01"/>
+    <param name="stt" value="0.02"/>
+    <param name="linearUpdate" value="0.5"/>
+    <param name="angularUpdate" value="0.436"/>
+    <param name="temporalUpdate" value="-1.0"/>
+    <param name="resampleThreshold" value="0.5"/>
+    <param name="particles" value="80"/>
+  <!--
+    <param name="xmin" value="-50.0"/>          <!--  初始化的地图尺寸 --> 
+    <param name="ymin" value="-50.0"/>
+    <param name="xmax" value="50.0"/>
+    <param name="ymax" value="50.0"/>
+  make the starting size small for the benefit of the Android client's memory...
+  -->
+    <param name="xmin" value="-1.0"/>           <!--  初始化的地图尺寸 --> 
+    <param name="ymin" value="-1.0"/>
+    <param name="xmax" value="1.0"/>
+    <param name="ymax" value="1.0"/>
+
+    <param name="delta" value="0.05"/>          <!--  地图分辨率 --> 
+    <param name="llsamplerange" value="0.01"/>
+    <param name="llsamplestep" value="0.01"/>
+    <param name="lasamplerange" value="0.005"/>
+    <param name="lasamplestep" value="0.005"/>
+    <remap from="scan" to="$(arg scan_topic)"/>
+  </node>
+</launch>
+
+  六、建自适应蒙特卡洛定位和导航
+      amcl 使用地图和当前的雷达数据定位
+      1、文件解析 fake_amcl.launch
+      
+ <launch>
+  <param name="use_sim_time" value="false" />   <!-- 不使用仿真的雷达数据 -->
+  <!-- 导入地图文件 -->
+  <arg name="map" default="test_map.yaml" />
+  <!-- 运行期望的地图服务器 -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find rbx1_nav)/maps/$(arg map)"/>
+  <!-- 运行fake_move_base_amcl文件 -->
+  <include file="$(find rbx1_nav)/launch/fake_move_base_amcl.launch" /> 
+  <!-- 运行自适应蒙特卡洛定位的仿真节点-->
+  <node pkg="fake_localization" type="fake_localization" name="fake_localization" clear_params="true" output="screen">
+     <remap from="base_pose_ground_truth" to="odom" />
+     <param name="global_frame_id" value="map" />
+     <param name="base_frame_id" value="base_footprint" />
+  </node>
+      2、仿真步骤：
+        1) 运行仿真机器人  roslaunch rbx1_bringup fake_turtlebot.launch
+        2) 导航定位 等    roslaunch rbx1_nav fake_amcl.launch map:=test_map.yaml
+        3) rviz          rosrun rviz rviz -d `rospack find rbx1_nav`/amcl.rviz
+        4) 鼠标指定目标位置  2D Nav Goal
+      3、实际验证
+        1) 运行机器人  roslaunch rbx1_bringup turtlebot_minimal_create.launch
+        2) 运行传感器
+            kinect   roslaunch rbx1_bringup turtlebot_fake_laser_freenect.launch
+            Xtion 等 roslaunch rbx1_bringup turtlebot_fake_laser_openni2.launch
+        3) 导航定位   roslaunch rbx1_nav tb_demo_amcl.launch map:=my_map.yaml
+        4) rviz      rosrun rviz rviz -d `rospack find rbx1_nav`/nav_test.rviz
+    
+      4、自动导航  
+        1) 文件解析 nav_test.py 
+import rospy #system
+import actionlib #
+from actionlib_msgs.msg import *
+from geometry_msgs.msg import Pose, PoseWithCovarianceStamped, Point, Quaternion, Twist
+from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
+from random import sample #random
+from math import pow, sqrt
+
+class NavTest():
+    # standard class initialization
+    def __init__(self):
+        rospy.init_node('nav_test', anonymous=True)         #creat node named nav_test
+        rospy.on_shutdown(self.shutdown)                    #auto shut down  
+        # How long in seconds should the robot pause at each location?
+        self.rest_time = rospy.get_param("~rest_time", 10)  #sleep time       
+        # Are we running in the fake simulator?
+        self.fake_test = rospy.get_param("~fake_test", False)      
+        # Goal state return values
+        goal_states = ['PENDING', 'ACTIVE', 'PREEMPTED', 
+                       'SUCCEEDED', 'ABORTED', 'REJECTED',
+                       'PREEMPTING', 'RECALLING', 'RECALLED',
+                       'LOST']
+        
+        # Set up the goal locations. Poses are defined in the map frame.  
+        # An easy way to find the pose coordinates is to point-and-click
+        # Nav Goals in RViz when running in the simulator.
+        # Pose coordinates are then displayed in the terminal
+        # that was used to launch RViz.
+        locations = dict()        
+        locations['hall_foyer'] = Pose(Point(0.643, 4.720, 0.000), Quaternion(0.000, 0.000, 0.223, 0.975))
+        locations['hall_kitchen'] = Pose(Point(-1.994, 4.382, 0.000), Quaternion(0.000, 0.000, -0.670, 0.743))
+        locations['hall_bedroom'] = Pose(Point(-3.719, 4.401, 0.000), Quaternion(0.000, 0.000, 0.733, 0.680))
+        locations['living_room_1'] = Pose(Point(0.720, 2.229, 0.000), Quaternion(0.000, 0.000, 0.786, 0.618))
+        locations['living_room_2'] = Pose(Point(1.471, 1.007, 0.000), Quaternion(0.000, 0.000, 0.480, 0.877))
+        locations['dining_room_1'] = Pose(Point(-0.861, -0.019, 0.000), Quaternion(0.000, 0.000, 0.892, -0.451))
+        
+        # Publisher to manually control the robot (e.g. to stop it, queue_size=5)
+        self.cmd_vel_pub = rospy.Publisher('cmd_vel', Twist, queue_size=5)        
+        # Subscribe to the move_base action server
+        self.move_base = actionlib.SimpleActionClient("move_base", MoveBaseAction)       
+        rospy.loginfo("Waiting for move_base action server...")       
+        # Wait 60 seconds for the action server to become available
+        self.move_base.wait_for_server(rospy.Duration(60))       
+        rospy.loginfo("Connected to move base server")
+        
+        # A variable to hold the initial pose of the robot to be set by 
+        # the user in RViz
+        initial_pose = PoseWithCovarianceStamped()       
+        # Variables to keep track of success rate, running time,
+        # and distance traveled
+        n_locations = len(locations)
+        n_goals = 0
+        n_successes = 0
+        i = n_locations
+        distance_traveled = 0
+        start_time = rospy.Time.now()
+        running_time = 0
+        location = ""
+        last_location = ""
+        
+        # Get the initial pose from the user
+        rospy.loginfo("*** Click the 2D Pose Estimate button in RViz to set the robot's initial pose...")
+        rospy.wait_for_message('initialpose', PoseWithCovarianceStamped)
+        self.last_location = Pose()
+        rospy.Subscriber('initialpose', PoseWithCovarianceStamped, self.update_initial_pose)      
+        # Make sure we have the initial pose
+        while initial_pose.header.stamp == "":
+            rospy.sleep(1)
+            
+        rospy.loginfo("Starting navigation test")       
+        # Begin the main loop and run through a sequence of locations
+        while not rospy.is_shutdown():
+            # If we've gone through the current sequence,
+            # start with a new random sequence
+            if i == n_locations:
+                i = 0
+                sequence = sample(locations, n_locations)  # Randomly select the next location.
+                # Skip over first location if it is the same as
+                # the last location
+                if sequence[0] == last_location:
+                    i = 1           
+            # Get the next location in the current sequence
+            location = sequence[i]
+                        
+            # Keep track of the distance traveled.
+            # Use updated initial pose if available.
+            if initial_pose.header.stamp == "":
+                distance = sqrt(pow(locations[location].position.x - 
+                                    locations[last_location].position.x, 2) +
+                                pow(locations[location].position.y - 
+                                    locations[last_location].position.y, 2))
+            else:
+                rospy.loginfo("Updating current pose.")
+                distance = sqrt(pow(locations[location].position.x - 
+                                    initial_pose.pose.pose.position.x, 2) +
+                                pow(locations[location].position.y - 
+                                    initial_pose.pose.pose.position.y, 2))
+                initial_pose.header.stamp = ""
+            
+            # Store the last location for distance calculations
+            last_location = location            
+            # Increment the counters
+            i += 1
+            n_goals += 1
+        
+            # Set up the next goal location
+            self.goal = MoveBaseGoal()
+            self.goal.target_pose.pose = locations[location]
+            self.goal.target_pose.header.frame_id = 'map'
+            self.goal.target_pose.header.stamp = rospy.Time.now()            
+            # Let the user know where the robot is going next
+            rospy.loginfo("Going to: " + str(location))            
+            # Start the robot toward the next location  Send the appropriate MoveBaseGoal goal to the move_base action server.
+            self.move_base.send_goal(self.goal)           
+            # Allow 5 minutes to get there
+            finished_within_time = self.move_base.wait_for_result(rospy.Duration(300)) 
+            
+            # Check for success or failure
+            if not finished_within_time:
+                self.move_base.cancel_goal()
+                rospy.loginfo("Timed out achieving goal")
+            else:
+                state = self.move_base.get_state()
+                if state == GoalStatus.SUCCEEDED:
+                    rospy.loginfo("Goal succeeded!")
+                    n_successes += 1
+                    distance_traveled += distance
+                    rospy.loginfo("State:" + str(state))
+                else:
+                  rospy.loginfo("Goal failed with error code: " + str(goal_states[state]))
+                  
+            #  Record the success or failure of the navigation to the goal, as well as the elapsed time and distance traveled.
+            # How long have we been running?
+            running_time = rospy.Time.now() - start_time
+            running_time = running_time.secs / 60.0           
+            # Print a summary success/failure, distance traveled and time elapsed
+            rospy.loginfo("Success so far: " + str(n_successes) + "/" + 
+                          str(n_goals) + " = " + 
+                          str(100 * n_successes/n_goals) + "%")
+            rospy.loginfo("Running time: " + str(trunc(running_time, 1)) + 
+                          " min Distance: " + str(trunc(distance_traveled, 1)) + " m")
+            
+             # Pause for a configurable number of seconds at each location
+            rospy.sleep(self.rest_time)
+            
+    def update_initial_pose(self, initial_pose):
+        self.initial_pose = initial_pose
+
+    def shutdown(self):
+        rospy.loginfo("Stopping the robot...")
+        self.move_base.cancel_goal()
+        rospy.sleep(2)
+        self.cmd_vel_pub.publish(Twist())
+        rospy.sleep(1)
+      
+def trunc(f, n):
+    # Truncates/pads a float f to n decimal places without rounding
+    slen = len('%.*f' % (n, f))
+    return float(str(f)[:slen])
+
+if __name__ == '__main__':
+    try:
+        NavTest()
+        rospy.spin()
+    except rospy.ROSInterruptException:
+        rospy.loginfo("AMCL navigation test finished.")
+
+    2)自动导航仿真
+     fake_nav_test.launch
+     
+<launch>
+  <param name="use_sim_time" value="false" />
+
+  <!-- 开启仿真机器人 -->
+  <include file="$(find rbx1_bringup)/launch/fake_turtlebot.launch" />
+  <!-- 运行地图服务器 -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find rbx1_nav)/maps/test_map.yaml"/>
+
+  <!-- 运动控制节点 move_base node -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" clear_params="true" output="screen">
+    <rosparam file="$(find rbx1_nav)/config/fake/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find rbx1_nav)/config/fake/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find rbx1_nav)/config/fake/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find rbx1_nav)/config/fake/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find rbx1_nav)/config/fake/base_local_planner_params.yaml" command="load" />
+    <!-- 需要调整的参数 目的位置方向的容忍度 6.28 360度 -->
+    <rosparam file="$(find rbx1_nav)/config/nav_test_params.yaml" command="load" />
+  </node>
+  
+  <!-- 运行仿真的amcl定位 -->
+  <node pkg="fake_localization" type="fake_localization" name="fake_localization" clear_params="true" output="screen">
+     <remap from="base_pose_ground_truth" to="odom" />
+     <param name="global_frame_id" value="map" />
+     <param name="base_frame_id" value="base_footprint" />
+  </node>
+  
+  <!-- 启动 导航节点 -->
+  <node pkg="rbx1_nav" type="nav_test.py" name="nav_test" output="screen">
+    <param name="rest_time" value="1" />
+    <param name="fake_test" value="true" />
+  </node>
+  
+</launch>
+
+  运行：
+   roscore
+   rqt_consore     控制台监控
+   roslaunch rbx1_nav fake_nav_test.launch     启动文件
+   rosrun rviz rviz -d `rospack find rbx1_nav`/amcl.rviz   可视化
+   等待初始化 初始位置  用 鼠标在rviz中指定初始位置  通过 2D Pose Estimate 指定
+   
+       3）实际验证
+        1) 运行机器人  roslaunch rbx1_bringup turtlebot_minimal_create.launch
+        2) 运行传感器
+            kinect   roslaunch rbx1_bringup turtlebot_fake_laser_freenect.launch
+            Xtion 等 roslaunch rbx1_bringup turtlebot_fake_laser_openni2.launch
+        3) 监控       rqt_console &
+        4) 导航定位   roslaunch rbx1_nav tb_nav_test.launch map:=my_map.yaml
+        5) rviz      rosrun rviz rviz -d `rospack find rbx1_nav`/nav_test.rviz
+        
+        
+        
+

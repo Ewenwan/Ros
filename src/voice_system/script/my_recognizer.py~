@@ -1,6 +1,6 @@
-### 修改后的 文件
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
+### 修改后的 文件
 import roslib
 roslib.load_manifest('pocketsphinx')
 import rospy
@@ -53,7 +53,7 @@ class recognizer(object):
         # 配置ros系统设置
         self.started = False
         rospy.on_shutdown(self.shutdown)# 自主关闭
-        self.pub = rospy.Publisher('~output', String)# 发布 ~output 参数指定的 话题 类型 tring  似乎缺少 指定发布队列大小 tring
+        self.pub = rospy.Publisher('~output', String, queue_size=5)# 发布 ~output 参数指定的 话题 类型 String  
         
         rospy.Service("~start", Empty, self.start)   # 开始服务
         rospy.Service("~stop", Empty, self.stop)     # 结束服务
