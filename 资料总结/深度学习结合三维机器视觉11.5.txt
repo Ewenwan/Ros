@@ -1,0 +1,655 @@
+
+1、VGG in TensorFlow
+https://www.cs.toronto.edu/~frossard/post/vgg16/
+http://www.360doc.com/content/17/0624/10/10408243_666125650.shtml
+
+
+2、FCIS
+http://blog.csdn.net/bea_tree/article/details/73088212
+
+
+
+3、ResNeXt算法详解
+http://blog.csdn.net/u014380165/article/details/71667916
+
+
+4、Mask R-CNN
+https://www.zhihu.com/question/57403701
+http://blog.csdn.net/crazyice521/article/details/65448935
+http://blog.csdn.net/zhangjunhit/article/details/64920075?locationNum=6&fps=1
+
+
+5、yolo
+https://pjreddie.com/darknet/yolo/
+https://zhuanlan.zhihu.com/p/25236464
+
+
+6、3D目标识别与定位技术的最新进展？有哪些技术瓶颈
+https://www.zhihu.com/question/38555322
+
+7、知乎 李济深
+https://www.zhihu.com/people/bugway/activities
+
+
+8、室外 自动驾驶场景下的3D object detection，pipeline是3D object proposals + Fast R-CNN，在KITTI上效果还不错。 
+http://www.cs.toronto.edu/objprop3d/
+
+首先，个人认为完整的3D物体识别/检测（full 3D object detection）这个task的输出应该包括：
+1）2D boxes
+2）3D pose
+3）3D location
+4）3D boxes    实际上如果能输出3D boxes，前面三个自然也可以得到。
+
+9、室内 ECCV'14的Sliding Shapes的deep版本，也是Faster R-CNN的3D版本。整个pipeline比较优美，速度也快了很多。
+http://vision.princeton.edu/projects/2015/DSS/paper.pdf
+Deep Sliding Shapes for Amodal 3D Object Detection in RGB-D Images
+
+
+10、教授肖健雄  深度学习 用于三维视觉
+一是RGB-D场景分析，即同时使用图片中的颜色和深度信息做场景识别；
+二是三维深度学习。通过三维的卷积神经网络对三维物体进行识别，对三维场景进行分析。
+
+
+11、三维重建
+Multi-View Supervision for Single-View Reconstruction via Differentiable Ray Consistency
+https://github.com/shubhtuls/drc
+
+
+
+
+
+
+12 基于三维点云的目标识别与定位方法及系统
+为解决上述工业机器人视觉引导方案对工件上下料存在的局限性，本发明提出一种基于三维点云的目标识别与定位方法及系统，
+检测各种不同工件时无需根据工件自身局部几何形状特征(如：圆、孔洞等特征)再次开发或修改识别与定位算法，
+只需导入工件模型，本发明中提出的算法会自动提取和描述目标工件的关键特征，并将其用于实际工作场景中目标识别以及三维位置和姿态的计算。
+
+为达到上述目的，本发明的技术方案如下：
+一种基于三维点云的目标识别与定位方法，包括如下步骤：
+S1：离线特征提取，导入工件模型，计算并创建数据库。
+S2：在线特征匹配，获取最终的目标识别与定位结果。
+
+所述步骤S1具体包括如下步骤：
+S11：导入工件的模型点云。
+S12：计算模型点云中各个点对应的法向量。
+S13：在模型点云中随机选取一个模型点对，计算所述模型点对对应的模型点对特征。
+S14：重复所述步骤S13，获取模型点云中一定数量的模型点对及其对应的模型点对特征，使用上述获取的模型点对及其对应的模型点对特征创建数据库。
+
+所述步骤S2具体包括如下步骤：
+S21：采集工件所在场景的三维点云数据，即获取了工件的场景点云，对所述场景点云进行预处理。
+S22：计算预处理后的场景点云中各个空间点对应的法向量。
+S23：在场景点云中随机选取一个场景点对，计算所述场景点对对应的场景点对特征
+S24：特征匹配，使用所述场景点对特征在所述步骤S14创建的数据库中查找具有相同特征的模型点对。
+S25：使用具有相同特征的模型点对和场景点对产生位姿假设。
+S26：对步骤S25中产生的位姿假设进行匹配质量评估。
+S27：多次循环步骤S23～S26，获取匹配质量最优的一个位姿假设作为最终的目标识别与定位结果。
+
+作为上述技术方案的优选，所述步骤S13中：
+所述模型点对由模型点云中任意两点及各自法向量组成。
+作为上述技术方案的优选，所述步骤S21中：
+使用3D相机采集工件所在场景的三维点云数据。
+作为上述技术方案的优选，所述步骤S21中：
+所述预处理包括滤波及去噪处理，用于去除场景点云中噪声点及离群点。
+作为上述技术方案的优选，所述步骤S23中：
+所述场景点对由场景点云中任意两点及其各自法向量组成。
+一种基于三维点云的目标识别与定位系统，包括：
+离线特征提取模块，所述离线特征提取模块用于导入工件模型，计算并创建数据库。
+在线特征匹配模块，所述在线特征匹配模块用于获取最终的目标识别与定位结果。
+所述离线特征模块具体包括：
+模型点云加载子模块，所述模型点云加载子模块用于导入工件的模型点云。
+模型点云法向量计算子模块，所述模型点云法向量计算子模块用于计算模型点云中各个点对应的法向量。
+模型点对特征计算子模块，所述模型点对特征计算子模块用于在模型点云中随机选取一个模型点对，
+计算所述模型点对对应的模型点对特征。
+
+数据库创建子模块，所述数据库创建子模块用于重复所述模型点对特征计算子模块中的计算方法，
+获取模型点云中一定数量的模型点对及其对应的模型点对特征，使用上述获取的模型点对及其对应的模型点对特征创建数据库。
+
+所述在线特征匹配模块具体包括：
+场景点云获取子模块，所述场景点云获取子模块用于采集工件所在场景的三维点云数据，
+即获取了工件的场景点云，对所述场景点云进行预处理。
+场景点云法向量计算子模块，所述场景点云法向量计算子模块用于计算预处理后的场景点云中各个空间点对应的法向量。
+场景点对特征计算子模块，所述场景点对特征计算子模块用于在场景点云中随机选取一个场景点对，计算所述场景点对对应的场景点对特征。
+特征匹配子模块，所述特征匹配子模块用于使用所述场景点对特征在所述数据库创建子模块创建的数据库中查找具有相同特征的模型点对。
+位姿假设子模块，所述位姿假设子模块用于使用具有相同特征的模型点对和场景点对产生位姿假设。
+匹配质量评估子模块，所述匹配质量评估子模块用于对位姿假设子模块中产生的位姿假设进行匹配质量评估。
+目标识别与定位结果获取子模块，所述目标识别与定位结果获取子模块用于多次循环场景点对特征计算子模块～
+匹配质量评估子模块中的操作，获取匹配质量最优的一个位姿假设作为最终的目标识别与定位结果。
+
+作为上述技术方案的优选，所述模型点对特征计算子模块中：
+所述模型点对由模型点云中任意两点及各自法向量组成。
+作为上述技术方案的优选，所述场景点云获取子模块中：
+使用3D相机采集工件所在场景的三维点云数据。
+作为上述技术方案的优选，所述场景点云获取子模块中：
+所述预处理包括滤波及去噪处理，用于去除场景点云中噪声点及离群点。
+作为上述技术方案的优选，所述场景点对特征计算子模块中：
+所述场景点对由场景点云中任意两点及其各自法向量组成。
+
+本发明的有益效果在于：本发明把工业生产上下料中目标工件的识别与定位过程分为离线特征提取和在线特征匹配两个模块，
+大大减少了实时阶段的计算量，提高了运算速度。本发明引入了匹配质量评估以获得精确的工件三维位置和姿态，
+从而控制工业机器人以相应姿态抓取被识别的工件。传统的机器视觉方法需要根据工件局部几何形状特征(如：圆、孔洞等特征)
+开发对应的识别与定位算法，本发明能够进行通用的识别与精确的定位，对不同的工件不需进行算法的重新开发，节省了开发时间，
+大大提高生产效率。此外，传统的机器人上下料方案要求工件按照一定姿态进入相机视野并且只能获得工件相对于标准姿态
+在XOY平面的位置偏差和绕Z轴的偏转角，本发明对工件在相机视野中的姿态没有任何要求(工件可以离散放置，
+也可以相互重叠、相互遮挡)，并且能够完全获得目标工件的三维位置和姿态。
+
+
+13、三维点云目标提取
+http://blog.csdn.net/a2008301610258/article/details/48781441
+
+
+14、目标的3D姿态估计是一个非常有意思的问题
+对于刚性的目标，我们的三维姿态可能是一个6DoF的Pose，
+对于柔性的物体，这个姿态就复杂一点，通常直接给出重建出来的目标模型（mesh）。
+
+对于刚性的目标：
+如果是纹理丰富，特征点比较多的物体，最简单直接的方式莫过于直接通过特征点对来直接计算Pose了。
+如果没有特征点，现在流行的做法应该是使用梯度信息了。比较流行的是linemod。
+http://campar.in.tum.de/Main/StefanHinterstoisser
+git clone http://github.com/wg-perception/object_recognition_core
+git clone http://github.com/wg-perception/linemod
+git clone http://github.com/wg-perception/ork_renderer
+
+linemod 的基本思路是以CAD模型为出发点，提取离散的normal（就是与梯度方向垂直的一个方向向量），
+然后去原图里面做金字塔搜索。思路很朴实，技巧主要在于实现上，毕竟速度还是很重要的。
+
+linemod使用了图像normal和来自于深度摄像头的曲面normal，两个都是离散采样的。
+在实际中如果场景比较复杂，由于normal本身只有位置和方向属性，很容易出现误检，
+所以也有人在这一点上下功夫，回过头来利用颜色等信息来减少一些误检。
+
+
+另外，现在能买到的商业深度传感器的精度和范围都存在较强的限制，
+所以还是有很多人在想着直接使用双目视觉的方式来估算梯度，甚至加入一些Bias，
+通过单张图来估计物体表面的Normal。但是这些方法现在大多比较慢，在实际中很难用上。
+
+因为这些算法对精度要求高，并且不需要dense，
+所以工业上会有厂商用激光扫描获取一个稀疏的深度图，然后利用这个深度图来做一些工作。
+
+
+基于CAD模型的3D目标姿态估计的另外一个方向是减少CAD生成的模型跟实际模型之间的差异性，
+毕竟CAD出来的图，跟现实中图的光照条件等还是很不一样的，这个时候，哎，讨巧的人就幸运了，
+比如最新的ICCV2015有一篇论文，学习一个卷积网络来比较CAD出来的图像和实际中的图像，
+期望能去掉光照等因素的影响，典型的老思路用在新地方……是值得在实际中尝试的。
+
+
+
+
+
+
+15、2D图片中框出的物体上的点在物理世界座标中距离相机成像平面的距离
+对于RGB，可以利用geometry来求解，比如CVPR17上的Deep3DBox和Deep MANTA 论文。
+在Deep3DBox 中，已知2D box、orientation、3D size，利用3D box 
+投影到图像上的顶点和2D box 的边的对应关系可以求解出物体的3D坐标。
+在Deep MANTA中，已知2D keypoints、3D size，首先通过CAD model 获得3D keypoints，
+然后求解PnP就可以得到物体的3D坐标和orientation。这类方法的3D定位精度本质上受限于重投影误差，
+而keypoints、2D box 的定位精度是有限的，所以瓶颈也很明显。如果有RGB-D，玩法就更多了，
+你不一定要先得到2D box再求解3D坐标，你还可以直接在点云里面做。
+
+
+
+16、kinema systems的识别抓取系统
+首家实现深度学习与3d视觉融合技术用于工业机器人
+https://www.zhihu.com/question/63491452
+简单地说，就是希望把学术界在机器人上的研究成果放到工业机器人上，从而提高工业机器人易用性。
+
+Kinema Systems 与 MUJIN 最大的相似点在于，其主要创始人是非常著名的运动规划开源平台的创始人：
+
+MUJIN             CTO：Rosen Diankov   开源平台：OpenRave
+Kinema Systems    CEO：Sachin Chitta   开源平台：MoveIt!
+
+
+物体检测：一些箱子是堆在一起，并且中间有条缝（胶带），只用传统方法可能不太好解决（没试过，不清楚）；
+商标检测：由于视频中有一段是「Label Alignment」，这部分也可能是使用 SSD 或者Fast-RCNN 之类的检测算法，来检测商标在箱子上的位置。
+抓取规划（Grasp Planning）：只用吸盘，不需要太多抓取规划，只要箱子识别好了，运动过去就行了。
+运动规划（Motion Planning）：
+	没有任何的运动规划，就是简单的给几个路径点，让机器人自己做轨迹插补。由此可以看出，
+	要想在真正的工业机器人上用运动规划还是很不容易的，毕竟 MUJIN 花了五年时间。
+
+
+
+17、mujin 工业机器人设计公司
+
+https://www.zhihu.com/question/26834888/answer/114456322
+
+MUJIN是从东京大学孵化器走出的技术上最硬核的科技创业公司。 它的主要方向是机器人控制，包括机器视觉、机械臂控制、规划等。
+
+目前工业机器人虽然已经很成熟了，也有很多应用实例，但是也存在不少问题：
+①人工示教费时费力；
+②无法应对变化环境；
+③更新流水线成本高；
+④应用场景较为简单。
+
+随着手机等3C产业（更新换代快）的发展，人工费用的上升，工业界开始追求一种更加灵活的机器人：
+要是机器人可以进行任务层次的编程（例如“抓取A放到B”），
+而不是手把手示教（从A-->001-->002-->张开手爪--->200-->...-->关闭手爪-->...--->666--->B-->打开手爪）
+，那岂不是太amazing了！
+
+然而，几乎所有做motion planning的人都认识一个开源project：OPENRAVE
+它可以帮你们算机器人运动学逆解（IKFast），跟视觉系统结合，做3D仿真环境，做碰撞检测，
+做Motion Planning，简直机器人研究必备。很多著名的机器人平台都使用了OpenRAVE做开发。
+
+
+3D视觉：
+平面分割、欧氏聚类、ICP点云匹配等算法。
+
+相机自动标定：
+由于需要使用3D摄像机，于是我们必须知道
+摄像机相对于机械臂的安装位置，这就需要标定。
+目前很多标定方法需要人为协助标定，费时费力。
+但MUJIN提供了一种自动标定方法，只要将标定板往机器人前一扔，
+机器人自己动几下就把摄像机相对于机械臂的位置给标定出来了。
+
+碰撞检测：
+既然要求机器人自己计算从A到B的轨迹，
+那就必然要让机器人能避开工作空间内的障碍物了。
+MUJIN是把碰撞检测做到了机器人的实时控制回路里，实现了real time collision detection。
+调用了香港城市大学的潘佳写的FCL（Flexible Collision Library）碰撞检测库。
+FCL可以实现约0.1ms的碰撞检测速度（基于AABB原理）。
+目前ROS的MoveIt也是把FCL作为默认碰撞检测库，
+所以我猜MUJIN很可能还是使用这个方法（完全自己重写碰撞检测的话，成本和效率都是问题）。
+
+
+抓取规划 Manipulation Planning：
+这个也是Rosen论文里的一个重点内容，他通过采样方法计算到合适的抓取姿态。
+当然，工业环境中机器人的爪手一般很简单，工件也相对固定，
+可能MUJIN并没有使用复杂的Manipulation Planning。
+
+机器人逆解：
+这个是我当时看Rosen论文感到最震撼的一章了。
+他的IKFast算法可以解决绝大多数串联机器人运动学逆解的封闭解！
+请注意，我说的是封闭解！目前其他通用运动学逆解求解器都是利用雅克比迭代法求的数值解。
+这两个的区别在于数值解速度慢（约1ms），且一次只能得到一个解；
+而封闭解速度快（约4μs），且可以得到所有逆解（如果是冗余机构，则可设置分辨率）。
+亲手算过7-dof机械臂逆解的同仁们应该能理解这个功能的强大之处
+
+universal robot机器人有多少种逆解？
+现在用ros里逆解的方法，得到8组解，但是感觉不够，想知道到底有多少种解?
+https://www.zhihu.com/question/47605775/answer/113477680?from=profile_answer_card
+
+
+
+运动规划：
+这个是机器人目前很热的研究点，我的博士课题也是在这方面。
+运动规划就是指给定起点与终点，自动生成一条连接起止点的无碰撞轨迹。
+由于规划空间大，在Path Planning中常用的A*，Dijkstra
+等算法均无用武之地了。Rosen的博士论文在这方面没有太多创新，
+但是他把基于采用的规划算法整合进了OpenRAVE，
+这样用户就可以直接使用，而不需要对每个机器人进行复杂的配置了。
+
+
+但是，工业界对稳定性的要求可谓极致（甚至6σ，99.99966%无缺陷率），然而，前述几种技
+术中，3D视觉识别精度可能无法保证，另外，
+Sampling Based Motion Planning随机性太大，肯定也
+无法达到这么高的稳定性。当然，机器人智能化后，可以通过对执行结果进行检测，
+并进行re-grasp或者re-planning来实现高成功率。但是，依旧还有许多技术问题亟待解决。
+
+
+
+
+
+JR2智能移动抓取机器人----http://www.gaitech.net/product.asp?id=55&nid=3&uid=2
+http://www.gaitech.net/product.asp?id=55&nid=3&uid=2
+
+
+
+
+18、有没有将深度学习融入机器人领域的尝试？有哪些难点？
+https://www.zhihu.com/question/40333794/answer/153048773
+
+物体识别 ： 
+Rcnn  mask-rcnn  yolo  基于深度卷积神经网路
+
+物体定位：
+机器人领域的视觉除了物体识别还包括物体定位（为了要操作物体，需要知道物体的位姿）。 
+虽然很多人采用DL进行物体识别，但在物体定位方面都还是使用比较简单、或者传统的算法。
+似乎并未广泛采用DL。
+
+交大张博士   以及DL的三维物体定位
+https://www.zhihu.com/people/haoruo-zhang/activities
+它的方法大概是这样：对于一个物体，取很多小块 RGB-D 数据（只关心一个 patch，用局部特征可以应对遮挡）；
+每小块有一个坐标（相对于物体坐标系）；然后，首先用一个自编码器对数据进行降维；
+之后，用将降维后的特征用于训练 Hough Forest。
+这样，在实际物体检测的时候，我就可以通过在物体表面采样RGB-D数据，
+之后，估计出一个位姿。
+
+
+19、机器人抓取时怎么定位的？用什么传感器来检测？
+http://daily.zhihu.com/story/9329525
+
+
+
+20、传统的RCNN可以大致框出定位物体在图片中的位置，但是如何将这个图片中的位置转化为物理世界的位置？
+https://www.zhihu.com/question/50868746/answer/123510561
+
+最近在做一个机器人智能抓取物品的项目，机器人可以用一个双目摄像头将他看到的图片传回来，
+这里我们使用了RCNN处理图片，识别图片上的物体。但是RCNN只能在2d的图片中框出来目标物体，
+我们可以利用双目摄像头，将rcnn框出来的那一部分的3d坐标都拿到，但是如何确定物体的中心具体在哪里？
+
+
+
+因为机器人通过双目视觉得到的点云并不完整，所以直接把点云坐标求平均找中心的方法并不可行。
+
+先说比较传统的做法：
+由于之前的物体识别模块已经确定了这片点云对应的物体，如果我们有物体的3D模型，
+便可以直接用ICP算法将这片点云与物体的3D模型对齐。
+既然知道3D模型的位姿那就好办了。之后就是各种抓取姿态生成、力封闭之类的东西了：
+
+其他方法：
+当时已经完成了利用Bag-of-Features (BoF)原理做的图像物体定位算法。就类似题主现在做的利用RCNN在图像中定位了物体的大概位置。
+于是就想，我能不能直接利用这样的图像粗定位，然后根据一堆点云做抓取，而不用知道物体的3D模型。
+
+1、Using Geometry to Detect Grasp Poses in 3D Point Clouds
+上面这个是ICRA 2015中的一篇论文，他们利用SVM分类器，直接对3D点云进行训练，判断其可抓取方向：
+感觉效果并不是特别好，需要较为完整的点云，同时训练库对结果影响也很大。
+
+
+2、High precision grasp pose detection in dense clutter
+最近，深度学习之类的东西这么火，所以，今年出了个新的方法。
+这篇论文采用卷积神经网络训练一小片点云的可抓取性，
+
+我们实验室有同学也测试了这个方法，效果果然好不少：
+上图按顺序依次是：彩色图片、点云图片、随机生成的抓取姿态、CNN判断可行的抓取姿态。
+
+
+
+21、amazon picking challenge（APC）2016中识别和运动规划的主流算法是什么？
+https://www.zhihu.com/question/48544753/answer/150349578
+
+
+识别+位姿估计
+在物体识别上:
+	大部分队伍都还是采用颜色直方图、局部特征点（SIFT等）、BoF（Bag-of-Features 原理做的图像物体定位算法）等传统方法；
+        特征点提取，聚类，特种trick找到属于一个物体的特征点，PNP或者close form找到3D的relative pose。
+	深度学习方法，fast-RCNN，yolo2等
+位姿估计：
+	则多采用点云配准（ICP等（便可以直接用ICP算法将这片点云与物体的3D模型对齐））
+	   或 bounding box 提取等的传统简单方法；
+       深度学习方法，采用卷积神经网络CNN训练一小片点云的可抓取性
+
+【1】APC 2016排名第一的队伍
+DELFT：
+https://roscon.ros.org/2016/presentations/ROSCon2016_Plan_to_Win.pdf
+对于识别，DELFT采用一个 Faster R-CNN 网络进行物体识别，训练数据是 20K RGB图像；
+而位姿估计，定位super4PCS， 则是采用 CAD 模型与 3D 点云的配准（ICP）。
+icp(求一个两个点云之间的旋转平移矩阵（rigid transform or euclidean transform 刚性变换或欧式变换）)
+
+
+算法详解：
+http://www.cnblogs.com/liuyuan-pal/p/6444684.html
+
+
+http://blog.csdn.net/yang_q_x/article/details/52326953?locationNum=7
+           ICP算法（Iterative Closest Point迭代最近点）
+	   ICP是解决三维点集配准问题的一个应用较为广泛的算法，此外在SLAM等移动机器人导航等领域也有着很大的用武之地。
+      三维点集配准是一个非常重要的中间步骤，它在表面重建、三维物体识别、相机定位等问题中有着极其重要的应用。
+      对于三维点集配准问题，研究者提出了很多解决方案但是应用最广泛的，但是应用最广泛，
+      影响最大的还是由Besl和Mckay在1992年提出的迭代最近点算法（Iterative Closest Point，ICP），
+       它是基于纯粹几何模型的三维物体对准算法，由于它的强大功能以及高的精确度，很快就成为了曲面配准中的主流算法。
+
+
+
+对于规划，DELFT完全是基于 MoveIt 做的。简单地说，他们在工作空间内定义了一系列 keypoint，
+          点与点之间的规划用 RRT-Connect，进入柜子则是用的在线笛卡尔规划（对末端进行规划）。
+          改进 RRT，主要是降维，configuration space 有点庞大，要想高效的找到解，降维是关键。
+          还有一点是采样的分布（distribution of sampling）,当然不能单纯是随机的，或者biased，Delft 团队在采样分布上也有改进。
+
+
+【2】NimbRo 的 Stow 成绩第二，Pick 成绩第三。
+他们的识别，采用的是 Deep Features + SVM 的策略。简单地说，Deep Features 
+           就是用已经训练好的 CNN 网络的前面几层（除去最后全连接层）
+           作为特征提取方式；再用 SVM 进行分类（数据量较少
+           时，SVM的分类效果远远好于全连接神经网络）。
+对于位姿估计，则是采用『生成位姿假设-->3D模型配准的方法』
+而对于运动规划，他们也是极度简化：在柜子前定几个 keypoint，然后运动过去后进行检测，
+              采用『如果能看到抓取点，那么直接往前走就能抓到』的策略（相机在手上），
+              直接笛卡尔插值过去，当然，会考虑避障。
+
+
+
+【3】MIT stow 比赛第二，pick 比赛第四，从第一届开始成绩就一直不错。
+先看识别：MIT利用CNN做物体识别与分割，
+位姿估计，用 ICP 配准
+在规划方面，MIT与2015年一样，并没有采用规划方法，而是用预先计算好的动作元。
+
+
+简而言之，2016年与2015年相比，运动规划上并没有太多变化，都还是采用极度简化的方法
+（针对该固定环境）；而在视觉方面，2016年的前几名队伍大量使用了深度神经网络，
+而这也使得识别效果大大提升。（在Pick方面，有两支队伍都成功抓取了全部物体）。
+
+
+有能估计pose的去抓，也有很多不估计pose的。
+可以设计不同的gripper，抓不了可以用吸的，吸不了可以推到一边再吸。
+
+###############################################
+################################
+http://www.sohu.com/a/166602133_744167
+
+ARC——2017：
+2017年7月31日，第三届亚马逊机器人大赛
+（原为Amazon Picking Challenge，这一届更名为Amazon Robotics Challenge，简称ARC）
+
+2017 今年在第三轮比赛中最终获胜的是一个叫Cartman的机器人，它属于Australian Centre for Robotic Vision（ACRV）。
+
+迄今为止，亚马逊机器人大赛已经举办了三届，每一届的表现都比上一届更加让人惊艳。
+这一届仍然有不少队伍的表现都可圈可点。
+
+例如，在大多数队伍采取的分拣模式都是：识别物品-规划抓取方法-抓取-放到目标位置。
+
+来自MIT-Princeton的机器人，采取的做法是，抓取之前先不识别物品，用端到端（end-to-end）
+的方式训练一个直接从图像生成抓取方法的神经网络，然后先抓起物品，提到相机前，再让相机识别这个物体的类别。
+这么做的好处是识别的时候相机只看得到一个物品，误识别率降低。即采取：抓取-识别物品-放到目标位置或者丢到一边的模式。
+
+NAIST-Panasonic所使用的方法也比较特别，机器人在抓取物品以后，提起来再度识别，确认抓到了正确的物品。
+再度识别的同时确定物品在被抓取状态下的姿态和外形，从而即使在抓取形变物品，比如书本时，
+也可以规划出无碰撞的机械臂运动轨迹。分拣模式为：识别物品-抓取-重新观察物品-放到目标位置或者丢到一边。
+
+假设题目和真实场景完全一致：目前的计算机视觉已经能通过短时间的学习来识别场景中的
+多个物品并给出其包围盒（bounding box），
+但并不能准确地获得物品的形状、大小和位姿，从而不能准确的算出抓取的方法。
+
+
+而几乎所有队伍都以 吸盘 作为主要的抓取方式，机械手作为辅助甚至完全不装备机械手。
+这次比赛只有MIT-Princeton，Team K – University of Tokyo和GMU-BGU三支队伍给手爪装备了触觉传感器，
+并且只有MIT-Princeton用上了。这种方式限制了可抓取物品的范围以及抓取的成功率。
+
+
+
+
+到了deep learning的时代，作为一个门外汉，我觉得物体识别和抓取位置识别基本上都已经被攻克了，
+物体识别自不必说，RCNN, FASTER-RCNN, RNN, YOLO已经做成那样子，
+    日常生活下的物体识别问题感觉能剩下的就是诸如遮挡和光照变化的挑战了。
+抓取位置识别Ashutosh Saxena已经做了足够多的工作，不知道速度如何，文章没有详细看过。
+    但是如何处理识别过后的
+姿态估计问题仿佛还是没有找到一个足够优雅的解决方案，deep learning确实有做这个问题，但是感觉不好说。
+    今年有幸在RSS中审了文献6，把姿态估计formulate 成一个最优姿态的搜索问题，配合的是fast-rcnn，貌似效果不错。
+    真的觉得ICP在物体姿态的估计上并不是最终的答案啊
+
+
+
+ICP算法（Iterative Closest Point迭代最近点）有以下特点：
+      1. 可以获得非常精确的配准效果；
+       2.可以处理三维点集、参数曲面等多种形式表达的曲面，也就是说该算法对曲面表示 方法独立；
+       3.不必对待处理的点集进行分割和特征提取；
+       4.在较好的初值情况下，可以得到很好的算法收敛性。
+       5.该算法在搜索对应点的过程中，计算代价非常的大；
+       6.在基本的ICP算法中，在寻找对应点的时候，认为欧氏距离最近的点就是对应点，这种假设是比较武断的，
+         它会产生一定数量的错误对应点。
+ICP算法包括以下步骤：
+      1） 根据点集Plk中的点坐标，在曲面S上搜索相应最近点点集Prk；  
+      2） 计算两个点集的重心位置坐标，并进行点集中心化生成新的点集；   
+      3） 由新的点集计算正定矩阵N，并计算N的最大特征值及其最大特征向量；   
+      4） 由于最大特征向量等价于残差平方和最小时的旋转四元数，将四元数转换为旋转矩阵R；    
+      5） 在旋转矩阵R被确定后，由平移向量t仅仅是两个点集的重心差异，可以通过两个坐标系中的重心点和旋转矩阵确定；    
+      6） 根据式(0-3)，由点集Plk计算旋转后的点集P’lk。通过Plk与P’lk计算距离平方和值为fk+1。
+          以连续两次距离平方和之差绝对值 作为迭代判断数值；   
+      7） 当 时，ICP配准算法就停止迭代，否则重复1至6步，直到满足条件 后停止迭代。
+
+经过了十多年的发展ICP也有着很多的变种：
+Point to Point就近点搜索法；
+Point to Plane就近点搜索算法；
+Point to Projection就近点搜索算法。
+
+
+ ICP算法的前提条件是具有一个良好的配准初值,文中在配准初值的选取上采用主成分分析法,
+为后续ICP算法的工作提供一个良好前提条件,增加点集预处理,点对查找上增加各种限制,
+采用kd-tree加速查找,以此对算法进行改进,并通过实例来验证本算法的有效性及合理性。
+
+
+PCL中实现ICP与相关论文中一致，最终的变换矩阵都是基于SVD（奇异值分解）。
+由基类Registration派生，直接实例化对象即可：
+Pcl::IterativeClosestPoint<SourcePoint,TargetPoint> icp
+
+
+成员函数的组成：
+    1. inline void inline void setSearchMethodTarget(const KdTreePtr &tree)   
+           kdtree加速搜索，还有一个Target的函数，用法与之一致，普通的匹配可以不用使用。
+    2. inline void setInputSource (const PointCloudSource ConstPtr &cloud)     
+           源点云。指将要被旋转和平移的点云。
+    3. inline void setInputTarget (const PointCloudTarget ConstPtr &cloud)       
+           目标点云。从Source到Target匹配，将源点云变换到目标点云的相对位置。
+    4. inline void setMaximumIterations (int nr_iterations)                              
+           迭代次数，几十上百甚至上千都可能出现（默认为10），可以用来终止迭代。
+    5. inline void setTransformationEpsilon (double epsilon)     
+           上次转换与当前转换的差值，这个值一般设为1e-6或者1e-10或者更小，可以用来终止迭代次数。
+    6. inline void setEuclideanFitnessEpsilon (double epsilon)      
+           前后两次迭代方差的差值，可以用来终止迭代次数。
+    7. inline void setMaxCorrespondenceDistance (double distance_threshold) 
+           如果两个点云距离大于此值，则被忽略（PCL默认距离单位是m），
+           一般根据两个点云之间的距离估计，这个值对点云匹配的结果影响较大。
+    8. inline void align (PointCloudSource &output)    output为配准后点云。
+    9. inline Matrix4 getFinalTransformation ()    获取最终的转换矩阵。
+
+注：  
+    1.如果由于设置相关参数过于苛刻，而造成没有匹配成功法，icp.hasConverged() 会提示匹配失败，
+并且  icp.getFitnessScore()  为0，相关的转换矩阵为单位矩阵。
+    2.输入的点云最好经过预处理，过于复杂和过多噪声的点与将会出现
+“Invalid (NaN, Inf) point coordinates given to nearestKSearch!”的错误
+
+
+
+效果展示：
+        最近终于把PCL1.7.2搞定了，IDE为VS2013，系统为win7 64位。我使用的是两个近似的人体模型点云，。所需要的核心代码如下：
+
+typedef pcl::PointXYZRGB PointT;//点类型
+pcl::IterativeClosestPoint<PointT, PointT> icp;//创建icp对象
+icp.setInputSource(cloud_pr);  //原点云
+icp.setInputTarget(cloud_hole_pr);//目标点云
+pcl::PointCloud<PointT> final_cloud;//配准后点云
+//icp 参数设置
+    icp.setMaximumIterations(1000);  //最大迭代次数
+icp.setEuclideanFitnessEpsilon(0.5);//前后两次迭代误差的差值
+icp.setTransformationEpsilon(1e-10); //上次转换与当前转换的差值；
+icp.setMaxCorrespondenceDistance(0.7); //忽略在此距离之外的点，对配准影响较大
+//保存配准后的点
+icp.align(final_cloud);
+//icp匹配后的转换矩阵及得分
+cout << "has converged: " << icp.hasConverged() << endl
+<< "score: " << icp.getFitnessScore() << endl;
+cout << icp.getFinalTransformation() << endl; 
+
+icp例子
+http://www.cnblogs.com/21207-iHome/p/6034462.html
+#include <iostream>
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_types.h>
+#include <pcl/registration/icp.h>
+
+int main (int argc, char** argv)
+{
+    //Creates two pcl::PointCloud<pcl::PointXYZ> boost shared pointers and initializes them
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_in (new pcl::PointCloud<pcl::PointXYZ>);
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_out (new pcl::PointCloud<pcl::PointXYZ>);
+
+    // Fill in the CloudIn data
+    cloud_in->width    = 5;
+    cloud_in->height   = 1;
+    cloud_in->is_dense = false;
+    cloud_in->points.resize (cloud_in->width * cloud_in->height);
+    for (size_t i = 0; i < cloud_in->points.size (); ++i)
+    {
+        cloud_in->points[i].x = 1024 * rand () / (RAND_MAX + 1.0f);
+        cloud_in->points[i].y = 1024 * rand () / (RAND_MAX + 1.0f);
+        cloud_in->points[i].z = 1024 * rand () / (RAND_MAX + 1.0f);
+    }
+
+
+    *cloud_out = *cloud_in;
+
+    //performs a simple rigid transform on the point cloud
+    for (size_t i = 0; i < cloud_in->points.size (); ++i)
+        cloud_out->points[i].x = cloud_in->points[i].x + 1.5f;
+
+    //creates an instance of an IterativeClosestPoint and gives it some useful information
+    pcl::IterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ> icp;
+    icp.setInputCloud(cloud_in);
+    icp.setInputTarget(cloud_out);
+
+    //Creates a pcl::PointCloud<pcl::PointXYZ> to which the IterativeClosestPoint can save the resultant cloud after applying the algorithm
+    pcl::PointCloud<pcl::PointXYZ> Final;
+
+    //Call the registration algorithm which estimates the transformation and returns the transformed source (input) as output.
+    icp.align(Final);
+
+    //Return the state of convergence after the last align run. 
+    //If the two PointClouds align correctly then icp.hasConverged() = 1 (true). 
+    std::cout << "has converged: " << icp.hasConverged() <<std::endl;
+
+    //Obtain the Euclidean fitness score (e.g., sum of squared distances from the source to the target) 
+    std::cout << "score: " <<icp.getFitnessScore() << std::endl; 
+    std::cout << "----------------------------------------------------------"<< std::endl;
+
+    //Get the final transformation matrix estimated by the registration method. 
+    std::cout << icp.getFinalTransformation() << std::endl;
+
+    return (0);
+}
+
+
+
+
+22、 ROS英文新书--ROS Robotics Projects 
+http://blog.csdn.net/zhangrelay/article/details/62105650
+ROS Robotics Projects学习资料汇总笔记 
+http://blog.csdn.net/zhangrelay/article/details/68942709
+ROS Robotics Projects（1）代码使用编译 
+http://blog.csdn.net/ZhangRelay/article/details/68942938
+
+
+
+作者：Lentin约瑟夫
+个人网站 http://www.lentinjoseph.com/
+Author of 《ROS Robotics Projects》                  ros机器人项目工程
+Author of 《Mastering ROS for Robotics Programming》 掌握机器人操作系统
+Author of 《Learning Robotics using Python》 使用ROS和OpenCV构建自主移动机器人
+Author of 《Effective Robotics Programming with ROS》 机器人 导航 抓取
+       the basics of ROS to advance topics such as Robot manipulation and Navigation
+Author of 《Raspberry Pi Image Processing Programming》 图像处理 树莓派3
+       focused on teaching image processing algorithms using Raspberry Pi 3 board.
+Author of 《Raspberry Pi Supercomputing and Scientific Programming》 消息传递 树莓派3
+       focused on teaching message passing interface in super computer using Raspberry Pi 3 board.
+
+
+《ROS Robotics Projects》：
+使用深度学习和ROS构建智能机器人应用程序
+主3D对象识别
+使用虚拟现实和ROS控制机器人
+使用ROS构建您自己的人工智能聊天机器人
+了解使用ROS的机器人的自主导航的所有
+使用ROS了解面部检测和跟踪
+使用手势掌握遥控操作机器人
+使用Matlab和Android构建基于ROS的应用程序
+使用Turtlebot构建交互式应用程序
+
+
+
+
+
+23、Sergey Levine主页
+http://people.eecs.berkeley.edu/~svlevine/
+Assistant Professor, UC Berkeley, EECS
+机器人 深度学习DL  生成对抗网络GAN
+
+
+
+
+
+

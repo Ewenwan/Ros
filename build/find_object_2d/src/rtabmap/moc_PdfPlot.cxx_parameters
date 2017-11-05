@@ -1,0 +1,11 @@
+-I/home/ewenwan/ewenwan/catkin_ws/devel/include
+-DROS_BUILD_SHARED_LIBS=1
+-DPROJECT_PREFIX="find_object"
+-DPROJECT_VERSION="0.6.1"
+-DPROJECT_NAME="find_object_2d"
+-DQT_NO_KEYWORDS
+-DROS_PACKAGE_NAME="find_object_2d"
+-DROSCONSOLE_BACKEND_LOG4CXX
+-o
+/home/ewenwan/ewenwan/catkin_ws/build/find_object_2d/src/rtabmap/moc_PdfPlot.cxx
+/home/ewenwan/ewenwan/catkin_ws/src/find_object_2d/src/rtabmap/PdfPlot.h

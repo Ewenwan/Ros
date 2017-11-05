@@ -1,1 +1,1 @@
-/usr/bin/c++       CMakeFiles/subscriber_test.dir/test/subscriber_test.cpp.o  -o /home/ewenwan/ewenwan/catkin_ws/devel/lib/rosserial_client/subscriber_test  -L/home/ewenwan/ewenwan/catkin_ws/build/gtest -rdynamic ../../gtest/libgtest.so -lpthread -Wl,-rpath,/home/ewenwan/ewenwan/catkin_ws/build/gtest 
+/usr/bin/c++       CMakeFiles/subscriber_test.dir/test/subscriber_test.cpp.o  -o /home/ewenwan/ewenwan/catkin_ws/devel/lib/rosserial_client/subscriber_test -rdynamic /usr/local/lib/libgtest.so -Wl,-rpath,/usr/local/lib 

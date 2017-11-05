@@ -1,9 +1,10 @@
 <package>
   <name>usb_cam</name>
-  <version>0.3.4</version>
+  <version>0.3.6</version>
   <description>A ROS Driver for V4L USB Cameras</description>
 
   <maintainer email="rctoris@wpi.edu">Russell Toris</maintainer>
+  <maintainer email="ros-orphaned-packages@googlegroups.com">ROS Orphaned Package Maintainers</maintainer>
   <author email="benjamin.pitzer@bosch.com">Benjamin Pitzer</author>
 
   <license>BSD</license>

@@ -1,0 +1,16 @@
+<package>
+  <name>object_recognition_tutorials</name>
+  <version>0.1.1</version>
+  <description>A set of doc/data/scripts for the tutorials in the Object Recognition Kitchen</description>
+  <author email="vincent.rabaud@gmail.com">Vincent Rabaud</author>
+  <maintainer email="vincent.rabaud@gmail.com">Vincent Rabaud</maintainer>
+  <license>Apache 2.0</license>
+
+  <url>https://github.com/wg-perception/ork_tutorials</url>
+
+  <build_depend>object_recognition_core</build_depend>
+
+  <run_depend>object_recognition_core</run_depend>
+
+  <buildtool_depend>catkin</buildtool_depend>
+</package>

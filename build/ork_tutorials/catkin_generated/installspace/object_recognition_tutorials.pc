@@ -1,0 +1,8 @@
+prefix=/home/ewenwan/ewenwan/catkin_ws/install
+
+Name: object_recognition_tutorials
+Description: Description of object_recognition_tutorials
+Version: 0.1.1
+Cflags: 
+Libs: -L/home/ewenwan/ewenwan/catkin_ws/install/lib 
+Requires: 

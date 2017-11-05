@@ -51,3 +51,99 @@ make[1]: *** [cmTryCompileExec917709149] 错误 1
 make: *** [cmTryCompileExec917709149/fast] 错误 2
 
 
+Determining if the Q_WS_WIN exist failed with the following output:
+Change Dir: /home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1358620205/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1358620205.dir/build.make CMakeFiles/cmTryCompileExec1358620205.dir/build
+make[1]: 正在进入目录 `/home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec1358620205.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -I/usr/include/qt4    -o CMakeFiles/cmTryCompileExec1358620205.dir/CheckSymbolExists.cxx.o -c /home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+/home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
+/home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_WIN’ was not declared in this scope
+   return ((int*)(&Q_WS_WIN))[argc];
+                   ^
+make[1]: *** [CMakeFiles/cmTryCompileExec1358620205.dir/CheckSymbolExists.cxx.o] 错误 1
+make[1]:正在离开目录 `/home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp'
+make: *** [cmTryCompileExec1358620205/fast] 错误 2
+
+File /home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
+/* */
+#include <QtCore/qglobal.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef Q_WS_WIN
+  return ((int*)(&Q_WS_WIN))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the Q_WS_QWS exist failed with the following output:
+Change Dir: /home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec982355155/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec982355155.dir/build.make CMakeFiles/cmTryCompileExec982355155.dir/build
+make[1]: 正在进入目录 `/home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec982355155.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -I/usr/include/qt4    -o CMakeFiles/cmTryCompileExec982355155.dir/CheckSymbolExists.cxx.o -c /home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+/home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
+/home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_QWS’ was not declared in this scope
+   return ((int*)(&Q_WS_QWS))[argc];
+                   ^
+make[1]: *** [CMakeFiles/cmTryCompileExec982355155.dir/CheckSymbolExists.cxx.o] 错误 1
+make[1]:正在离开目录 `/home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp'
+make: *** [cmTryCompileExec982355155/fast] 错误 2
+
+File /home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
+/* */
+#include <QtCore/qglobal.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef Q_WS_QWS
+  return ((int*)(&Q_WS_QWS))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the Q_WS_MAC exist failed with the following output:
+Change Dir: /home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1123842682/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1123842682.dir/build.make CMakeFiles/cmTryCompileExec1123842682.dir/build
+make[1]: 正在进入目录 `/home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec1123842682.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -I/usr/include/qt4    -o CMakeFiles/cmTryCompileExec1123842682.dir/CheckSymbolExists.cxx.o -c /home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+/home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
+/home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_MAC’ was not declared in this scope
+   return ((int*)(&Q_WS_MAC))[argc];
+                   ^
+make[1]: *** [CMakeFiles/cmTryCompileExec1123842682.dir/CheckSymbolExists.cxx.o] 错误 1
+make[1]:正在离开目录 `/home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp'
+make: *** [cmTryCompileExec1123842682/fast] 错误 2
+
+File /home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
+/* */
+#include <QtCore/qglobal.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef Q_WS_MAC
+  return ((int*)(&Q_WS_MAC))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+

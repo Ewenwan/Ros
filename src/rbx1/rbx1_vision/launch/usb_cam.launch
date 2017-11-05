@@ -10,7 +10,7 @@
         <param name="image_width" value="640" />
         <param name="image_height" value="480" />
         <param name="framerate" value="30" />
-        <param name="pixel_format" value="mjpeg" />
+        <param name="pixel_format" value="yuyv" />
         <param name="contrast" value="32" />
         <param name="brightness" value="32" />
         <param name="saturation" value="32" />

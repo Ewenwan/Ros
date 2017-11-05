@@ -1,0 +1,21 @@
+<launch>
+
+ <!--<node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+    <remap from="/usb_cam" to="/camera"/>
+    <param name="video_device" value="/dev/video0" />
+    <param name="image_width" value="640" />
+    <param name="image_height" value="480" />
+    <param name="pixel_format" value="yuyv" />
+    <param name="camera_frame_id" value="usb_cam" />
+    <param name="io_method" value="mmap"/>
+  </node>-->
+<!-- ORB_SLAM2 Mono -->
+<include file="$(find kinect2_bridge)/launch/kinect2_bridge.launch"/>
+  <node pkg="ros_orb" type="rgbd" name="rgbd" output="screen" args="$(find ros_orb)/Vocabulary/ORBvoc.bin $(find ros_orb)/launch/lizi.yaml">
+    <param name="depthframe"         type="str"    value="/kinect2/qhd/image_depth_rect"/>
+    <param name="rgbframe"         type="str"    value="/kinect2/qhd/image_color_rect"/>
+  </node>
+
+	
+ 
+</launch>

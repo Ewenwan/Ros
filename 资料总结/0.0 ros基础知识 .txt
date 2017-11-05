@@ -1,4 +1,28 @@
 
+
+安装
+【1】添加 sources.list
+ sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+【2】添加 keys
+ sudo apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116
+【3】安装
+ sudo apt-get update
+ sudo apt-get install ros-indigo-desktop-full
+【4】初始化 rosdep
+sudo rosdep init
+rosdep update
+【5】环境变量设置     注意以后如果找不到 roscore啥的情况 重新设置一下环境变量
+一劳永逸
+echo "source /opt/ros/indigo/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+单次
+source /opt/ros/indigo/setup.bash
+【6】安装 rosinstall 它可以方便让你通过一条命令就可以给某个ROS软件包下载很多源码树。 
+sudo apt-get install python-rosinstall
+
+【7】查找错误
+roswtf
+
 1、查看Lniux版本
 lsb_release  -a
  查看内核版本    cat /proc/version       uname  -a

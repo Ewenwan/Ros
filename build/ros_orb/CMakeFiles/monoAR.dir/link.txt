@@ -1,0 +1,1 @@
+/usr/bin/c++    -Wall  -O3 -march=native -std=c++11  -Wno-deprecated     CMakeFiles/monoAR.dir/src/AR/ros_mono_ar.cc.o CMakeFiles/monoAR.dir/src/AR/ViewerAR.cc.o  -o /home/ewenwan/ewenwan/catkin_ws/devel/lib/ros_orb/monoAR -rdynamic 

@@ -1,0 +1,50 @@
+<?xml version="1.0"?>  
+<robot xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"  
+         xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"  
+         xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"  
+         xmlns:xacro="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface" name="test_robot">  
+  
+  <xacro:property name="body_size" value=".2 .3 .1" />  
+  <xacro:property name="body_pos" value="0 0 0.05" />  
+  <xacro:property name="wheel_radius" value="0.05" />  
+  <xacro:property name="wheel_length" value="0.05" />  
+  <xacro:property name="wheel1_pos" value="0.1 0.1 0" />  
+  <xacro:property name="wheel2_pos" value="-0.1 0.1 0" />  
+  <xacro:property name="wheel3_pos" value="0.1 -0.1 0" />  
+  <xacro:property name="wheel4_pos" value="-0.1 -0.1 0" />  
+  
+  <xacro:macro name="wheel" params="wheelname position">  
+    <link name="${wheelname}">  
+      <visual>  
+        <geometry>  
+          <cylinder length="${wheel_length}" radius="${wheel_radius}"/>  
+        </geometry>  
+        <origin rpy="0 1.5 0" xyz="${position}"/>  
+        <material name="black">  
+          <color rgba="0 0 0 1"/>  
+        </material>  
+      </visual>  
+    </link>  
+  
+    <joint name="joint_base_${wheelname}" type="fixed">  
+      <parent link="base_link"/>  
+      <child link="${wheelname}"/>  
+    </joint>  
+  </xacro:macro>  
+  <xacro:wheel wheelname="wheel1" position="${wheel1_pos}"/>  
+  <xacro:wheel wheelname="wheel2" position="${wheel2_pos}"/>  
+  <xacro:wheel wheelname="wheel3" position="${wheel3_pos}"/>  
+  <xacro:wheel wheelname="wheel4" position="${wheel4_pos}"/>  
+  
+  <link name="base_link">  
+    <visual>  
+       <geometry>  
+         <box size="${body_size}"/>  
+       </geometry>  
+       <origin rpy="0 0 0" xyz="${body_pos}"/>  
+       <material name="white">  
+         <color rgba="1 1 1 1"/>  
+       </material>  
+    </visual>  
+  </link>  
+</robot>

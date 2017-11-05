@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<robot name="smartcar">
+<!-- material blue and black and white color-->
+  <material name="red">  
+    <color rgba="0.8 0 0 1"/>  
+  </material>    
+  <material name="green">  
+    <color rgba="0 0.8 0 1"/>  
+  </material>  
+  <material name="blue">  
+    <color rgba="0 0 0.8 1"/>  
+  </material>  
+  <material name="black">  
+    <color rgba="0 0 0 1"/>  
+  </material>  
+  <material name="white">  
+    <color rgba="1 1 1 1"/>  
+  </material> 
+<!-- 5 link = base_link + 4 wheel + head -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.25 .16 .05"/><!-- x y z size-->
+      </geometry>
+      <origin rpy="0 0 1.57075" xyz="0 0 0"/><!-- z rote 90-->
+      <material name="blue"/>
+    </visual>
+ </link>
+<!--right_front_wheel link-->
+ <link name="right_front_wheel">
+    <visual>
+      <geometry><!-- radius="0.025" 0.25/2=0.125 0.125-0.1=0.025 -->
+        <cylinder length=".08" radius="0.025"/><!-- length 0.02 to 0.08-->
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+<!--right_front_wheel to base_link joint-->
+  <joint name="right_front_wheel_joint" type="continuous">
+    <axis xyz="0 0 1"/><!--axis is z rote 90 by y to be x-->
+    <parent link="base_link"/>
+    <child link="right_front_wheel"/><!--  x_cord = 0.16/2=0.08 --><!-- z_cord = -(0.05)/2 = -0.025 -->
+    <origin rpy="0 1.57075 0" xyz="0.08 0.1 -0.03"/><!-- y_cord = (0.25-0.025*2)/2=0.1 -->
+    <limit effort="100" velocity="100"/><!--effort:force limit -->
+    <joint_properties damping="0.0" friction="0.0"/><!--mo ca zhu ni-->
+  </joint>
+
+  <link name="right_back_wheel">
+    <visual>
+      <geometry>
+        <cylinder length=".02" radius="0.025"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+
+  <joint name="right_back_wheel_joint" type="continuous">
+    <axis xyz="0 0 1"/><!--axis is z rote 90 by y to be x-->
+    <parent link="base_link"/>
+    <child link="right_back_wheel"/>
+    <origin rpy="0 1.57075 0" xyz="0.08 -0.1 -0.03"/>
+    <limit effort="100" velocity="100"/>
+    <joint_properties damping="0.0" friction="0.0"/>
+ </joint>
+
+ <link name="left_front_wheel">
+    <visual>
+      <geometry>
+        <cylinder length=".02" radius="0.025"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+
+  <joint name="left_front_wheel_joint" type="continuous">
+    <axis xyz="0 0 1"/><!--axis is z rote 90 by y to be x-->
+    <parent link="base_link"/>
+    <child link="left_front_wheel"/>
+    <origin rpy="0 1.57075 0" xyz="-0.08 0.1 -0.03"/>
+    <limit effort="100" velocity="100"/>
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+
+  <link name="left_back_wheel">
+    <visual>
+      <geometry>
+        <cylinder length=".02" radius="0.025"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+
+  <joint name="left_back_wheel_joint" type="continuous">
+    <axis xyz="0 0 1"/><!--axis is z rote 90 by y to be x-->
+    <parent link="base_link"/>
+    <child link="left_back_wheel"/>
+    <origin rpy="0 1.57075 0" xyz="-0.08 -0.1 -0.03"/>
+    <limit effort="100" velocity="100"/>
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+
+  <link name="head">
+    <visual>
+      <geometry>
+        <box size=".02 .08 .03"/><!-- x y z size-->
+      </geometry>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <joint name="tobox" type="fixed">
+    <parent link="base_link"/>
+    <child link="head"/>
+    <origin xyz="0 0.125 0.025"/><!-- center coordinates-->
+  </joint>
+
+  <link name="cap">
+    <visual>
+      <geometry>
+        <sphere radius="0.02"/><!-- qiu banjing-->
+      </geometry>
+      <material name="red"/>
+    </visual>
+  </link>
+  <joint name="tocap" type="fixed">
+    <parent link="head"/><!--parent reference coording system-->
+    <child link="cap"/>
+    <origin xyz="0 0.02 0.035"/>
+  </joint>
+
+
+</robot>
+

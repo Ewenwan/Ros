@@ -2,7 +2,7 @@ prefix=/home/ewenwan/ewenwan/catkin_ws/install
 
 Name: usb_cam
 Description: Description of usb_cam
-Version: 0.3.4
+Version: 0.3.6
 Cflags: -I/home/ewenwan/ewenwan/catkin_ws/install/include
 Libs: -L/home/ewenwan/ewenwan/catkin_ws/install/lib -lusb_cam
 Requires: 

@@ -1,0 +1,597 @@
+首先，就是要先了解ROS的基本架构和开发方式。
+我个人是强烈推荐直接看ROS官网上的教程ROS/Tutorials的Beginner Level（多看几遍），
+同时充分使用ROS的问答社区ROS Answers与各模块的Mail Lists，很多基础问题可能前人都遇到过。
+
+其次，在了解ROS的基本架构与开发方式后，就可以有针对性地看自己所关心的部分了。
+如做移动机器人的同学就去看Navigation教程；
+做物体识别的就去看ORK教程  Object Recognition Kitchen ；
+          http://blog.techbridge.cc/2016/05/14/ros-object-recognition-kitchen/
+          http://blog.csdn.net/zhangrelay/article/details/77248232
+          https://github.com/wg-perception
+
+做运动规划的就去看MoveIt教程。
+
+
+正逆运动学 
+开源运动学与运动力学库 KDL
+
+碰撞检测
+ODE    OPEN dynamic engine
+
+
+这一步最好能跟有实际机器人练手（如果没有的话，就用gazebo仿真）。
+
+由于一些模块的教程不够清楚（如MoveIt），
+一定要多练习，甚至是去看部分源码，先保证自己会用ROS实现一些功能。
+
+对于ROS与实际机器人的连接，建议仔细看看action（编写机器人驱动package）、URDF（机器人描述文件）的教程（或者ros_control）。
+如下图，我为SDA5F机器人编写了URDF文件，并修改了motoman_driver中的action，使得在ROS环境中用MoveIt规划控制双臂机器人运动。
+
+
+最后，就是进阶阶段了。我要强调一句“ROS只是一个工具”，
+你会用ROS做SLAM并不能说明你会做SLAM。对于自己研究的内容，
+必须沉下心去看教材和论文，去理解每种算法背后的原理，知道如何调整算法参数
+、如何改进算法，最终能够自己编写某部分代码，并替换ROS的相应模块（如自己写运动学正逆解替代KDL等）。
+做研究，交流非常重要。如果你改进ROS某一算法后，最好能与package的原作者交流，
+将自己的修改merge到原项目中，在交流中提高自己与package的水平。
+当然，如果对算法有疑问，也可以直接咨询作者，ROS里的贡献者大都非常愿意分享和交流。
+
+
+当然，在问别人之前，请一定要保证自己充分熟悉了官方Tutorials，
+而不是朝别人发一堆编译错误截图，然后问这是怎么回事。
+提问的艺术真的非常重要，有时候不是对方不愿
+
+
+
+
+ros入门代码实战
+https://u.cs.biu.ac.il/~yehoshr1/89-685/
+
+ros在线视频教程 英文
+http://www.theconstructsim.com/all-ros-courses-2/
+
+ros入门
+https://zhuanlan.zhihu.com/p/26007106
+
+linux入门
+https://www.shiyanlou.com/courses/1
+https://www.shiyanlou.com/courses/68
+linux命令
+http://www.cnblogs.com/peida/archive/2012/12/05/2803591.html
+
+在线编程课程
+https://www.shiyanlou.com/courses/68
+
+
+算法导论
+https://www.bilibili.com/video/av11928034/
+https://www.shiyanlou.com/courses/492
+
+
+
+
+
+ros机械臂 运动规划 试教
+ https://mp.weixin.qq.com/s?__biz=MzA5MDE2MjQ0OQ==&mid=2652786427&idx=1&sn=ac4b9a890fec3d68773c6cb65ed86946&mpshare=1&scene=1&srcid=0326mGy0nXBqFqBWxQCeNv6B&pass_ticket=1eHBdZLk6YjR3YAN0wCTt5ZXh4HtyqvVaLglwMh4ZRmOyALdqcjLhuOqe%2BBWkmJm#rd
+微信公众号   邱博士 清华学士 较大博士
+https://github.com/qqfly?tab=overview&from=2017-10-01&to=2017-10-14
+
+
+说点题外话：有一个问题是，ROS本身不是一个实时的软件，所以在一些应用场合，
+机器人对实时性要求高的话，则需要解决控制器实时的问题。
+
+如果没有商业的解决方案，个人推荐可以使用一个叫OROCOS的架构，
+跟ROS不同的是，OROCOS专注于实现底层系统级的实时控制和通讯。
+而且ROS和OROCOS社区的各种大牛已经完成了ROS和OROCOS的集成工作，可以让两个系统无缝的连接工作。
+
+开源机器人控制软件OROCOS
+http://www.orocos.org/
+http://blog.csdn.net/linuxarmsummary/article/details/18698589
+
+KDL运动与动力学组件（KDL）是一个C++的函数库。提供了时实的动力学约束计算。
+http://www.orocos.org/kdl/  机械手臂正逆运动学求解
+
+
+ROS节点与OROCOS组件通信--安装
+http://blog.csdn.net/sukha/article/details/41962847
+
+ROS节点与OROCOS组件通信--构建组件
+http://blog.csdn.net/sukha/article/details/41977447
+
+
+
+
+http://www.aiimooc.com/  睿幕课
+http://www.robot-china.com/news/201404/25/9678.html   中国机器人网
+http://blog.csdn.net/sonictl/article/details/47061821 ROS-Industrial 介绍
+
+http://blog.csdn.net/zhangrelay/article/details/74012470   ros-i培训会议
+https://github.com/ros-industrial/industrial_training     //资料
+http://blog.csdn.net/zhangrelay/article/details/76427533
+
+在线介绍
+http://ros-industrial.github.io/industrial_training/_source/prerequisites/Navigating-the-Ubuntu-GUI.html
+
+
+
+ ROS-Industrial 安装
+https://github.com/ros-planning/moveit
+步骤：  
+1. 安装 ROS 
+2. 安装 moveit     sudo apt-get install ros-indigo-moveit-full
+    http://blog.csdn.net/xuehuafeiwu123/article/details/53785792 
+    http://www.guyuehome.com/435
+3. 创建一个 catkin workspace
+
+mkdir ~/catkin_ws/src
+
+MOVIT教程
+http://docs.ros.org/kinetic/api/moveit_tutorials/html/
+
+urdf Unified Robot Description Format——统一机器人描述格式
+http://blog.csdn.net/sujun3304/article/details/18962719
+
+
+《master ros for robotics programming》里的案例进行学习，在工作空间里git下来源码：
+git clone https://github.com/qboticslabs/mastering_ros.git
+
+
+
+4 . 将 industrial-core 代码checkout 到此空间中，并 catkin_make 编译:
+
+cd ~/catkin_ws/src
+git clone https://github.com/ros-industrial/industrial_core.git
+cd ..
+catkin_make
+
+
+
+
+matlab 机器人工具箱
+http://petercorke.com/wordpress/toolboxes/robotics-toolbox
+介绍
+http://blog.csdn.net/zyf1109/article/details/53423385
+http://blog.csdn.net/zyf1109/article/details/53423830
+介绍
+https://zhuanlan.zhihu.com/p/29824732
+
+
+################################################
+#####################################################
+物体识别 ORK安装   基于RGBD相机
+http://blog.techbridge.cc/2016/05/14/ros-object-recognition-kitchen/
+http://wg-perception.github.io/ork_tutorials/tutorial03/tutorial.html
+
+
+ 1、环境安装
+ export DISTRO=indigo
+ sudo apt-get install libopenni-dev ros-${DISTRO}-catkin ros-${DISTRO}-ecto* ros-${DISTRO}-opencv-candidate ros-${DISTRO}-moveit-msgs
+ 
+
+ 2、简单安装
+sudo apt-get install ros-indigo-object-recognition-kitchen-*
+
+3、具体 分开安装
+sudo apt-get install ros-indigo-object-recognition-core ros-indigo-object-recognition-linemod ros-indigo-object-recognition-msgs ros-indigo-object-recognition-renderer ros-indigo-object-recognition-ros ros-indigo-object-recognition-ros-visualization
+
+
+4、源码安装
+ 
+cd catkin_workspace/src/ork 切换到目标文件夹下
+
+ork和ros衔接的包
+git clone http://github.com/wg-perception/object_recognition_msgs
+git clone http://github.com/wg-perception/object_recognition_ros
+git clone http://github.com/wg-perception/object_recognition_ros_visualization
+
+linemod 物体识别算法相关包 使用梯度信息
+http://daily.zhihu.com/story/9329525
+简单而言，这篇论文同时利用了彩色图像的图像梯度和深度图像的表面法向作为特征，与数据库中的模板进行匹配。
+http://campar.in.tum.de/Main/StefanHinterstoisser
+git clone http://github.com/wg-perception/object_recognition_core
+git clone http://github.com/wg-perception/linemod
+git clone http://github.com/wg-perception/ork_renderer
+
+cd ../ && catkin_make
+
+可能缺少
+因為是少了 GL/osmesa.h，所以需要額外下一個指令 sudo apt-get install libosmesa6-dev 來安裝。
+
+
+如果roscd object_recognition_core找不到源码安装的包
+
+先 vim ~/.bashrc 一下，然後在最下面補上一行 加入catkin_ws/src的路径 供搜索:
+
+export ROS_PACKAGE_PATH="$ROS_PACKAGE_PATH:/home/rosindigo/catkin_ws/src"
+
+
+
+5、接收RGB-D传感器资料
+Kinect 2
+roslaunch openni2_launch openni2.launch
+
+用 Kinect 1，要用 
+roslaunch openni_launch openni.launch
+
+
+6、ORK 是一套以 template matching 方法為主的辨識工具，
+把传感器检测到的物体和库中的物体对比，足够相似就算辨识成功
+
+【6.1】 首先要安裝 CouchDB 這個工具 一个开源的面向文档的数据库管理系统
+sudo apt-get install couchdb
+面向文档的数据库和关系数据库之间的区别
+顾名思义，面向文档数据库是由一系列自包含的文档组成的。这意味着相关文档的所有数据都储存在该文档中
+ — 而不是关系数据库的关系表中。事实上，面向文档的数据库中根本不存在表、行、列或关系。
+这意味着它们是与模式无关的；不需要在实际使用数据库之前定义严格的模式。
+如果某个文档需要添加一个新字段，它仅需包含该字段，从而不影响到数据库中的其他文档。
+因此，文档不必为没有值的字段储存空数据值。
+
+http://wg-perception.github.io/ork_tutorials/tutorial03/tutorial.html
+
+【6.2】 檢查一下是否有安裝成功
+curl -X GET http://localhost:5984
+
+   可以配置 CouchDB
+   编辑配置文件
+   sudo vim /etc/couchdb/local.ini
+
+[httpd]
+;port = 5984                 端口
+;bind_address = 127.0.0.1    只接受对应的IPv4（IPv6）地址
+>>>
+[httpd]
+;port = 5984                 端口
+;bind_address = 0.0.0.0      接受所有的IPv4地址
+
+修改后重启 couchdb 数据库服务器
+sudo service couchdb restart
+
+配置数据库可视化 app
+sudo pip install -U couchapp
+
+rosrun object_recognition_core push.sh
+>>>
+2017-11-04 18:54:15 [INFO] Visit your CouchApp here:
+http://localhost:5984/or_web_ui/_design/viewer/index.html
+
+查看 可视化
+http://localhost:5984/or_web_ui/_design/viewer/index.html
+
+【6.3】 在物体库中加入自己定义的物体                name名字  discription描述
+rosrun object_recognition_core object_add.py -n "coke " -d "A universal can of coke" --commit
+
+【6.4 】可以去 看看物体库中是否添加了该物体
+http://localhost:5984/_utils/database.html?object_recognition/_design/objects/_view/by_object_name 
+
+
+【6.5】添加对应物体的3D模型   .stl/.obj
+安装ork_tutorials
+cd catkin_ws
+git clone https://github.com/wg-perception/ork_tutorials
+cd .. && catkin_make
+
+ork_tutorials里面有一個 coke.stl就是3D模型
+
+STL是用三角网格来表现3D CAD模型。
+STL只能用来表示封闭的面或者体
+
+生成方法：
+对于刚接触3d打印的朋友 提供点帮助！
+
+Alibre
+File（文件） -> Export（输出）-> Save As（另存为，选择.STL）-> 输入文件名-> Save（保存）
+
+AutoCAD
+输出模型必须为三维实体，且XYZ坐标都为正值。在命令行输入命令“Faceters” -> 
+设定FACETRES为1 到10 之间的一个值 (1为低精度，10为高精度) -> 
+然后在命令行输入命令“STLOUT” -> 选择实体 -> 选择“Y”，
+输出二进制文件 -> 选择文件名
+
+Inventor
+Save Copy As（另存复件为） -> 选择STL类型 -> 选择Options（选项），设定为High（高）
+
+SolidWorks
+1.　File（文件）-> Save As（另存为） -> 选择文件类型为STL
+2.　Options（选项）-> Resolution（品质）-> Fine（良好） -> OK（确定）
+
+
+向物体库中提交3D模型  物体ID(自己的物体资料库中) 3D模型位置
+rosrun object_recognition_core mesh_add.py 3757483d43848e7bd85edf3089000fc7 /home/ewenwan/ewenwan/catkin_ws/src/ork_tutorials/data/coke.stl --commit
+
+查看可视化模型
+http://localhost:5984/or_web_ui/_design/viewer/meshes.html 
+
+删除物体
+rosrun object_recognition_core object_delete.py 3757483d43848e7bd85edf3089000fc7
+
+
+【6.6】执行Linemod 演算法 (Training & Detection)
+
+ 开始训练
+rosrun object_recognition_core training -c `rospack find object_recognition_linemod`/conf/training.ork
+這個 training 指令會利用資料庫裡的 3D 模型建立辨識時所需要的 template
+
+ 使用 Kinect 开始检测
+roslaunch openni_launch openni.launch
+rosrun dynamic_reconfigure dynparam set /camera/driver depth_registration True
+rosrun dynamic_reconfigure dynparam set /camera/driver image_mode 2 
+rosrun dynamic_reconfigure dynparam set /camera/driver depth_mode 2
+rosrun topic_tools relay /camera/depth_registered/image_raw /camera/depth_registered/image
+rosrun object_recognition_core detection -c  `rospack find object_recognition_linemod`/conf/detection.ros.ork
+
+
+
+用 Gazebo 三维仿真器里的 Kinect 来模拟
+
+安装 Gazebo ros中有三个仿真器 Stage(二位) ArbotiX(就是RVIz)，而Gazebo则是三维的，可以自己在地图上添加几何体
+sudo apt-get install ros-indigo-simulators
+
+配置环境变量
+source /opt/ros/indigo/setup.bash
+
+运行
+rosrun gazebo_ros gazebo
+
+建立工作空间
+cd catkin_ws/src
+catkin_create_pkg learn_gazebo urdf xacro roscpp rospy
+
+新建文件夹urdf
+mkdir urdf
+在urdf文件夹下编辑robot1_xacro.xacro文件如下
+
+新建文件夹world
+mkdir world
+在world 文件夹下新建并编辑robot.world文件 
+
+新建.launch文件并编辑内容
+新建lauch文件夹并新建gazebo.launch如下
+
+###robot1_xacro.xacro:
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" 
+    xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+        xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+        xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+    name="robot1_xacro">
+
+
+    <xacro:property name="length_wheel" value="0.05" />
+    <xacro:property name="radius_wheel" value="0.05" />
+    <xacro:macro name="default_inertial" params="mass">
+               <inertial>
+                       <mass value="${mass}" />
+                       <inertia ixx="1.0" ixy="0.0" ixz="0.0"
+                                iyy="1.0" iyz="0.0"
+                                izz="1.0" />
+               </inertial>
+    </xacro:macro>
+
+    <link name="base_footprint">
+        <visual>
+            <geometry>
+                    <box size="0.001 0.001 0.001"/>
+                </geometry>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+        </visual>
+        <xacro:default_inertial mass="0.0001"/>
+    </link>
+
+    <gazebo reference="base_footprint">
+        <material>Gazebo/Green</material>      ##### 可以看到<gazebo>标签设置了物理属性如颜色为绿色
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+
+    <joint name="base_footprint_joint" type="fixed">
+        <origin xyz="0 0 0" />
+        <parent link="base_footprint" />
+        <child link="base_link" />
+    </joint>
+
+
+    <link name="base_link">
+        <visual>
+            <geometry>
+                    <box size="0.2 .3 .1"/>
+                </geometry>
+            <origin rpy="0 0 1.54" xyz="0 0 0.05"/>
+            <material name="white">
+                <color rgba="1 1 1 1"/>
+            </material>
+        </visual>
+        <collision>
+            <geometry>
+                    <box size="0.2 .3 0.1"/>
+            </geometry>
+        </collision>
+        <xacro:default_inertial mass="10"/>
+    </link>
+
+    <link name="wheel_1">
+        <visual>
+                <geometry>
+                    <cylinder length="${length_wheel}" radius="${radius_wheel}"/>
+                </geometry>
+            <!-- <origin rpy="0 1.5 0" xyz="0.1 0.1 0"/> -->
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <material name="black">
+                <color rgba="0 0 0 1"/>
+            </material>
+        </visual>
+        <collision>
+            <geometry>
+                    <cylinder length="${length_wheel}" radius="${radius_wheel}"/>
+            </geometry>
+        </collision>
+        <xacro:default_inertial mass="1"/>
+    </link>
+
+    <link name="wheel_2">
+        <visual>
+                <geometry>
+                    <cylinder length="${length_wheel}" radius="${radius_wheel}"/>
+                </geometry>
+            <!-- <origin rpy="0 1.5 0" xyz="-0.1 0.1 0"/> -->
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <material name="black"/>
+        </visual>
+        <collision>
+            <geometry>
+                    <cylinder length="${length_wheel}" radius="${radius_wheel}"/>
+            </geometry>
+        </collision>
+        <xacro:default_inertial mass="1"/>
+
+    </link>
+
+    <link name="wheel_3">
+        <visual>
+                <geometry>
+                    <cylinder length="${length_wheel}" radius="${radius_wheel}"/>
+                </geometry>
+            <!-- <origin rpy="0 1.5 0" xyz="0.1 -0.1 0"/> -->
+
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <material name="black"/>
+        </visual>
+        <collision>
+            <geometry>
+                    <cylinder length="${length_wheel}" radius="${radius_wheel}"/>
+            </geometry>
+        </collision>
+        <xacro:default_inertial mass="1"/>
+    </link>
+
+    <link name="wheel_4">
+        <visual>
+                <geometry>
+                    <cylinder length="${length_wheel}" radius="${radius_wheel}"/>
+                </geometry>
+        <!--    <origin rpy="0 1.5 0" xyz="-0.1 -0.1 0"/> -->
+            <origin rpy="0 0 0" xyz="0 0 0" />
+            <material name="black"/>
+        </visual>
+        <collision>
+            <geometry>
+                    <cylinder length="${length_wheel}" radius="${radius_wheel}"/>
+            </geometry>
+        </collision>
+        <xacro:default_inertial mass="1"/>
+
+    </link>
+
+
+
+ <joint name="base_to_wheel1" type="continuous">
+   <parent link="base_link"/>
+   <child link="wheel_1"/>
+   <origin rpy="1.5707 0 0" xyz="0.1 0.15 0"/>
+   <axis xyz="0 0 1" />
+ </joint>
+
+ <joint name="base_to_wheel2" type="continuous">
+   <axis xyz="0 0 1" />
+   <anchor xyz="0 0 0" />
+   <limit effort="100" velocity="100" />
+   <parent link="base_link"/>
+   <child link="wheel_2"/>
+   <origin rpy="1.5707 0 0" xyz="-0.1 0.15 0"/>
+</joint>
+
+ <joint name="base_to_wheel3" type="continuous">
+   <parent link="base_link"/>
+   <axis xyz="0 0 1" />
+   <child link="wheel_3"/>
+   <origin rpy="1.5707 0 0" xyz="0.1 -0.15 0"/>
+ </joint>
+
+ <joint name="base_to_wheel4" type="continuous">
+   <parent link="base_link"/>
+   <axis xyz="0 0 1" />
+   <child link="wheel_4"/>
+   <origin rpy="1.5707 0 0" xyz="-0.1 -0.15 0"/>
+ </joint>
+</robot>
+
+
+##############################
+robot.world
+发现文件的参数就是配置些灯光视角参数
+<?xml version="1.0" ?>
+<sdf version="1.4">
+  <!-- We use a custom world for the rrbot so that the camera angle is launched correctly -->
+
+  <world name="default">
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- Global light source -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <!-- Focus camera on tall pendulum -->
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>4.927360 -4.376610 3.740080 0.000000 0.275643 2.356190</pose>
+        <view_controller>orbit</view_controller>
+      </camera>
+    </gui>
+
+  </world>
+</sdf>
+
+##########################
+gazebo.launch
+
+<?xml version="1.0"?>
+<launch>
+
+  <!-- these are the arguments you can pass this launch file, for example paused:=true -->
+  <arg name="paused" default="true"/>
+  <arg name="use_sim_time" default="false"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="true"/>
+
+  <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+   <include file="$(find gazebo_ros)/launch/empty_world.launch">   ##### 系统包的 空世界
+     <arg name="world_name" value="$(find learn_gazebo)/worlds/robot.world"/>### 上述新建的 world的地址
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="headless" value="$(arg headless)"/>
+  </include>
+
+
+############################ 需要参数
+  <!-- Load the URDF into the ROS Parameter Server -->
+  <arg name="model" />
+  <param name="robot_description" 
+     command="$(find xacro)/xacro.py $(arg model)" />   ### 机器人模型 需要使用命令行参数指定
+####修改后 不需要参数
+  <!-- Load the URDF into the ROS Parameter Server 
+  <arg name="model" /> -->
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(find learn_gazebo)/urdf/robot1_xacro.xacro'" />
+
+
+  <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+    args="-urdf -model robot1 -param robot_description -z 0.05"/> 
+
+</launch>
+
+
+
+###########
+运行
+roslaunch learn_gazebo gazebo.launch model:="$(rospack find learn_gazebo)/urdf/robot1_xacro.xacro"
+//或者使用绝对路径命令
+roslaunch learn_gazebo gazebo.launch model:="/home/ewenwan/ewenwan/catkin_ws/src/learn_gazebo/urdf/robot1_xacro.xacro"
+
+
+
+
+

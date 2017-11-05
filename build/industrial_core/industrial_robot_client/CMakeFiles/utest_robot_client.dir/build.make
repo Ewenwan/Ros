@@ -81,7 +81,7 @@ utest_robot_client_EXTERNAL_OBJECTS =
 
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/industrial_robot_client/utest_robot_client: industrial_core/industrial_robot_client/CMakeFiles/utest_robot_client.dir/test/utest.cpp.o
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/industrial_robot_client/utest_robot_client: industrial_core/industrial_robot_client/CMakeFiles/utest_robot_client.dir/build.make
-/home/ewenwan/ewenwan/catkin_ws/devel/lib/industrial_robot_client/utest_robot_client: gtest/libgtest.so
+/home/ewenwan/ewenwan/catkin_ws/devel/lib/industrial_robot_client/utest_robot_client: /usr/local/lib/libgtest.so
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/industrial_robot_client/utest_robot_client: /home/ewenwan/ewenwan/catkin_ws/devel/lib/libindustrial_robot_client.so
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/industrial_robot_client/utest_robot_client: /home/ewenwan/ewenwan/catkin_ws/devel/lib/libsimple_message_dummy.so
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/industrial_robot_client/utest_robot_client: /opt/ros/indigo/lib/libactionlib.so

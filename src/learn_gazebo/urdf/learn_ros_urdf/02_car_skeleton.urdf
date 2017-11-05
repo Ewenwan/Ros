@@ -1,0 +1,81 @@
+<?xml version="1.0"?>  
+<robot name="test_robot"> 
+<!-- material blue and black color-->
+  <material name="blue">  
+    <color rgba="0 0 .8 1"/> 
+  </material>   
+  <material name="back"> 
+    <color rgba="0 0 .8 1"/>
+  </material> 
+<!-- 5 link = base_link + 4 wheel -->
+      <link name="base_link">  
+        <visual>  
+           <geometry>  
+             <box size="0.2 .3 .1"/>  
+           </geometry>  
+           <origin rpy="0 0 0" xyz="0 0 0.05"/> 
+	   <material name="blue"/> 
+        </visual>  
+      </link>  
+      
+      <link name="wheel_1">  
+        <visual>  
+          <geometry>  
+            <cylinder length="0.05" radius="0.05"/>  
+          </geometry>  
+          <origin rpy="0 1.5 0" xyz="0.1 0.1 0"/>  
+	  <material name="black"/> 
+        </visual>  
+      </link>  
+      
+      <link name="wheel_2">  
+        <visual>  
+          <geometry>  
+            <cylinder length="0.05" radius="0.05"/>  
+          </geometry>  
+          <origin rpy="0 1.5 0" xyz="-0.1 0.1 0"/> 
+	  <material name="black"/>  
+        </visual>  
+      </link>  
+      
+      <link name="wheel_3">  
+        <visual>  
+          <geometry>  
+            <cylinder length="0.05" radius="0.05"/>  
+          </geometry>  
+          <origin rpy="0 1.5 0" xyz="0.1 -0.1 0"/>  
+	  <material name="black"/> 
+        </visual>  
+      </link>  
+      
+      <link name="wheel_4">  
+        <visual>  
+          <geometry>  
+            <cylinder length="0.05" radius="0.05"/>  
+          </geometry>  
+          <origin rpy="0 1.5 0" xyz="-0.1 -0.1 0"/>  
+	  <material name="black"/> 
+        </visual>  
+      </link>  
+
+<!-- 4 joint = base_link to 4 wheel -->      
+      <joint name="joint_base_wheel1" type="fixed">  
+        <parent link="base_link"/>  
+        <child link="wheel_1"/>  
+      </joint>  
+      
+      <joint name="joint_base_wheel2" type="fixed">  
+        <parent link="base_link"/>  
+        <child link="wheel_2"/>  
+      </joint>  
+      
+      <joint name="joint_base_wheel3" type="fixed">  
+        <parent link="base_link"/>  
+        <child link="wheel_3"/>  
+      </joint>  
+      
+      <joint name="joint_base_wheel4" type="fixed">  
+        <parent link="base_link"/>  
+        <child link="wheel_4"/>  
+      </joint>  
+</robot>  

@@ -1,0 +1,290 @@
+<?xml version="1.0"?>
+
+
+<robot name="six_dof_arm" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+  <!-- Include materials -->
+
+
+    <material name="Black">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+    </material>
+
+
+    <material name="Red">
+        <color rgba="0.8 0.0 0.0 1.0"/>
+    </material>
+
+
+    <material name="White">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+    </material>
+
+
+  <!-- Constants -->
+  <property name="deg_to_rad" value="0.01745329251994329577"/>
+  <property name="M_PI" value="3.14159"/>
+  <property name="x" value="0.0125"/>
+
+
+  <!-- base link properties -->
+  <property name="base_len" value="0.168" />
+  <property name="base_width" value="0.168" />
+  <property name="base_height" value="0.055" />
+
+
+  <!-- shoulder link properties -->
+  <property name="shoulder_radius" value="0.06" />
+  <property name="shoulder_len" value="0.085" />
+
+
+  <!-- bigarm link properties -->
+  <property name="bigarm_radius" value="0.03" />
+  <property name="bigarm_len" value="0.135" />
+
+
+  <!-- forearm link properties -->
+  <property name="forearm_radius" value="0.03" />
+  <property name="forearm_len" value="0.147" />
+
+
+  <!-- chuck link properties -->
+  <property name="chuck_len" value="0.08" />
+  <property name="chuck_width" value="0.03" />
+  <property name="chuck_height" value="0.03" />
+
+
+  <!-- inertial matrix macro definition -->
+   <xacro:macro name="inertial_matrix" params="mass">
+      <inertial>
+      <mass value="${mass}" />
+        <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="0.5" iyz="0.0" izz="1.0" />
+      </inertial>
+   </xacro:macro>
+
+
+<!-- transmission block macro definition -->
+   <xacro:macro name="transmission_block" params="joint_name">
+ <transmission name="tran1">
+   <type>transmission_interface/SimpleTransmission</type>
+   <joint name="${joint_name}">
+     <hardwareInterface>PositionJointInterface</hardwareInterface>
+   </joint>
+   <actuator name="motor1">
+     <hardwareInterface>PositionJointInterface</hardwareInterface>
+     <mechanicalReduction>1</mechanicalReduction>
+   </actuator>
+ </transmission>
+   </xacro:macro>
+
+
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+  <virtual_joint name="fixed_frame" type="fixed" parent_frame="base_link" child_link="base_link" />  
+
+
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+
+  <!-- BASE LINK -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0.0275" rpy="0 0 0" /> 
+      <geometry>
+       <box size="${base_len} ${base_width} ${base_height}" />
+      </geometry>
+      <material name="White" />
+    </visual>
+
+
+    <collision>
+      <origin xyz="0 0 0.0275" rpy="0 0 0" />
+      <geometry>
+      <box size="${base_len} ${base_width} ${base_height}" />
+      </geometry>
+      </collision>>
+<xacro:inertial_matrix mass="1"/>
+  </link>
+
+
+  <gazebo reference="base_link">
+    <material>Gazebo/White</material>
+  </gazebo>
+
+
+  <joint name="shoulder_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="shoulder_link"/>
+    <origin xyz="0 0 0.055" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+    <limit effort="300" velocity="1" lower="-2.35619449" upper="2.35619449"/>
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+
+  <!-- SHOULDER LINK -->
+  <link name="shoulder_link" >
+    <visual>
+      <origin xyz="0 0 0.0425" rpy="0 0 0" />
+      <geometry>
+            <cylinder radius="${shoulder_radius}" length="${shoulder_len}"/>
+      </geometry>
+      <material name="Red" />
+    </visual>
+
+
+    <collision>
+      <origin xyz="0 0 0.0425" rpy="0 0 0" />
+      <geometry>
+            <cylinder radius="${shoulder_radius}" length="${shoulder_len}"/>
+      </geometry>
+    </collision>
+<xacro:inertial_matrix mass="1"/>
+  </link>
+
+
+  <gazebo reference="shoulder_link">
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+
+  <joint name="bigarm_joint" type="revolute">
+    <parent link="shoulder_link"/>
+    <child link="bigarm_link"/>
+    <origin xyz="0 0 0.085" rpy="0 0 0" />
+    <axis xyz="0 1 0" />
+    <limit effort="300" velocity="1" lower="0.0" upper="1.483529864195" />
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+
+  <!-- BIGARM LINK -->
+  <link name="bigarm_link" >
+    <visual>
+      <origin xyz="0 0 0.0675" rpy="0 0 0" />
+      <geometry>
+            <cylinder radius="${bigarm_radius}" length="${bigarm_len}"/>
+      </geometry>
+      <material name="White" />
+    </visual>
+
+
+    <collision>
+      <origin xyz="0 0 0.0675" rpy="0 0 0" />
+      <geometry>
+            <cylinder radius="${bigarm_radius}" length="${bigarm_len}"/>
+      </geometry>
+    </collision>
+<xacro:inertial_matrix mass="1"/>
+  </link>
+
+
+  <gazebo reference="bigarm_link">
+    <material>Gazebo/White</material>
+  </gazebo>
+
+
+  <joint name="forearm_joint" type="revolute">
+    <parent link="bigarm_link"/>
+    <child link="forearm_link"/>
+    <origin xyz="0 0 0.135" rpy="0 0 0" />
+    <axis xyz="0 1 0" />
+    <limit effort="300" velocity="1" lower="-0.1745329251994329577" upper="1.65806278939" />
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+
+  <!--FOREARM LINK -->
+  <link name="forearm_link" >
+    <visual>
+      <origin xyz="0 0 0.0735" rpy="0 0 0" />
+      <geometry>
+            <cylinder radius="${forearm_radius}" length="${forearm_len}"/>
+      </geometry>
+      <material name="Black" />
+    </visual>
+
+
+    <collision>
+      <origin xyz="0 0 0.0735" rpy="0 0 0" />
+      <geometry>
+            <cylinder radius="${forearm_radius}" length="${forearm_len}"/>
+      </geometry>
+    </collision>
+<xacro:inertial_matrix mass="1"/>
+  </link>
+
+
+  <gazebo reference="forearm_link">
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+
+  <joint name="chuck_joint" type="revolute">
+    <parent link="forearm_link"/>
+    <child link="chuck_link"/>
+    <origin xyz="0 0 0.147" rpy="0 0 0" />
+    <axis xyz="0 1 0" />
+    <limit effort="300" velocity="1" lower="-1.5707963267948966" upper="1.5707963267948966" />
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+
+  <!--FOREARM LINK -->
+  <link name="chuck_link" >
+    <visual>
+      <origin xyz="0.02 0 0.0155" rpy="0 0 0" />
+      <geometry>
+            <box size="${chuck_len} ${chuck_width} ${chuck_height}" />
+      </geometry>
+      <material name="Red" />
+    </visual>
+
+
+    <collision>
+      <origin xyz="0 0 0.0155" rpy="0 0 0" />
+      <geometry>
+            <box size="${chuck_len} ${chuck_width} ${chuck_height}" />
+      </geometry>
+    </collision>
+<xacro:inertial_matrix mass="1"/>
+  </link>
+
+
+  <gazebo reference="chuck_link">
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+  <!-- Transmissions for ROS Control -->
+
+
+   <xacro:transmission_block joint_name="shoulder_joint"/>
+   <xacro:transmission_block joint_name="bigarm_joint"/>
+   <xacro:transmission_block joint_name="forearm_joint"/>
+   <xacro:transmission_block joint_name="chuck_joint"/>
+
+
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+  <!-- ros_control plugin -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/six_dof_arm</robotNamespace>
+    </plugin>
+  </gazebo>
+
+
+</robot>

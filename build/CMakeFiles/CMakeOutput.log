@@ -291,3 +291,64 @@ Linking C executable cmTryCompileExec3981130796
 make[1]:正在离开目录 `/home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp'
 
 
+Determining if the Q_WS_X11 exist passed with the following output:
+Change Dir: /home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3601291398/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3601291398.dir/build.make CMakeFiles/cmTryCompileExec3601291398.dir/build
+make[1]: 正在进入目录 `/home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec3601291398.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -I/usr/include/qt4    -o CMakeFiles/cmTryCompileExec3601291398.dir/CheckSymbolExists.cxx.o -c /home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+Linking CXX executable cmTryCompileExec3601291398
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3601291398.dir/link.txt --verbose=1
+/usr/bin/c++        CMakeFiles/cmTryCompileExec3601291398.dir/CheckSymbolExists.cxx.o  -o cmTryCompileExec3601291398 -rdynamic 
+make[1]:正在离开目录 `/home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp'
+
+File /home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
+/* */
+#include <QtCore/qglobal.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef Q_WS_X11
+  return ((int*)(&Q_WS_X11))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Performing C++ SOURCE FILE Test COMPILER_SUPPORTS_CXX11 succeded with the following output:
+Change Dir: /home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3072096893/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3072096893.dir/build.make CMakeFiles/cmTryCompileExec3072096893.dir/build
+make[1]: Entering directory `/home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec3072096893.dir/src.cxx.o
+/usr/bin/c++    -Wall  -O3 -march=native -DCOMPILER_SUPPORTS_CXX11   -std=c++11 -o CMakeFiles/cmTryCompileExec3072096893.dir/src.cxx.o -c /home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTryCompileExec3072096893
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3072096893.dir/link.txt --verbose=1
+/usr/bin/c++    -Wall  -O3 -march=native -DCOMPILER_SUPPORTS_CXX11    CMakeFiles/cmTryCompileExec3072096893.dir/src.cxx.o  -o cmTryCompileExec3072096893 -rdynamic 
+make[1]: Leaving directory `/home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0;}
+Performing C++ SOURCE FILE Test COMPILER_SUPPORTS_CXX0X succeded with the following output:
+Change Dir: /home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec675314871/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec675314871.dir/build.make CMakeFiles/cmTryCompileExec675314871.dir/build
+make[1]: Entering directory `/home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec675314871.dir/src.cxx.o
+/usr/bin/c++    -Wall  -O3 -march=native -DCOMPILER_SUPPORTS_CXX0X   -std=c++0x -o CMakeFiles/cmTryCompileExec675314871.dir/src.cxx.o -c /home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTryCompileExec675314871
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec675314871.dir/link.txt --verbose=1
+/usr/bin/c++    -Wall  -O3 -march=native -DCOMPILER_SUPPORTS_CXX0X    CMakeFiles/cmTryCompileExec675314871.dir/src.cxx.o  -o cmTryCompileExec675314871 -rdynamic 
+make[1]: Leaving directory `/home/ewenwan/ewenwan/catkin_ws/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0;}

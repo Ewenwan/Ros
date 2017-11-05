@@ -81,7 +81,7 @@ utest_inds_utils_EXTERNAL_OBJECTS =
 
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/industrial_utils/utest_inds_utils: industrial_core/industrial_utils/CMakeFiles/utest_inds_utils.dir/test/utest.cpp.o
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/industrial_utils/utest_inds_utils: industrial_core/industrial_utils/CMakeFiles/utest_inds_utils.dir/build.make
-/home/ewenwan/ewenwan/catkin_ws/devel/lib/industrial_utils/utest_inds_utils: gtest/libgtest.so
+/home/ewenwan/ewenwan/catkin_ws/devel/lib/industrial_utils/utest_inds_utils: /usr/local/lib/libgtest.so
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/industrial_utils/utest_inds_utils: /home/ewenwan/ewenwan/catkin_ws/devel/lib/libindustrial_utils.so
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/industrial_utils/utest_inds_utils: /opt/ros/indigo/lib/liburdf.so
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/industrial_utils/utest_inds_utils: /usr/lib/x86_64-linux-gnu/liburdfdom_sensor.so

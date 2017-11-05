@@ -1,0 +1,8 @@
+prefix=/home/ewenwan/ewenwan/catkin_ws/devel
+
+Name: find_object_2d
+Description: Description of find_object_2d
+Version: 0.6.1
+Cflags: -I/home/ewenwan/ewenwan/catkin_ws/devel/include
+Libs: -L/home/ewenwan/ewenwan/catkin_ws/devel/lib 
+Requires: cv_bridge roscpp rospy sensor_msgs std_msgs image_transport message_filters tf

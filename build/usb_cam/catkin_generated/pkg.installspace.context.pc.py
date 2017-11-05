@@ -5,4 +5,4 @@ PROJECT_CATKIN_DEPENDS = "".replace(';', ' ')
 PKG_CONFIG_LIBRARIES_WITH_PREFIX = "-lusb_cam".split(';') if "-lusb_cam" != "" else []
 PROJECT_NAME = "usb_cam"
 PROJECT_SPACE_DIR = "/home/ewenwan/ewenwan/catkin_ws/install"
-PROJECT_VERSION = "0.3.4"
+PROJECT_VERSION = "0.3.6"

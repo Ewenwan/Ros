@@ -81,7 +81,7 @@ rosserial_test_publish_subscribe_EXTERNAL_OBJECTS =
 
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/rosserial_test/rosserial_test_publish_subscribe: rosserial/rosserial_test/CMakeFiles/rosserial_test_publish_subscribe.dir/src/publish_subscribe.cpp.o
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/rosserial_test/rosserial_test_publish_subscribe: rosserial/rosserial_test/CMakeFiles/rosserial_test_publish_subscribe.dir/build.make
-/home/ewenwan/ewenwan/catkin_ws/devel/lib/rosserial_test/rosserial_test_publish_subscribe: gtest/libgtest.so
+/home/ewenwan/ewenwan/catkin_ws/devel/lib/rosserial_test/rosserial_test_publish_subscribe: /usr/local/lib/libgtest.so
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/rosserial_test/rosserial_test_publish_subscribe: /opt/ros/indigo/lib/libtopic_tools.so
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/rosserial_test/rosserial_test_publish_subscribe: /opt/ros/indigo/lib/libroscpp.so
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/rosserial_test/rosserial_test_publish_subscribe: /usr/lib/x86_64-linux-gnu/libboost_signals.so

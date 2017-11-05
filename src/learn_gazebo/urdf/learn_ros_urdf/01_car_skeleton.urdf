@@ -1,0 +1,31 @@
+<?xml version="1.0"?> 
+<robot name="test_robot">#机器人的名字
+      #5个部件link 车身+4个轮子 
+      <link name="base_link" />  
+      <link name="wheel_1" />  
+      <link name="wheel_2" />  
+      <link name="wheel_3" />  
+      <link name="wheel_4" />  
+  
+    
+      #4个关节joint 每个轮子一个
+      <joint name="joint_base_wheel1" type="fixed">  
+        <parent link="base_link"/> #一边接在车身上  
+        <child link="wheel_1"/>    #另一边接在轮子1上
+      </joint>  
+           
+      <joint name="joint_base_wheel2" type="fixed">  
+        <parent link="base_link"/>  
+        <child link="wheel_2"/>  
+      </joint>  
+          
+      <joint name="joint_base_wheel3" type="fixed">  
+        <parent link="base_link"/>  
+        <child link="wheel_3"/>  
+      </joint>       
+      
+      <joint name="joint_base_wheel4" type="fixed">  
+        <parent link="base_link"/>  
+        <child link="wheel_4"/>  
+      </joint>  
+</robot>  

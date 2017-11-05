@@ -1,0 +1,13 @@
+-I/home/ewenwan/ewenwan/catkin_ws/devel/include
+-I/usr/include/opencv
+-I/usr/include
+-DROS_BUILD_SHARED_LIBS=1
+-DPROJECT_PREFIX="find_object"
+-DPROJECT_VERSION="0.6.1"
+-DPROJECT_NAME="find_object_2d"
+-DQT_NO_KEYWORDS
+-DROS_PACKAGE_NAME="find_object_2d"
+-DROSCONSOLE_BACKEND_LOG4CXX
+-o
+/home/ewenwan/ewenwan/catkin_ws/build/src/find_object_2d/src/utilite/moc_UPlot.cxx
+/home/ewenwan/ewenwan/catkin_ws/src/src/find_object_2d/src/utilite/UPlot.h

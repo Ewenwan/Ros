@@ -81,7 +81,7 @@ subscriber_test_EXTERNAL_OBJECTS =
 
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/rosserial_client/subscriber_test: rosserial/rosserial_client/CMakeFiles/subscriber_test.dir/test/subscriber_test.cpp.o
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/rosserial_client/subscriber_test: rosserial/rosserial_client/CMakeFiles/subscriber_test.dir/build.make
-/home/ewenwan/ewenwan/catkin_ws/devel/lib/rosserial_client/subscriber_test: gtest/libgtest.so
+/home/ewenwan/ewenwan/catkin_ws/devel/lib/rosserial_client/subscriber_test: /usr/local/lib/libgtest.so
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/rosserial_client/subscriber_test: rosserial/rosserial_client/CMakeFiles/subscriber_test.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX executable /home/ewenwan/ewenwan/catkin_ws/devel/lib/rosserial_client/subscriber_test"
 	cd /home/ewenwan/ewenwan/catkin_ws/build/rosserial/rosserial_client && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/subscriber_test.dir/link.txt --verbose=$(VERBOSE)

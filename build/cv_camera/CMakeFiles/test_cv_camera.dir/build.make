@@ -81,7 +81,7 @@ test_cv_camera_EXTERNAL_OBJECTS =
 
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: cv_camera/CMakeFiles/test_cv_camera.dir/test/test_cv_camera.cpp.o
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: cv_camera/CMakeFiles/test_cv_camera.dir/build.make
-/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: gtest/libgtest.so
+/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/local/lib/libgtest.so
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /home/ewenwan/ewenwan/catkin_ws/devel/lib/libcv_camera.so
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /opt/ros/indigo/lib/libimage_transport.so
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /opt/ros/indigo/lib/libmessage_filters.so
@@ -132,23 +132,23 @@ test_cv_camera_EXTERNAL_OBJECTS =
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/lib/x86_64-linux-gnu/libboost_system.so
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/lib/x86_64-linux-gnu/libboost_thread.so
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/lib/x86_64-linux-gnu/libpthread.so
-/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/lib/x86_64-linux-gnu/libopencv_videostab.so.2.4.8
-/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/lib/x86_64-linux-gnu/libopencv_superres.so.2.4.8
-/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/lib/x86_64-linux-gnu/libopencv_stitching.so.2.4.8
-/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/lib/x86_64-linux-gnu/libopencv_ocl.so.2.4.8
-/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/lib/x86_64-linux-gnu/libopencv_gpu.so.2.4.8
-/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/lib/x86_64-linux-gnu/libopencv_photo.so.2.4.8
-/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/lib/x86_64-linux-gnu/libopencv_legacy.so.2.4.8
-/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/lib/x86_64-linux-gnu/libopencv_contrib.so.2.4.8
-/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/lib/x86_64-linux-gnu/libopencv_video.so.2.4.8
-/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/lib/x86_64-linux-gnu/libopencv_objdetect.so.2.4.8
-/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/lib/x86_64-linux-gnu/libopencv_ml.so.2.4.8
-/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/lib/x86_64-linux-gnu/libopencv_calib3d.so.2.4.8
-/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/lib/x86_64-linux-gnu/libopencv_features2d.so.2.4.8
-/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/lib/x86_64-linux-gnu/libopencv_highgui.so.2.4.8
-/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/lib/x86_64-linux-gnu/libopencv_imgproc.so.2.4.8
-/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/lib/x86_64-linux-gnu/libopencv_flann.so.2.4.8
-/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/lib/x86_64-linux-gnu/libopencv_core.so.2.4.8
+/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/local/lib/libopencv_viz.so.3.1.0
+/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/local/lib/libopencv_videostab.so.3.1.0
+/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/local/lib/libopencv_superres.so.3.1.0
+/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/local/lib/libopencv_stitching.so.3.1.0
+/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/local/lib/libopencv_shape.so.3.1.0
+/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/local/lib/libopencv_video.so.3.1.0
+/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/local/lib/libopencv_photo.so.3.1.0
+/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/local/lib/libopencv_objdetect.so.3.1.0
+/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/local/lib/libopencv_calib3d.so.3.1.0
+/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/local/lib/libopencv_features2d.so.3.1.0
+/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/local/lib/libopencv_ml.so.3.1.0
+/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/local/lib/libopencv_highgui.so.3.1.0
+/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/local/lib/libopencv_videoio.so.3.1.0
+/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/local/lib/libopencv_imgcodecs.so.3.1.0
+/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/local/lib/libopencv_imgproc.so.3.1.0
+/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/local/lib/libopencv_flann.so.3.1.0
+/home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: /usr/local/lib/libopencv_core.so.3.1.0
 /home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera: cv_camera/CMakeFiles/test_cv_camera.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX executable /home/ewenwan/ewenwan/catkin_ws/devel/lib/cv_camera/test_cv_camera"
 	cd /home/ewenwan/ewenwan/catkin_ws/build/cv_camera && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/test_cv_camera.dir/link.txt --verbose=$(VERBOSE)

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<package>
+  <name>find_object_2d</name>
+  <version>0.6.1</version>
+  <description>The find_object_2d package</description>
+
+  <maintainer email="matlabbe@gmail.com">Mathieu Labbe</maintainer>
+  <license>BSD</license>
+  <url type="website">http://find-object.googlecode.com</url>
+  <author email="matlabbe@gmail.com">Mathieu Labbe</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend>genmsg</buildtool_depend>
+ 
+  <build_depend>qt_gui_cpp</build_depend>
+  <build_depend>cv_bridge</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>std_srvs</build_depend>
+  <build_depend>image_transport</build_depend>
+  <build_depend>message_filters</build_depend>
+  <build_depend>tf</build_depend>
+  
+  <run_depend>qt_gui_cpp</run_depend>
+  <run_depend>cv_bridge</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>std_srvs</run_depend>
+  <run_depend>image_transport</run_depend>
+  <run_depend>message_filters</run_depend>
+  <run_depend>tf</run_depend>
+  
+</package>

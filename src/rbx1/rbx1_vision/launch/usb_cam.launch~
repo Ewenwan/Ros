@@ -1,0 +1,21 @@
+<launch>
+    <arg name="video_device" default="/dev/video0" />
+
+    <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" clear_params="true" output="screen">
+    
+    	<remap from="usb_cam/image_raw" to="/camera/rgb/image_raw" />
+    	<remap from="usb_cam/camera_info" to="/camera/rgb/camera_info" />
+
+        <param name="video_device" value="$(arg video_device)" />
+        <param name="image_width" value="640" />
+        <param name="image_height" value="480" />
+        <param name="framerate" value="30" />
+        <param name="pixel_format" value="mjpeg" />
+        <param name="contrast" value="32" />
+        <param name="brightness" value="32" />
+        <param name="saturation" value="32" />
+        <param name="autofocus" value="true" />
+        <param name="camera_frame_id" value="camera_link" />
+        
+    </node>
+</launch>

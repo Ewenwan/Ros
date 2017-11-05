@@ -6,6 +6,34 @@ OpenCV,                           二维图像处理和机器学习
 OpenN I2 +OpenKinect(freenect),   深度传感器(MicrosoftKinect and Asus Xtion Pro)驱动和处理库
 and PCL.                          点云库 处理三维点云数据
 
+2维特征提取包  find_object_2d (ROS package)
+https://github.com/introlab/find-object
+http://wiki.ros.org/find_object_2d
+
+
+http://blog.csdn.net/zhangrelay/article/details/77248232
+
+直接安装
+# ROS Kinetic:
+ $ sudo apt-get install ros-kinetic-find-object-2d
+# ROS Jade:
+ $ sudo apt-get install ros-jade-find-object-2d
+# ROS Indigo:
+ $ sudo apt-get install ros-indigo-find-object-2d
+# ROS Hydro:
+ $ sudo apt-get install ros-hydro-find-object-2d
+源码安装
+ $ cd ~/catkin_ws
+ $ git clone https://github.com/introlab/find-object.git src/find_object_2d
+ $ catkin_make
+
+运行
+ $ roscore &
+ # Launch your preferred usb camera driver
+ $ rosrun uvc_camera uvc_camera_node &
+ $ rosrun find_object_2d find_object_2d image:=image_raw
+
+
 2、图像分辨率：
 160x120 (QQVGA), 320x240 (QVGA), 640x480 (VGA) ， 1280x960 (SXGA).
 
@@ -15,11 +43,20 @@ $ rospack profile
 
 4、安装普通摄像头驱动 Webcam Driver
 源码安装
+usb_cam:
 cd ~/catkin_ws/src
 git clone https://github.com/bosch-ros-pkg/usb_cam.git
 cd ~/catkin_ws
 catkin_make
 rospack profile
+
+libuvc_ros:
+https://github.com/ros-drivers/libuvc_ros
+
+uvc_cam:
+cd cd ~/catkin_ws/src
+git clone https://github.com/ericperko/uvc_cam.git  
+rosmake uvc_cam
 
 5、测试图像传感器
 
@@ -47,6 +84,32 @@ $ roslaunch rbx1_vision usb_cam.launch video_device:=/dev/video1
 可视化查看
 rosrun image_view image_view image:=/camera/rgb/image_raw
 
+
+<launch>
+    <arg name="video_device" default="/dev/video0" />   驱动名字
+
+    <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" clear_params="true" output="screen">##节点信息
+    
+    	<remap from="usb_cam/image_raw" to="/camera/rgb/image_raw" />  话题重定向
+    	<remap from="usb_cam/camera_info" to="/camera/rgb/camera_info" />
+
+        <param name="video_device" value="$(arg video_device)" />
+        <param name="image_width" value="640" />
+        <param name="image_height" value="480" />
+        <param name="framerate" value="30" />
+        <param name="pixel_format" value="yuyv" />  这里注意需要和驱动程序输出的图片格式一致 原先为mmp格式
+        <param name="contrast" value="32" />  对比度
+        <param name="brightness" value="32" /> 亮度
+        <param name="saturation" value="32" /> 饱和度
+        <param name="autofocus" value="true" />
+        <param name="camera_frame_id" value="camera_link" />
+        
+    </node>
+</launch>
+
+
+
+rqt 也可以查看
 
 6、安装 ros 支持的opencv
 $ sudo apt-get install ros-indigo-vision-opencv libopencv-dev \
