@@ -1,0 +1,22 @@
+\subsubsection usage Usage
+\verbatim
+<node name="Config" pkg="lsd_slam_core" type="Config">
+  <param name="minUseGrad" type="double" value="5.0" />
+  <param name="cameraPixelNoise" type="double" value="4.0" />
+  <param name="KFUsageWeight" type="double" value="4.0" />
+  <param name="KFDistWeight" type="double" value="3.0" />
+  <param name="doSLAM" type="bool" value="True" />
+  <param name="doKFReActivation" type="bool" value="True" />
+  <param name="doMapping" type="bool" value="True" />
+  <param name="useFabMap" type="bool" value="False" />
+  <param name="allowNegativeIdepths" type="bool" value="True" />
+  <param name="useSubpixelStereo" type="bool" value="True" />
+  <param name="useAffineLightningEstimation" type="bool" value="False" />
+  <param name="multiThreading" type="bool" value="True" />
+  <param name="maxLoopClosureCandidates" type="int" value="10" />
+  <param name="loopclosureStrictness" type="double" value="1.5" />
+  <param name="relocalizationTH" type="double" value="0.7" />
+  <param name="depthSmoothingFactor" type="double" value="1.0" />
+</node>
+\endverbatim
+

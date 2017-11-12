@@ -1,0 +1,179 @@
+{
+	"version": "0.1.0",
+	"command": "bash",
+	"args": [
+		"-c"
+	],
+	"isShellCommand": true,
+	"showOutput": "always",
+	"suppressTaskName": true,
+	"tasks": [
+		{
+			"taskName": "Debug",
+			"args": [
+				"catkin_make -C ${workspaceRoot} -DCMAKE_BUILD_TYPE=Debug"
+			],
+			"problemMatcher": {
+				"owner": "cpp",
+				"fileLocation": [
+					"absolute"
+				],
+				"pattern": {
+					"regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+					"file": 1,
+					"line": 2,
+					"column": 3,
+					"severity": 4,
+					"message": 5
+				}
+			},
+			"isBuildCommand": true
+		},
+		{
+			"taskName": "Release",
+			"args": [
+				"catkin_make -C ${workspaceRoot}"
+			],
+			"problemMatcher": {
+				"owner": "cpp",
+				"fileLocation": [
+					"absolute"
+				],
+				"pattern": {
+					"regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+					"file": 1,
+					"line": 2,
+					"column": 3,
+					"severity": 4,
+					"message": 5
+				}
+			}
+		},
+		{
+			"taskName": "Debug (isolated)",
+			"args": [
+				"catkin_make_isolated -C ${workspaceRoot} -DCMAKE_BUILD_TYPE=Debug"
+			],
+			"problemMatcher": {
+				"owner": "cpp",
+				"fileLocation": [
+					"absolute"
+				],
+				"pattern": {
+					"regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+					"file": 1,
+					"line": 2,
+					"column": 3,
+					"severity": 4,
+					"message": 5
+				}
+			}
+		},
+		{
+			"taskName": "Release (isolated)",
+			"args": [
+				"catkin_make_isolated -C ${workspaceRoot}"
+			],
+			"problemMatcher": {
+				"owner": "cpp",
+				"fileLocation": [
+					"absolute"
+				],
+				"pattern": {
+					"regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+					"file": 1,
+					"line": 2,
+					"column": 3,
+					"severity": 4,
+					"message": 5
+				}
+			}
+		},
+		{
+			"taskName": "Debug (remote)",
+			"args": [
+				"echo \"Remote Arguments not configured!\""
+			],
+			"problemMatcher": {
+				"owner": "cpp",
+				"fileLocation": [
+					"absolute"
+				],
+				"pattern": {
+					"regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+					"file": 1,
+					"line": 2,
+					"column": 3,
+					"severity": 4,
+					"message": 5
+				}
+			}
+		},
+		{
+			"taskName": "Release (remote)",
+			"args": [
+				"echo \"Remote Arguments not configured!\""
+			],
+			"problemMatcher": {
+				"owner": "cpp",
+				"fileLocation": [
+					"absolute"
+				],
+				"pattern": {
+					"regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+					"file": 1,
+					"line": 2,
+					"column": 3,
+					"severity": 4,
+					"message": 5
+				}
+			}
+		},
+		{
+			"taskName": "Debug (remote isolated)",
+			"args": [
+				"echo \"Remote Arguments not configured!\""
+			],
+			"problemMatcher": {
+				"owner": "cpp",
+				"fileLocation": [
+					"absolute"
+				],
+				"pattern": {
+					"regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+					"file": 1,
+					"line": 2,
+					"column": 3,
+					"severity": 4,
+					"message": 5
+				}
+			}
+		},
+		{
+			"taskName": "Release (remote isolated)",
+			"args": [
+				"echo \"Remote Arguments not configured!\""
+			],
+			"problemMatcher": {
+				"owner": "cpp",
+				"fileLocation": [
+					"absolute"
+				],
+				"pattern": {
+					"regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+					"file": 1,
+					"line": 2,
+					"column": 3,
+					"severity": 4,
+					"message": 5
+				}
+			}
+		},
+		{
+			"taskName": "Remote Deploy",
+			"args": [
+				"echo \"Remote Arguments not configured!\""
+			]
+		}
+	]
+}

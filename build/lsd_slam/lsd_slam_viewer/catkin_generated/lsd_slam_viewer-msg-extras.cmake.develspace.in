@@ -1,0 +1,2 @@
+set(lsd_slam_viewer_MESSAGE_FILES "/home/ewenwan/ewenwan/catkin_ws/src/lsd_slam/lsd_slam_viewer/msg/keyframeMsg.msg;/home/ewenwan/ewenwan/catkin_ws/src/lsd_slam/lsd_slam_viewer/msg/keyframeGraphMsg.msg")
+set(lsd_slam_viewer_SERVICE_FILES "")

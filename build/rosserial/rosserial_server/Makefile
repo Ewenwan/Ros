@@ -191,48 +191,6 @@ rosserial_server_udp_socket_node/fast:
 	cd /home/ewenwan/ewenwan/catkin_ws/build && $(MAKE) -f rosserial/rosserial_server/CMakeFiles/rosserial_server_udp_socket_node.dir/build.make rosserial/rosserial_server/CMakeFiles/rosserial_server_udp_socket_node.dir/build
 .PHONY : rosserial_server_udp_socket_node/fast
 
-# Convenience name for target.
-rosserial/rosserial_server/CMakeFiles/topic_tools_generate_messages_cpp.dir/rule:
-	cd /home/ewenwan/ewenwan/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rosserial/rosserial_server/CMakeFiles/topic_tools_generate_messages_cpp.dir/rule
-.PHONY : rosserial/rosserial_server/CMakeFiles/topic_tools_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-topic_tools_generate_messages_cpp: rosserial/rosserial_server/CMakeFiles/topic_tools_generate_messages_cpp.dir/rule
-.PHONY : topic_tools_generate_messages_cpp
-
-# fast build rule for target.
-topic_tools_generate_messages_cpp/fast:
-	cd /home/ewenwan/ewenwan/catkin_ws/build && $(MAKE) -f rosserial/rosserial_server/CMakeFiles/topic_tools_generate_messages_cpp.dir/build.make rosserial/rosserial_server/CMakeFiles/topic_tools_generate_messages_cpp.dir/build
-.PHONY : topic_tools_generate_messages_cpp/fast
-
-# Convenience name for target.
-rosserial/rosserial_server/CMakeFiles/topic_tools_generate_messages_lisp.dir/rule:
-	cd /home/ewenwan/ewenwan/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rosserial/rosserial_server/CMakeFiles/topic_tools_generate_messages_lisp.dir/rule
-.PHONY : rosserial/rosserial_server/CMakeFiles/topic_tools_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-topic_tools_generate_messages_lisp: rosserial/rosserial_server/CMakeFiles/topic_tools_generate_messages_lisp.dir/rule
-.PHONY : topic_tools_generate_messages_lisp
-
-# fast build rule for target.
-topic_tools_generate_messages_lisp/fast:
-	cd /home/ewenwan/ewenwan/catkin_ws/build && $(MAKE) -f rosserial/rosserial_server/CMakeFiles/topic_tools_generate_messages_lisp.dir/build.make rosserial/rosserial_server/CMakeFiles/topic_tools_generate_messages_lisp.dir/build
-.PHONY : topic_tools_generate_messages_lisp/fast
-
-# Convenience name for target.
-rosserial/rosserial_server/CMakeFiles/topic_tools_generate_messages_py.dir/rule:
-	cd /home/ewenwan/ewenwan/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rosserial/rosserial_server/CMakeFiles/topic_tools_generate_messages_py.dir/rule
-.PHONY : rosserial/rosserial_server/CMakeFiles/topic_tools_generate_messages_py.dir/rule
-
-# Convenience name for target.
-topic_tools_generate_messages_py: rosserial/rosserial_server/CMakeFiles/topic_tools_generate_messages_py.dir/rule
-.PHONY : topic_tools_generate_messages_py
-
-# fast build rule for target.
-topic_tools_generate_messages_py/fast:
-	cd /home/ewenwan/ewenwan/catkin_ws/build && $(MAKE) -f rosserial/rosserial_server/CMakeFiles/topic_tools_generate_messages_py.dir/build.make rosserial/rosserial_server/CMakeFiles/topic_tools_generate_messages_py.dir/build
-.PHONY : topic_tools_generate_messages_py/fast
-
 src/serial_node.o: src/serial_node.cpp.o
 .PHONY : src/serial_node.o
 
@@ -321,9 +279,6 @@ help:
 	@echo "... rosserial_server_socket_node"
 	@echo "... rosserial_server_udp_socket_node"
 	@echo "... test"
-	@echo "... topic_tools_generate_messages_cpp"
-	@echo "... topic_tools_generate_messages_lisp"
-	@echo "... topic_tools_generate_messages_py"
 	@echo "... src/serial_node.o"
 	@echo "... src/serial_node.i"
 	@echo "... src/serial_node.s"

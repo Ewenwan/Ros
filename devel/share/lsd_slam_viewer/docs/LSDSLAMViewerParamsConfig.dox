@@ -1,0 +1,19 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~showKFCameras" : \b [bool] Toggle Drawing of blue Keyframe Camera-Frustrums min: False, default: True, max: True
+- \b "~showKFPointclouds" : \b [bool] Toggle Drawing of Pointclouds for all Keyframes min: False, default: True, max: True
+- \b "~showConstraints" : \b [bool] Toggle Drawing of red/green Pose-Graph Constraints min: False, default: True, max: True
+- \b "~showCurrentCamera" : \b [bool] Toggle Drawing of red Frustrum for the current Camera Pose min: False, default: True, max: True
+- \b "~showCurrentPointcloud" : \b [bool] Toggle Drawing of the latest pointcloud added to the map min: False, default: True, max: True
+- \b "~pointTesselation" : \b [double] Size of Points min: 0.0, default: 1.0, max: 5.0
+- \b "~lineTesselation" : \b [double] Width of Lines min: 0.0, default: 1.0, max: 5.0
+- \b "~scaledDepthVarTH" : \b [double] log10 of threshold on point's variance, in the respective keyframe's scale.  min: -10.0, default: -3.0, max: 1.0
+- \b "~absDepthVarTH" : \b [double] log10 of threshold on point's variance, in absolute scale. min: -10.0, default: -1.0, max: 1.0
+- \b "~minNearSupport" : \b [int] only plot points that have #minNearSupport similar neighbours (higher values remove outliers) min: 0, default: 7, max: 9
+- \b "~cutFirstNKf" : \b [int] do not display the first #cutFirstNKf keyframe's pointclouds, to remove artifacts left-over from the random initialization. min: 0, default: 5, max: 100
+- \b "~sparsifyFactor" : \b [int] only plot one out of #sparsifyFactor points, selected at random. Use this to significantly speed up rendering for large maps. min: 1, default: 1, max: 100
+- \b "~saveAllVideo" : \b [bool] save all rendered images... only use if you know what you are doing. min: False, default: False, max: True
+- \b "~keepInMemory" : \b [bool] If set to false, Pointcloud is only stored in OpenGL buffers, and not kept in RAM. This greatly reduces the required RAM for large maps, however also prohibits saving / dynamically changing sparsifyFactor and variance-thresholds. min: False, default: True, max: True
+

@@ -1,0 +1,20 @@
+\subsubsection usage Usage
+\verbatim
+<node name="Config" pkg="lsd_slam_viewer" type="Config">
+  <param name="showKFCameras" type="bool" value="True" />
+  <param name="showKFPointclouds" type="bool" value="True" />
+  <param name="showConstraints" type="bool" value="True" />
+  <param name="showCurrentCamera" type="bool" value="True" />
+  <param name="showCurrentPointcloud" type="bool" value="True" />
+  <param name="pointTesselation" type="double" value="1.0" />
+  <param name="lineTesselation" type="double" value="1.0" />
+  <param name="scaledDepthVarTH" type="double" value="-3.0" />
+  <param name="absDepthVarTH" type="double" value="-1.0" />
+  <param name="minNearSupport" type="int" value="7" />
+  <param name="cutFirstNKf" type="int" value="5" />
+  <param name="sparsifyFactor" type="int" value="1" />
+  <param name="saveAllVideo" type="bool" value="False" />
+  <param name="keepInMemory" type="bool" value="True" />
+</node>
+\endverbatim
+

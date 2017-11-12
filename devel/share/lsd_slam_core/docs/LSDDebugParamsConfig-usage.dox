@@ -1,0 +1,36 @@
+\subsubsection usage Usage
+\verbatim
+<node name="Config" pkg="lsd_slam_core" type="Config">
+  <param name="plotStereoImages" type="bool" value="False" />
+  <param name="plotTracking" type="bool" value="False" />
+  <param name="freeDebugParam1" type="double" value="1.0" />
+  <param name="freeDebugParam2" type="double" value="1.0" />
+  <param name="freeDebugParam3" type="double" value="1.0" />
+  <param name="freeDebugParam4" type="double" value="1.0" />
+  <param name="freeDebugParam5" type="double" value="1.0" />
+  <param name="plotTrackingIterationInfo" type="bool" value="False" />
+  <param name="printPropagationStatistics" type="bool" value="False" />
+  <param name="printFillHolesStatistics" type="bool" value="False" />
+  <param name="printObserveStatistics" type="bool" value="False" />
+  <param name="printObservePurgeStatistics" type="bool" value="False" />
+  <param name="printRegularizeStatistics" type="bool" value="False" />
+  <param name="printLineStereoStatistics" type="bool" value="False" />
+  <param name="printLineStereoFails" type="bool" value="False" />
+  <param name="printFrameBuildDebugInfo" type="bool" value="False" />
+  <param name="printMemoryDebugInfo" type="bool" value="False" />
+  <param name="printTrackingIterationInfo" type="bool" value="False" />
+  <param name="printThreadingInfo" type="bool" value="False" />
+  <param name="printMappingTiming" type="bool" value="False" />
+  <param name="printOverallTiming" type="bool" value="False" />
+  <param name="printKeyframeSelectionInfo" type="bool" value="False" />
+  <param name="printConstraintSearchInfo" type="bool" value="False" />
+  <param name="printOptimizationInfo" type="bool" value="False" />
+  <param name="printRelocalizationInfo" type="bool" value="False" />
+  <param name="continuousPCOutput" type="bool" value="False" />
+  <param name="saveKeyframes" type="bool" value="False" />
+  <param name="saveAllTracked" type="bool" value="False" />
+  <param name="saveLoopClosureImages" type="bool" value="False" />
+  <param name="saveAllTrackingStages" type="bool" value="False" />
+</node>
+\endverbatim
+

@@ -1,0 +1,8 @@
+prefix=/home/ewenwan/ewenwan/catkin_ws/install
+
+Name: lsd_slam_core
+Description: Description of lsd_slam_core
+Version: 0.0.0
+Cflags: -I/home/ewenwan/ewenwan/catkin_ws/install/include
+Libs: -L/home/ewenwan/ewenwan/catkin_ws/install/lib -llsdslam
+Requires: libg2o

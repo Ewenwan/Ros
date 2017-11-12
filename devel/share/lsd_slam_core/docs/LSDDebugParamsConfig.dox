@@ -1,0 +1,35 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~plotStereoImages" : \b [bool] Plot Searched Stereo Lines, and color-coded stereo-results. Nice Visualization of what's going on, however drastically decreases mapping speed. min: False, default: False, max: True
+- \b "~plotTracking" : \b [bool] Plot final tracking residual. Nice Visualization of what's going on, however drastically decreases tracking speed. min: False, default: False, max: True
+- \b "~freeDebugParam1" : \b [double] free parameter to be used for rapid prototyping min: 0.0, default: 1.0, max: 100.0
+- \b "~freeDebugParam2" : \b [double] free parameter to be used for rapid prototyping min: 0.0, default: 1.0, max: 100.0
+- \b "~freeDebugParam3" : \b [double] free parameter to be used for rapid prototyping min: 0.0, default: 1.0, max: 100.0
+- \b "~freeDebugParam4" : \b [double] free parameter to be used for rapid prototyping min: 0.0, default: 1.0, max: 100.0
+- \b "~freeDebugParam5" : \b [double] free parameter to be used for rapid prototyping min: 0.0, default: 1.0, max: 100.0
+- \b "~plotTrackingIterationInfo" : \b [bool] only use if you know what you are doing! min: False, default: False, max: True
+- \b "~printPropagationStatistics" : \b [bool] print lots of debug information min: False, default: False, max: True
+- \b "~printFillHolesStatistics" : \b [bool] print lots of debug information min: False, default: False, max: True
+- \b "~printObserveStatistics" : \b [bool] print lots of debug information min: False, default: False, max: True
+- \b "~printObservePurgeStatistics" : \b [bool] print lots of debug information min: False, default: False, max: True
+- \b "~printRegularizeStatistics" : \b [bool] print lots of debug information min: False, default: False, max: True
+- \b "~printLineStereoStatistics" : \b [bool] print lots of debug information min: False, default: False, max: True
+- \b "~printLineStereoFails" : \b [bool] print lots of debug information min: False, default: False, max: True
+- \b "~printFrameBuildDebugInfo" : \b [bool] print lots of debug information min: False, default: False, max: True
+- \b "~printMemoryDebugInfo" : \b [bool] print lots of debug information min: False, default: False, max: True
+- \b "~printTrackingIterationInfo" : \b [bool] print lots of debug information min: False, default: False, max: True
+- \b "~printThreadingInfo" : \b [bool] print lots of debug information min: False, default: False, max: True
+- \b "~printMappingTiming" : \b [bool] print lots of debug information min: False, default: False, max: True
+- \b "~printOverallTiming" : \b [bool] print lots of debug information min: False, default: False, max: True
+- \b "~printKeyframeSelectionInfo" : \b [bool] print lots of debug information min: False, default: False, max: True
+- \b "~printConstraintSearchInfo" : \b [bool] print lots of debug information min: False, default: False, max: True
+- \b "~printOptimizationInfo" : \b [bool] print lots of debug information min: False, default: False, max: True
+- \b "~printRelocalizationInfo" : \b [bool] print lots of debug information min: False, default: False, max: True
+- \b "~continuousPCOutput" : \b [bool] Publish Current Keyframe's Pointcloud after each update, to be seen in the viewer. Nice Visualization, however bad for performance and bandwith.  min: False, default: False, max: True
+- \b "~saveKeyframes" : \b [bool] Save lots of pictures. Only use if you know what you are doing. min: False, default: False, max: True
+- \b "~saveAllTracked" : \b [bool] Save lots of pictures. Only use if you know what you are doing. min: False, default: False, max: True
+- \b "~saveLoopClosureImages" : \b [bool] Save lots of pictures. Only use if you know what you are doing. min: False, default: False, max: True
+- \b "~saveAllTrackingStages" : \b [bool] Save lots of pictures. Only use if you know what you are doing. min: False, default: False, max: True
+

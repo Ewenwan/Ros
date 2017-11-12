@@ -1,0 +1,21 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~minUseGrad" : \b [double] Minimal Absolut Image Gradient for a Pixel to be used at all. Increase, if your camera has large image noise, Decrease if you have low image-noise and want to also exploit small gradients. min: 1.0, default: 5.0, max: 50.0
+- \b "~cameraPixelNoise" : \b [double] Image intensity noise used for e.g. tracking weight calculation. Sould be set larger than the actual sensor-noise, to also account for noise originating from discretization / linear interpolation. min: 1.0, default: 4.0, max: 50.0
+- \b "~KFUsageWeight" : \b [double] Determines how often Keyframes are taken, depending on the Overlap to the current Keyframe. Larger -> more Keyframes. min: 0.0, default: 4.0, max: 20.0
+- \b "~KFDistWeight" : \b [double] Determines how often Keyframes are taken, depending on the Distance to the current Keyframe. Larger -> more Keyframes. min: 0.0, default: 3.0, max: 20.0
+- \b "~doSLAM" : \b [bool] Toggle Global Mapping Component on/off. Only takes effect after a reset. min: False, default: True, max: True
+- \b "~doKFReActivation" : \b [bool] Toggle Keyframe Re-Activation on/off: If close to an existing keyframe, re-activate it instead of creating a new one. If false, Map will continually grow even if the camera moves in a relatively constrained area; If false, the number of keyframes will not grow arbitrarily. min: False, default: True, max: True
+- \b "~doMapping" : \b [bool] Toggle entire Keyframe Creating / Update module on/off: If false, only the Tracking Component stays active, which will prevent rapid motion or moving objects from corrupting the map. min: False, default: True, max: True
+- \b "~useFabMap" : \b [bool] Use OpenFABMAP to find large loop-closures. Only takes effect after a reset, and requires LSD-SLAM to be compiled with FabMap. min: False, default: False, max: True
+- \b "~allowNegativeIdepths" : \b [bool] Allow idepth to be (slightle) negative, to avoid introducing a bias for far-away points. min: False, default: True, max: True
+- \b "~useSubpixelStereo" : \b [bool] Compute subpixel-accurate stereo disparity. min: False, default: True, max: True
+- \b "~useAffineLightningEstimation" : \b [bool] EXPERIMENTAL: Correct for global affine intensity changes during tracking. Might help if you have Problems with Auto-Exposure. min: False, default: False, max: True
+- \b "~multiThreading" : \b [bool] Toggle Multi-Threading of DepthMap Estimation. Disable for less CPU usage, but possibly slightly less quality. min: False, default: True, max: True
+- \b "~maxLoopClosureCandidates" : \b [int] Maximal of Loop-Closures that are tracked initially for each new keyframe. min: 0, default: 10, max: 50
+- \b "~loopclosureStrictness" : \b [double] Threshold on reciprocal loop-closure consistency check, to be added to the map. Larger -> more (possibly wrong) Loopclosures. min: 0.0, default: 1.5, max: 100.0
+- \b "~relocalizationTH" : \b [double] How good a relocalization-attempt has to be, to be accepted. Larger -> More Strict. min: 0.0, default: 0.7, max: 1.0
+- \b "~depthSmoothingFactor" : \b [double] How much to smooth the depth map. Larger -> Less Smoothing min: 0.0, default: 1.0, max: 10.0
+
