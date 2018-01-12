@@ -1,0 +1,379 @@
+<?xml version="1.0"?>
+<robot name="six_arm"> 
+<!--creat baseline-->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.20 .15 .003"/>
+      </geometry>
+    </visual>
+  </link>
+
+<!--add dody-->
+  <link name="body">
+    <visual>
+      <geometry>
+       <box size="0.19 .11 .08"/>
+      </geometry>
+      <material name="blue">
+          <color rgba="0 0 255 0.8"/>
+      </material>  
+    </visual>
+  </link>  
+
+  <joint name="base_to_body" type="fixed">
+    <parent link="base_link"/>
+    <child link="body"/>
+    <origin xyz="0.0 0.0 0.04"/>
+  </joint> 
+
+<!-- shoulder stevo  XY -->
+  <link name="shoulder_stevo">
+    <visual>
+      <geometry>
+       <box size="0.054 .0403 .027"/>
+      </geometry>
+      <material name="black">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link> 
+
+ <joint name="body_to_left_shoulder_stevo" type="fixed">
+    <parent link="body"/>
+    <child link="shoulder_stevo"/>
+    <!--origin rpy="1.57075 0 1.57075" xyz="0.04 0.035 0.026"/ -->
+    <origin rpy="1.57075 0 1.57075" xyz="0 0 0.036"/>
+    <!-- origin rpy="1.57075 0 0" xyz="0.0 0.0 0.026" -->
+ </joint>  
+
+<!-- shoulder stevo axis XY -->
+  <link name="shoulder_stevo_axis">
+    <visual>
+      <geometry>
+       <cylinder length=".04" radius="0.0029"></cylinder>
+      </geometry>
+      <material name="yellow">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+
+  <joint name="shoulder_stevo_to_axis" type="fixed">
+    <axis xyz="0 0 1"/> 
+    <parent link="shoulder_stevo"/>
+    <child link="shoulder_stevo_axis"/>
+    <origin rpy="1.57075 0 0" xyz="0.0 0.027 0.0"/>
+    <limit effort="100" velocity="100" lower="0" upper="3.1415926"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>  
+
+ <!-- shoulder stevo lift  XZ-->
+  <link name="shoulder_stevo_lift">
+    <visual>
+      <geometry>
+       <box size="0.054 .0403 .027"/>
+      </geometry>
+      <material name="black">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link> 
+
+  <joint name="shoulder_stevo_axis_to_lift_stevo" type="fixed">
+    <parent link="shoulder_stevo_axis"/>
+    <child link="shoulder_stevo_lift"/>
+    <!-- origin xyz="0.0 -0.01015 -0.028"/ -->
+   <origin xyz="0 0 -0.028"/>
+  </joint>
+
+ <!-- shoulder stevo lift  axis XZ-->
+  <link name="shoulder_stevo_lift_axis">
+    <visual>
+      <geometry>
+       <cylinder length=".0704" radius="0.0029"></cylinder>
+      </geometry>
+      <material name="yellow">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+
+  <joint name="shoulder_stevo_lift_to_axis" type="fixed">
+    <axis xyz="0 0 1"/> 
+    <parent link="shoulder_stevo_lift"/>
+    <child link="shoulder_stevo_lift_axis"/>
+    <origin rpy="1.57075 0.7 0" xyz="0.0135 0.0 0.0"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>     
+
+<!-- big arm -->
+  <!-- eft side-->
+  <link name="big_arm_up">
+    <visual>
+      <geometry>
+       <box size="0.145 .027 .002"/>
+      </geometry>
+      <material name="sliver">
+          <color rgba="223 223 223 1"/>
+      </material>  
+    </visual>
+  </link> 
+
+ <joint name="shoulder_stevo_lift_axis_to_left_big_arm" type="fixed">
+    <parent link="shoulder_stevo_lift_axis"/>
+    <child link="big_arm_up"/>
+    <!-- origin xyz="0.059 0.0 -0.035"/ -->
+    <origin rpy="0 0 0" xyz="0.059 0.0 -0.035"/>
+  </joint>  
+
+ <!-- right side-->
+  <link name="big_arm_down">
+    <visual>
+      <geometry>
+       <box size="0.145 .027 .002"/>
+      </geometry>
+      <material name="sliver">
+          <color rgba="223 223 223 1"/>
+      </material>  
+    </visual>
+  </link> 
+
+ <joint name="big_arm_up_to_left_big_arm_down" type="fixed">
+    <parent link="big_arm_up"/>
+    <child link="big_arm_down"/>
+    <origin xyz="0.0 0.0 0.07"/>
+  </joint>   
+
+
+<!-- arm stevo-->
+
+  <link name="arm_stevo_axis">
+    <visual>
+      <geometry>
+       <cylinder length=".0704" radius="0.0029"></cylinder>
+      </geometry>
+      <material name="yellow">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+
+  <joint name="big_arm_up_to_axis" type="fixed">
+    <axis xyz="0 0 1"/> 
+    <parent link="big_arm_up"/>
+    <child link="arm_stevo_axis"/>
+    <origin rpy="0 0 0.5" xyz="0.059 0.0 0.0352"/>
+    <limit effort="100" velocity="100" lower="0" upper="3.1415926"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>  
+
+  <link name="arm_stevo">
+    <visual>
+      <geometry>
+       <box size="0.054 .027 .0403"/>
+      </geometry>
+      <material name="black">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link> 
+
+ <joint name="big_arm_up_to_axis_to_arm_stevo" type="fixed">
+    <parent link="arm_stevo_axis"/>
+    <child link="arm_stevo"/>
+    <origin xyz="0.0135 0.0 0.0"/>
+  </joint>  
+
+<!-- small arm -->
+ <!-- left side-->
+  <link name="small_arm_up">
+    <visual>
+      <geometry>
+       <box size="0.0725 .027 .002"/>
+      </geometry>
+      <material name="sliver">
+          <color rgba="223 223 223 1"/>
+      </material>  
+    </visual>
+  </link> 
+
+ <joint name="arm_stevo_to_left_small_arm_up" type="fixed">
+    <parent link="arm_stevo"/>
+    <child link="small_arm_up"/>
+    <origin xyz="0.059 0.0 -0.035"/>
+  </joint>  
+
+  <!-- right side-->
+  <link name="small_arm_down">
+    <visual>
+      <geometry>
+       <box size="0.0725 .027 .002"/>
+      </geometry>
+      <material name="sliver">
+          <color rgba="223 223 223 1"/>
+      </material>  
+    </visual>
+  </link> 
+
+ <joint name="small_arm_up_to_small_arm_down" type="fixed">
+    <parent link="small_arm_up"/>
+    <child link="small_arm_down"/>
+    <origin xyz="0.0 0.0 0.07"/>
+  </joint>  
+
+ <!-- middle side-->
+  <link name="small_arm_middle">
+    <visual>
+      <geometry>
+       <box size="0.07 .027 .002"/>
+      </geometry>
+      <material name="sliver">
+          <color rgba="223 223 223 1"/>
+      </material>  
+    </visual>
+  </link> 
+
+ <joint name="small_arm_up_to_small_arm_middle" type="fixed">
+    <parent link="small_arm_up"/>
+    <child link="small_arm_middle"/>
+    <origin rpy="0 1.57075 0" xyz="-0.035 0.0 0.035"/>
+  </joint> 
+
+<!--wrist stevo-->
+  <link name="wrist_stevo_axis">
+    <visual>
+      <geometry>
+       <cylinder length=".0704" radius="0.0029"></cylinder>
+      </geometry>
+      <material name="yellow">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+
+  <joint name="small_arm_up_to_axis" type="fixed">
+    <axis xyz="0 0 1"/> 
+    <parent link="small_arm_up"/>
+    <child link="wrist_stevo_axis"/>
+    <origin rpy="0 0 0.5" xyz="0.0295 0.0 0.0352"/>
+    <limit effort="100" velocity="100" lower="0" upper="3.1415926"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>  
+
+  <link name="wrist_stevo">
+    <visual>
+      <geometry>
+       <box size="0.054 .027 .0403"/>
+      </geometry>
+      <material name="black">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link> 
+
+ <joint name="small_arm_up_to_axis_to_axis_stevo" type="fixed">
+    <parent link="wrist_stevo_axis"/>
+    <child link="wrist_stevo"/>
+    <origin xyz="0.0135 0.0 0.0"/>
+  </joint> 
+
+<!--wrist run stevo-->
+  <link name="wrist_run_stevo">
+    <visual>
+      <geometry>
+       <box size="0.054 .027 .0403"/>
+      </geometry>
+      <material name="green">
+          <color rgba="0 255 0 1 "/>
+      </material>  
+    </visual>
+  </link> 
+
+ <joint name="wrist_stevo_to_wrist_run_stevo" type="fixed">
+    <parent link="wrist_stevo"/>
+    <child link="wrist_run_stevo"/>
+    <origin rpy="0 1.57075 0" xyz="0.0135 -0.027 0.0"/>
+  </joint>   
+
+  <link name="wrist_run_stevo_axis">
+    <visual>
+      <geometry>
+       <cylinder length=".04" radius="0.0029"></cylinder>
+      </geometry>
+      <material name="yellow">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+
+  <joint name="wrist_run_stevo_to_axis" type="fixed">
+    <axis xyz="0 0 1"/> 
+    <parent link="wrist_run_stevo"/>
+    <child link="wrist_run_stevo_axis"/>
+    <!-- origin rpy="0 0 0" xyz="0.0135 0 0.020"/ -->
+    <origin rpy="0 0 0" xyz="0 0 0.020"/>
+    <limit effort="100" velocity="100" lower="0" upper="3.1415926"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint> 
+
+<!-- hand run stevo -->
+  <link name="hand_run_stevo">
+    <visual>
+      <geometry>
+       <box size="0.054 .027 .0403"/>
+      </geometry>
+      <material name="black">
+          <color rgba="0 0 0 1 "/>
+      </material>  
+    </visual>
+  </link> 
+
+ <joint name="wrist_run_stevo_axis_to_hand_run_stevo" type="fixed">
+    <parent link="wrist_run_stevo_axis"/>
+    <child link="hand_run_stevo"/>
+    <origin rpy="1.57075 0 0" xyz="0.0 0.0 0.0335"/>
+  </joint>  
+
+ <link name="hand_run_stevo_axis">
+    <visual>
+      <geometry>
+       <cylinder length=".04" radius="0.0029"></cylinder>
+      </geometry>
+      <material name="yellow">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+
+  <joint name="hand_run_stevo_to_hand_run_stevo_axis" type="fixed">
+    <axis xyz="0 0 1"/> 
+    <parent link="hand_run_stevo"/>
+    <child link="hand_run_stevo_axis"/>
+    <!-- origin rpy="0 0 0" xyz="0.0135 0 0.0135"/ -->
+    <origin rpy="0 0 0" xyz="0 0 0.0135"/>
+    <limit effort="100" velocity="100" lower="0" upper="3.1415916"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>    
+
+
+<!--finger-->
+  <link name="finger">
+    <visual>
+      <geometry>
+       <box size="0.0375 .0135 .002"/>
+      </geometry>
+      <material name="sliver">
+          <color rgba="223 223 223 1"/>
+      </material>  
+    </visual>
+  </link> 
+
+ <joint name="hand_run_stevo_axis_to_finger" type="fixed">
+    <parent link="hand_run_stevo_axis"/>
+    <child link="finger"/>
+    <origin rpy="0 0 1.57075" xyz="0.0 0.0173 0.02"/>
+  </joint>     
+
+</robot>
