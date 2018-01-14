@@ -1,0 +1,1220 @@
+<?xml version="1.0"?>
+<robot name="diego1">
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.20 .15 .003"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="left_leg">
+    <visual>
+      <geometry>
+        <box size="0.14 .003 .095"/>
+      </geometry>
+     </visual>
+  </link>
+
+  <joint name="base_to_left_leg" type="fixed">
+    <parent link="base_link"/>
+    <child link="left_leg"/>
+    <origin xyz="0.0 0.075 -0.046"/>
+  </joint>
+  
+  <link name="right_leg">
+    <visual>
+      <geometry>
+        <box size="0.14 .003 .095"/>
+      </geometry>
+     </visual>
+  </link>
+
+  <joint name="base_to_right_leg" type="fixed">
+    <parent link="base_link"/>
+    <child link="right_leg"/>
+    <origin xyz="0.0 -0.075 -0.046"/>
+  </joint>  
+  
+  <link name="left_leg_front">
+    <visual>
+      <geometry>
+        <box size="0.05 .003 .03"/>
+      </geometry>
+     </visual>
+  </link>
+  
+  <joint name="base_to_left_leg_front" type="fixed">
+    <parent link="left_leg"/>
+    <child link="left_leg_front"/>
+    <origin xyz="0.095 0.0 -0.0025"/>
+  </joint>
+  
+  <link name="left_leg_back">
+    <visual>
+      <geometry>
+        <box size="0.05 .003 .03"/>
+      </geometry>
+     </visual>
+  </link>
+  
+  <joint name="base_to_left_leg_back" type="fixed">
+    <parent link="left_leg"/>
+    <child link="left_leg_back"/>
+    <origin xyz="-0.095 0.0 -0.0325"/>
+  </joint>
+  
+  <link name="right_leg_front">
+    <visual>
+      <geometry>
+        <box size="0.05 .003 .03"/>
+      </geometry>
+     </visual>
+  </link>
+  
+  <joint name="base_to_right_leg_front" type="fixed">
+    <parent link="right_leg"/>
+    <child link="right_leg_front"/>
+    <origin xyz="0.095 0.0 -0.0025"/>
+  </joint>
+  
+  <link name="right_leg_back">
+    <visual>
+      <geometry>
+        <box size="0.05 .003 .03"/>
+      </geometry>
+     </visual>
+  </link>
+  
+  <joint name="base_to_right_leg_back" type="fixed">
+    <parent link="right_leg"/>
+    <child link="right_leg_back"/>
+    <origin xyz="-0.095 0.0 -0.0325"/>
+  </joint>
+  
+  <link name="tyer_master_right_axis">
+    <visual>
+      <geometry>
+       <cylinder length=".06" radius="0.005"></cylinder>
+      </geometry>
+      <material name="yellow">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="right_leg_to_master_right_axix" type="continuous">
+    <axis xyz="0 0 1"/> 
+    <parent link="right_leg"/>
+    <child link="tyer_master_right_axis"/>
+    <origin rpy="1.57075 0 0" xyz="0.03 -0.0315 0.0175"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+
+  <link name="tyer_master_left_axis">
+    <visual>
+      <geometry>
+       <cylinder length=".06" radius="0.005"></cylinder>
+      </geometry>
+      <material name="yellow">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="left_leg_to_master_left_axis" type="continuous">
+    <axis xyz="0 0 1"/> 
+    <parent link="left_leg"/>
+    <child link="tyer_master_left_axis"/>
+    <origin rpy="1.57075 0 0" xyz="0.03 0.0315 0.0175"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+  
+  <link name="tyer_master_right_motor">
+    <visual>
+      <geometry>
+       <cylinder length=".068" radius="0.0075"></cylinder>
+      </geometry>
+      <material name="black">
+          <color rgba="0 0 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="right_leg_to_master_right_motor" type="fixed">
+    <axis xyz="0 0 1"/> 
+    <parent link="right_leg"/>
+    <child link="tyer_master_right_motor"/>
+    <origin rpy="1.57075 0 0" xyz="0.03 0.0315 0.0175"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+
+  <link name="tyer_master_left_motor">
+    <visual>
+      <geometry>
+       <cylinder length=".06" radius="0.0075"></cylinder>
+      </geometry>
+      <material name="black">
+          <color rgba="0 0 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="left_leg_to_master_left_motor" type="fixed">
+    <axis xyz="0 0 1"/> 
+    <parent link="left_leg"/>
+    <child link="tyer_master_left_motor"/>
+    <origin rpy="1.57075 0 0" xyz="0.03 -0.0315 0.0175"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+  
+  <link name="tyer_slave_right_axis1">
+    <visual>
+      <geometry>
+       <cylinder length=".06" radius="0.005"></cylinder>
+      </geometry>
+      <material name="yellow">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="right_leg_to_slave_right_axix1" type="continuous">
+    <axis xyz="0 0 1"/> 
+    <parent link="right_leg_front"/>
+    <child link="tyer_slave_right_axis1"/>
+    <origin rpy="1.57075 0 0" xyz="0.02 -0.0315 0.0"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+  
+  <link name="tyer_slave_right_axis2">
+    <visual>
+      <geometry>
+       <cylinder length=".06" radius="0.005"></cylinder>
+      </geometry>
+      <material name="yellow">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="right_leg_to_slave_right_axix2" type="continuous">
+    <axis xyz="0 0 1"/> 
+    <parent link="right_leg"/>
+    <child link="tyer_slave_right_axis2"/>
+    <origin rpy="1.57075 0 0" xyz="0.063 -0.0315 -0.0405"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+
+  <link name="tyer_slave_right_axis3">
+    <visual>
+      <geometry>
+       <cylinder length=".06" radius="0.005"></cylinder>
+      </geometry>
+      <material name="yellow">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="right_leg_to_slave_right_axix3" type="continuous">
+    <axis xyz="0 0 1"/> 
+    <parent link="right_leg"/>
+    <child link="tyer_slave_right_axis3"/>
+    <origin rpy="1.57075 0 0" xyz="0.008 -0.0315 -0.0405"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+  
+  <link name="tyer_slave_right_axis4">
+    <visual>
+      <geometry>
+       <cylinder length=".06" radius="0.005"></cylinder>
+      </geometry>
+      <material name="yellow">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="right_leg_to_slave_right_axix4" type="continuous">
+    <axis xyz="0 0 1"/> 
+    <parent link="right_leg"/>
+    <child link="tyer_slave_right_axis4"/>
+    <origin rpy="1.57075 0 0" xyz="-0.047 -0.0315 -0.0405"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>  
+  
+  <link name="tyer_slave_right_axis5">
+    <visual>
+      <geometry>
+       <cylinder length=".06" radius="0.005"></cylinder>
+      </geometry>
+      <material name="yellow">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="right_leg_to_slave_right_axix5" type="continuous">
+    <axis xyz="0 0 1"/> 
+    <parent link="right_leg_back"/>
+    <child link="tyer_slave_right_axis5"/>
+    <origin rpy="1.57075 0 0" xyz="-0.018 -0.0315 -0.008"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>    
+  
+  <link name="tyer_slave_left_axis1">
+    <visual>
+      <geometry>
+       <cylinder length=".06" radius="0.005"></cylinder>
+      </geometry>
+      <material name="yellow">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="right_leg_to_slave_left_axix1" type="continuous">
+    <axis xyz="0 0 1"/> 
+    <parent link="left_leg_front"/>
+    <child link="tyer_slave_left_axis1"/>
+    <origin rpy="1.57075 0 0" xyz="0.02 0.0315 0.0"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+  
+  <link name="tyer_slave_left_axis2">
+    <visual>
+      <geometry>
+       <cylinder length=".06" radius="0.005"></cylinder>
+      </geometry>
+      <material name="yellow">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="right_leg_to_slave_left_axix2" type="continuous">
+    <axis xyz="0 0 1"/> 
+    <parent link="left_leg"/>
+    <child link="tyer_slave_left_axis2"/>
+    <origin rpy="1.57075 0 0" xyz="0.063 0.0315 -0.0405"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+
+  <link name="tyer_slave_left_axis3">
+    <visual>
+      <geometry>
+       <cylinder length=".06" radius="0.005"></cylinder>
+      </geometry>
+      <material name="yellow">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="right_leg_to_slave_left_axix3" type="continuous">
+    <axis xyz="0 0 1"/> 
+    <parent link="left_leg"/>
+    <child link="tyer_slave_left_axis3"/>
+    <origin rpy="1.57075 0 0" xyz="0.008 0.0315 -0.0405"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+  
+  <link name="tyer_slave_left_axis4">
+    <visual>
+      <geometry>
+       <cylinder length=".06" radius="0.005"></cylinder>
+      </geometry>
+      <material name="yellow">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="right_leg_to_slave_left_axix4" type="continuous">
+    <axis xyz="0 0 1"/> 
+    <parent link="left_leg"/>
+    <child link="tyer_slave_left_axis4"/>
+    <origin rpy="1.57075 0 0" xyz="-0.047 0.0315 -0.0405"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>    
+
+  <link name="tyer_slave_left_axis5">
+    <visual>
+      <geometry>
+       <cylinder length=".06" radius="0.005"></cylinder>
+      </geometry>
+      <material name="yellow">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="right_leg_to_slave_left_axix5" type="continuous">
+    <axis xyz="0 0 1"/> 
+    <parent link="left_leg_back"/>
+    <child link="tyer_slave_left_axis5"/>
+    <origin rpy="1.57075 0 0" xyz="-0.018 0.0315 -0.008"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>    
+  
+  <link name="tyer_master_left">
+    <visual>
+      <geometry>
+       <cylinder length=".03" radius="0.0275"></cylinder>
+      </geometry>
+      <material name="green">
+          <color rgba="0 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="right_leg_to_master_left" type="fixed">
+    <axis xyz="0 0 1"/> 
+    <parent link="tyer_master_left_axis"/>
+    <child link="tyer_master_left"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0025 0.00"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>  
+  
+  <link name="tyer_master_right">
+    <visual>
+      <geometry>
+       <cylinder length=".03" radius="0.0275"></cylinder>
+      </geometry>
+      <material name="green">
+          <color rgba="0 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="right_leg_to_master_right" type="fixed">
+    <axis xyz="0 0 1"/> 
+    <parent link="tyer_master_right_axis"/>
+    <child link="tyer_master_right"/>
+    <origin rpy="0 0 0" xyz="0.0 -0.0025 0.00"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+  
+  <link name="tyer_slave1_left">
+    <visual>
+      <geometry>
+       <cylinder length=".024" radius="0.0275"></cylinder>
+      </geometry>
+      <material name="green">
+          <color rgba="0 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="right_leg_to_slave1_left" type="fixed">
+    <axis xyz="0 0 1"/> 
+    <parent link="tyer_slave_left_axis1"/>
+    <child link="tyer_slave1_left"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0025 0.00"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>         
+  
+  <link name="tyer_slave2_left">
+    <visual>
+      <geometry>
+       <cylinder length=".024" radius="0.0275"></cylinder>
+      </geometry>
+      <material name="green">
+          <color rgba="0 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="right_leg_to_slave2_left" type="fixed">
+    <axis xyz="0 0 1"/> 
+    <parent link="tyer_slave_left_axis2"/>
+    <child link="tyer_slave2_left"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0025 0.00"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>  
+  
+  <link name="tyer_slave3_left">
+    <visual>
+      <geometry>
+       <cylinder length=".024" radius="0.0275"></cylinder>
+      </geometry>
+      <material name="green">
+          <color rgba="0 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="right_leg_to_slave3_left" type="fixed">
+    <axis xyz="0 0 1"/> 
+    <parent link="tyer_slave_left_axis3"/>
+    <child link="tyer_slave3_left"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0025 0.00"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>   
+  
+  <link name="tyer_slave4_left">
+    <visual>
+      <geometry>
+       <cylinder length=".024" radius="0.0275"></cylinder>
+      </geometry>
+      <material name="green">
+          <color rgba="0 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="right_leg_to_slave4_left" type="fixed">
+    <axis xyz="0 0 1"/> 
+    <parent link="tyer_slave_left_axis4"/>
+    <child link="tyer_slave4_left"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0025 0.00"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>    
+  
+  <link name="tyer_slave5_left">
+    <visual>
+      <geometry>
+       <cylinder length=".024" radius="0.0275"></cylinder>
+      </geometry>
+      <material name="green">
+          <color rgba="0 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="right_leg_to_slave5_left" type="fixed">
+    <axis xyz="0 0 1"/> 
+    <parent link="tyer_slave_left_axis5"/>
+    <child link="tyer_slave5_left"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0025 0.00"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>           
+
+  <link name="tyer_slave1_right">
+    <visual>
+      <geometry>
+       <cylinder length=".024" radius="0.0275"></cylinder>
+      </geometry>
+      <material name="green">
+          <color rgba="0 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+    
+  <joint name="right_leg_to_slave1_right" type="fixed">
+    <axis xyz="0 0 1"/> 
+    <parent link="tyer_slave_right_axis1"/>
+    <child link="tyer_slave1_right"/>
+    <origin rpy="0 0 0" xyz="0.0 -0.0025 0.00"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>   
+  
+  <link name="tyer_slave2_right">
+    <visual>
+      <geometry>
+       <cylinder length=".024" radius="0.0275"></cylinder>
+      </geometry>
+      <material name="green">
+          <color rgba="0 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="right_leg_to_slave2_right" type="fixed">
+    <axis xyz="0 0 1"/> 
+    <parent link="tyer_slave_right_axis2"/>
+    <child link="tyer_slave2_right"/>
+    <origin rpy="0 0 0" xyz="0.0 -0.0025 0.00"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>      
+  
+  
+  <link name="tyer_slave3_right">
+    <visual>
+      <geometry>
+       <cylinder length=".024" radius="0.0275"></cylinder>
+      </geometry>
+      <material name="green">
+          <color rgba="0 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="right_leg_to_slave3_right" type="fixed">
+    <axis xyz="0 0 1"/> 
+    <parent link="tyer_slave_right_axis3"/>
+    <child link="tyer_slave3_right"/>
+    <origin rpy="0 0 0" xyz="0.0 -0.0025 0.00"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>   
+  
+  <link name="tyer_slave4_right">
+    <visual>
+      <geometry>
+       <cylinder length=".024" radius="0.0275"></cylinder>
+      </geometry>
+      <material name="green">
+          <color rgba="0 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="right_leg_to_slave4_right" type="fixed">
+    <axis xyz="0 0 1"/> 
+    <parent link="tyer_slave_right_axis4"/>
+    <child link="tyer_slave4_right"/>
+    <origin rpy="0 0 0" xyz="0.0 -0.0025 0.00"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>    
+  
+  <link name="tyer_slave5_right">
+    <visual>
+      <geometry>
+       <cylinder length=".024" radius="0.0275"></cylinder>
+      </geometry>
+      <material name="green">
+          <color rgba="0 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="right_leg_to_slave5_right" type="fixed">
+    <axis xyz="0 0 1"/> 
+    <parent link="tyer_slave_right_axis5"/>
+    <child link="tyer_slave5_right"/>
+    <origin rpy="0 0 0" xyz="0.0 -0.0025 0.00"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>  
+  
+  <link name="caterpilar_left1">
+    <visual>
+      <geometry>
+       <box size="0.10 .045 .0015"/>
+      </geometry>
+      <material name="black">
+          <color rgba="0 0 0 1"/>
+      </material>  
+    </visual>
+  </link>    
+  
+  <joint name="tyer_master_left_motor_to_caterpilar_left1" type="fixed">
+    <parent link="tyer_master_left_motor"/>
+    <child link="caterpilar_left1"/>
+    <origin rpy="1.57075 0 -0.24178" xyz="0.05 0.02 -0.068"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>  
+  
+  <link name="caterpilar_left2">
+    <visual>
+      <geometry>
+       <box size="0.16 .045 .0015"/>
+      </geometry>
+      <material name="black">
+          <color rgba="0 0 0 1"/>
+      </material>  
+    </visual>
+  </link>    
+  
+  <joint name="tyer_master_left_motor_to_caterpilar_left2" type="fixed">
+    <parent link="tyer_master_left_motor"/>
+    <child link="caterpilar_left2"/>
+    <origin rpy="1.57075 0 0.38178" xyz="-0.080 -0.00 -0.068"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>    
+  
+  <link name="caterpilar_left3">
+    <visual>
+      <geometry>
+       <box size="0.07 .045 .0015"/>
+      </geometry>
+      <material name="black">
+          <color rgba="0 0 0 1"/>
+      </material>  
+    </visual>
+  </link>    
+  
+  <joint name="tyer_master_left_motor_to_caterpilar_left3" type="fixed">
+    <parent link="tyer_slave2_left"/>
+    <child link="caterpilar_left3"/>
+    <origin rpy="1.57075 0 0.64178" xyz="0.0405 -0.0065 -0.002"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>  
+  
+  <link name="caterpilar_left4">
+    <visual>
+      <geometry>
+       <box size="0.18 .045 .0015"/>
+      </geometry>
+      <material name="black">
+          <color rgba="0 0 0 1"/>
+      </material>  
+    </visual>
+  </link>    
+  
+  <joint name="tyer_master_left_motor_to_caterpilar_left4" type="fixed">
+    <parent link="tyer_slave2_left"/>
+    <child link="caterpilar_left4"/>
+    <origin rpy="1.57075 0 0" xyz="-0.09 -0.028 -0.002"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>    
+  
+  <link name="caterpilar_right1">
+    <visual>
+      <geometry>
+       <box size="0.10 .045 .0015"/>
+      </geometry>
+      <material name="black">
+          <color rgba="0 0 0 1"/>
+      </material>  
+    </visual>
+  </link>    
+  
+  <joint name="tyer_master_left_motor_to_caterpilar_right1" type="fixed">
+    <parent link="tyer_master_right_motor"/>
+    <child link="caterpilar_right1"/>
+    <origin rpy="1.57075 0 -0.24178" xyz="0.05 0.02 0.068"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>  
+  
+  <link name="caterpilar_right2">
+    <visual>
+      <geometry>
+       <box size="0.16 .045 .0015"/>
+      </geometry>
+      <material name="yellow">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link>    
+  
+  <joint name="tyer_master_left_motor_to_caterpilar_right2" type="fixed">
+    <parent link="tyer_master_right_motor"/>
+    <child link="caterpilar_right2"/>
+    <origin rpy="1.57075 0 0.38178" xyz="-0.080 -0.00 0.068"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>    
+  
+  <link name="caterpilar_right3">
+    <visual>
+      <geometry>
+       <box size="0.07 .045 .0015"/>
+      </geometry>
+      <material name="black">
+          <color rgba="0 0 0 1"/>
+      </material>  
+    </visual>
+  </link>    
+  
+  <joint name="tyer_master_left_motor_to_caterpilar_right3" type="fixed">
+    <parent link="tyer_slave2_right"/>
+    <child link="caterpilar_right3"/>
+    <origin rpy="1.57075 0 0.64178" xyz="0.0405 -0.0065 0.002"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>  
+  
+  <link name="caterpilar_right4">
+    <visual>
+      <geometry>
+       <box size="0.18 .045 .0015"/>
+      </geometry>
+      <material name="black">
+          <color rgba="0 0 0 1"/>
+      </material>  
+    </visual>
+  </link>    
+  
+  <joint name="tyer_master_left_motor_to_caterpilar_right4" type="fixed">
+    <parent link="tyer_slave2_right"/>
+    <child link="caterpilar_right4"/>
+    <origin rpy="1.57075 0 0" xyz="-0.09 -0.028 0.002"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>    
+  
+  <link name="arm_base">
+    <visual>
+      <geometry>
+       <box size="0.11 .11 .013"/>
+      </geometry>
+      <material name="black">
+          <color rgba="255 255 255 1"/>
+      </material>  
+    </visual>
+  </link>  
+  
+  <joint name="base_to_arm_base" type="fixed">
+    <parent link="base_link"/>
+    <child link="arm_base"/>
+    <origin xyz="0.085 0.0 0.008"/>
+  </joint>  
+  
+  <link name="control_box">
+    <visual>
+      <geometry>
+       <box size="0.16 .128 .14"/>
+      </geometry>
+      <material name="black">
+          <color rgba="255 255 255 1"/>
+      </material>  
+    </visual>
+  </link>  
+  
+  <joint name="base_to_control_box" type="fixed">
+    <parent link="base_link"/>
+    <child link="control_box"/>
+    <origin xyz="-0.07 0.0 0.0715"/>
+  </joint>  
+<!-- camera holder-->  
+  <link name="camera_holder">
+    <visual>
+      <geometry>
+       <box size="0.043 .03 .59"/>
+      </geometry>
+      <material name="silver">
+          <color rgba="161 161 161 1"/>
+      </material>  
+    </visual>
+  </link>  
+  
+  <joint name="control_box_to_camera_holder" type="fixed">
+    <parent link="control_box"/>
+    <child link="camera_holder"/>
+    <origin xyz="-0.0215 0.0 0.365"/>
+  </joint>  
+  
+<!-- xtion-->
+  <link name="xtion_camera_base">
+    <visual>
+      <geometry>
+       <box size="0.038 .10 .025"/>
+      </geometry>
+      <material name="black">
+          <color rgba="0 0 1 1"/>
+      </material>  
+    </visual>
+  </link>  
+  
+  <joint name="camera_holder_to_xtion_camera_base" type="fixed">
+    <parent link="camera_holder"/>
+    <child link="xtion_camera_base"/>
+    <origin xyz="0.0 0.0 0.3075"/>
+  </joint>
+  
+  <link name="xtion_camera_base_neck">
+    <visual>
+      <geometry>
+       <box size="0.020 .020 .020"/>
+      </geometry>
+      <material name="black">
+          <color rgba="0 0 50 1"/>
+      </material>  
+    </visual>
+  </link>  
+  
+  <joint name="xtion_camera_base_to_neck" type="fixed">
+    <parent link="xtion_camera_base"/>
+    <child link="xtion_camera_base_neck"/>
+    <origin xyz="0.009 0.0 0.0125"/>
+  </joint>   
+  
+  <link name="xtion_camera">
+    <visual>
+      <geometry>
+       <box size="0.038 .18 .027"/>
+      </geometry>
+      <material name="black">
+          <color rgba="0 0 1 1"/>
+      </material>  
+    </visual>
+  </link>  
+  
+  <joint name="xtion_camera_base_neck_to_camera" type="fixed">
+    <parent link="xtion_camera_base_neck"/>
+    <child link="xtion_camera"/>
+    <origin xyz="0.0 0.0 0.0235"/>
+  </joint>      
+  
+  <link name="xtion_camera_eye_left">
+    <visual>
+      <geometry>
+       <cylinder length=".002" radius="0.005"></cylinder>
+      </geometry>
+      <material name="yellow">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="xtion_camera_to_eye_left" type="fixed">
+    <axis xyz="0 0 1"/> 
+    <parent link="xtion_camera"/>
+    <child link="xtion_camera_eye_left"/>
+    <origin rpy="0 1.57075 0" xyz="0.0191 0.045 0.0"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>   
+  
+  <link name="xtion_camera_eye_right">
+    <visual>
+      <geometry>
+       <cylinder length=".002" radius="0.005"></cylinder>
+      </geometry>
+      <material name="yellow">
+          <color rgba="1 1 0 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="xtion_camera_to_eye_right" type="fixed">
+    <axis xyz="0 0 1"/> 
+    <parent link="xtion_camera"/>
+    <child link="xtion_camera_eye_right"/>
+    <origin rpy="0 1.57075 0" xyz="0.0191 -0.045 0.0"/>
+    <limit effort="100" velocity="100"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+<!--arm-->
+  <link name="arm_round_joint_stevo0">
+    <visual>
+      <geometry>
+       <cylinder length=".013" radius="0.05"></cylinder>
+      </geometry>
+      <material name="blue">
+          <color rgba="0 0 255 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="arm_base_to_arm_round_joint_stevo0" type="revolute">
+    <axis xyz="0 0 1"/> 
+    <parent link="arm_base"/>
+    <child link="arm_round_joint_stevo0"/>
+    <origin rpy="0 0 0" xyz="0.00 0.00 0.013"/>
+    <limit effort="100" velocity="100" lower="-1.5707963" upper="1.5707963"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>  
+  
+  <link name="shoulder_1">
+    <visual>
+      <geometry>
+       <box size="0.065 .065 .037"/>
+      </geometry>
+      <material name="silver1">
+          <color rgba="232 232 232 1"/>
+      </material>  
+    </visual>
+  </link>  
+  
+  <joint name="arm_round_joint_stevo0_to_shoulder_1" type="fixed">
+    <parent link="arm_round_joint_stevo0"/>
+    <child link="shoulder_1"/>
+    <origin xyz="0.0 0.0 0.025"/>
+  </joint>  
+  
+   <link name="shoulder_2">
+    <visual>
+      <geometry>
+       <box size="0.05 .065 .105"/>
+      </geometry>
+      <material name="silver">
+          <color rgba="232 232 232 1"/>
+      </material>  
+    </visual>
+  </link>  
+  
+  <joint name="shoulder_1_to_shoulder_1" type="fixed">
+    <parent link="shoulder_1"/>
+    <child link="shoulder_2"/>
+    <origin rpy="0 0.785398 0" xyz="0.022 0.0 0.03915"/>
+  </joint>  
+  
+  <link name="arm_joint_stevo1">
+    <visual>
+      <geometry>
+       <cylinder length=".09" radius="0.025"></cylinder>
+      </geometry>
+      <material name="black">
+          <color rgba="255 255 255 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="shoulder_2_to_arm_joint_stevo1" type="revolute">
+    <axis xyz="0 0 1"/> 
+    <parent link="shoulder_2"/>
+    <child link="arm_joint_stevo1"/>
+    <origin rpy="1.5707963 0 0" xyz="0.00 0.00 0.025"/>
+    <limit effort="100" velocity="100" lower="-0.1899" upper="1.5707963"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>  
+  
+   <link name="big_arm">
+    <visual>
+      <geometry>
+       <box size="0.05 .05 .13"/>
+      </geometry>
+      <material name="blue">
+          <color rgba="0 0 255 1"/>
+      </material>  
+    </visual>
+  </link>  
+  
+  <joint name="arm_joint_stevo1_to_big_arm" type="fixed">
+    <parent link="arm_joint_stevo1"/>
+    <child link="big_arm"/>
+    <origin rpy="1.5707963 0 0" xyz="0.0 0.065 0.0"/>
+  </joint>  
+  
+  <link name="arm_joint_stevo2">
+    <visual>
+      <geometry>
+       <cylinder length=".06" radius="0.025"></cylinder>
+      </geometry>
+      <material name="black">
+          <color rgba="255 255 255 1"/>
+      </material>  
+    </visual>
+  </link>
+  
+  <joint name="big_arm_round_to_joint_stevo2" type="revolute">
+    <axis xyz="0 0 1"/> 
+    <parent link="big_arm"/>
+    <child link="arm_joint_stevo2"/>
+    <origin rpy="1.5707963 0 0" xyz="0.00 0.00 -0.065"/>
+    <limit effort="100" velocity="100" lower="1.0" upper="2.5891"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>    
+
+  <link name="arm_joint_stevo3">
+    <visual>
+      <geometry>
+       <cylinder length=".12" radius="0.012"></cylinder>
+      </geometry>
+      <material name="blue">
+          <color rgba="0 0 255 1"/>
+      </material>  
+    </visual>
+  </link>  
+  
+ <joint name="arm_joint_stevo2_to_arm_joint_stevo3" type="revolute">
+    <axis xyz="0 0 1"/> 
+    <parent link="arm_joint_stevo2"/>
+    <child link="arm_joint_stevo3"/>
+    <origin rpy="1.5707963 -0.52359877 0" xyz="0.00 -0.06 0.00"/>
+    <limit effort="100" velocity="100" lower="-1.5707963" upper="1.5707963"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint> 
+
+  <link name="wrist">
+    <visual>
+      <geometry>
+       <box size="0.045 .04 .06"/>
+      </geometry>
+      <material name="blue">
+          <color rgba="0 0 255 1"/>
+      </material>  
+    </visual>
+  </link>  
+  
+  <joint name="arm_joint_stevo3_to_wrist" type="fixed">
+    <parent link="arm_joint_stevo3"/>
+    <child link="wrist"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.09"/>
+  </joint>  
+
+  <link name="arm_joint_stevo4">
+    <visual>
+      <geometry>
+       <cylinder length=".05" radius="0.02"></cylinder>
+      </geometry>
+      <material name="black">
+          <color rgba="255 255 255 1"/>
+      </material>  
+    </visual>
+  </link>  
+  
+ <joint name="wrist_to_arm_joint_stevo4" type="revolute">
+    <axis xyz="0 0 1"/> 
+    <parent link="wrist"/>
+    <child link="arm_joint_stevo4"/>
+    <origin rpy="0 1.5707963 0" xyz="0.00 0.00 0.03"/>
+    <limit effort="100" velocity="100" lower="-1.5707963" upper="1.5707963"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+
+  <link name="arm_joint_stevo5">
+    <visual>
+      <geometry>
+       <cylinder length=".04" radius="0.02"></cylinder>
+      </geometry>
+      <material name="black">
+          <color rgba="255 255 255 1"/>
+      </material>  
+    </visual>
+  </link>
+  <joint name="arm_joint_stevo4_to_arm_joint_stevo5" type="revolute">
+    <axis xyz="0 0 1"/> 
+    <parent link="arm_joint_stevo4"/>
+    <child link="arm_joint_stevo5"/>
+    <origin rpy="0 1.5707963 0" xyz="-0.02 0.00 0.00"/>
+    <limit effort="100" velocity="100" lower="-1.5707963" upper="1.5707963"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint> 
+
+  <link name="hand">
+    <visual>
+      <geometry>
+       <box size="0.04 .06 .02"/>
+      </geometry>
+      <material name="blue">
+          <color rgba="0 0 255 1"/>
+      </material>  
+    </visual>
+  </link>  
+  
+  <joint name="arm_joint_stevo5_to_hand" type="fixed">
+    <parent link="arm_joint_stevo5"/>
+    <child link="hand"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 -0.03"/>
+  </joint> 
+
+  <link name="grip_joint_stevo6">
+    <visual>
+      <geometry>
+       <cylinder length=".05" radius="0.005"></cylinder>
+      </geometry>
+      <material name="black">
+          <color rgba="255 255 255 1"/>
+      </material>  
+    </visual>
+  </link>
+  <joint name="hand_to_grip_joint_stevo6" type="revolute">
+    <axis xyz="0 0 1"/> 
+    <parent link="hand"/>
+    <child link="grip_joint_stevo6"/>
+    <origin rpy="0 1.5707963 0" xyz="0.00 0.015 0.00"/>
+    <limit effort="100" velocity="100" lower="-0.1762" upper="0.8285"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint> 
+
+  <link name="grip_joint_stevo7">
+    <visual>
+      <geometry>
+       <cylinder length=".05" radius="0.005"></cylinder>
+      </geometry>
+      <material name="black">
+          <color rgba="255 255 255 1"/>
+      </material>  
+    </visual>
+  </link>
+  <joint name="hand_to_grip_joint_stevo7" type="revolute">
+    <axis xyz="0 0 1"/> 
+    <parent link="hand"/>
+    <child link="grip_joint_stevo7"/>
+    <origin rpy="0 1.5707963 0" xyz="0.00 -0.015 0.00"/>
+    <limit effort="100" velocity="100" lower="-0.8285" upper="0.1584"/> 
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint> 
+
+  <link name="finger_left_big">
+    <visual>
+      <geometry>
+       <box size="0.04 .009 .045"/>
+      </geometry>
+      <material name="red">
+          <color rgba="194 194 194 1"/>
+      </material>  
+    </visual>
+  </link>  
+  
+  <joint name="grip_joint_stevo6_to_finger_left_big" type="fixed">
+    <parent link="grip_joint_stevo6"/>
+    <child link="finger_left_big"/>
+    <origin rpy="0 0 0.34906585" xyz="0.03 0.0 0.0"/>
+  </joint> 
+
+  <link name="finger_left_small">
+    <visual>
+      <geometry>
+       <box size="0.04 .009 .045"/>
+      </geometry>
+      <material name="red">
+          <color rgba="194 194 194 1"/>
+      </material>  
+    </visual>
+  </link>  
+  
+  <joint name="finger_left_big_to_finger_left_small" type="fixed">
+    <parent link="finger_left_big"/>
+    <child link="finger_left_small"/>
+    <origin rpy="0 0 -0.34906585" xyz="0.04 -0.008 0.0"/>
+  </joint> 
+
+  <link name="finger_right_big">
+    <visual>
+      <geometry>
+       <box size="0.04 .009 .045"/>
+      </geometry>
+      <material name="red">
+          <color rgba="194 194 194 1"/>
+      </material>  
+    </visual>
+  </link>  
+  
+  <joint name="grip_joint_stevo7_to_finger_right_big" type="fixed">
+    <parent link="grip_joint_stevo7"/>
+    <child link="finger_right_big"/>
+    <origin rpy="0 0 -0.34906585" xyz="0.03 0.0 0.0"/>
+  </joint>
+  <link name="finger_right_small">
+    <visual>
+      <geometry>
+       <box size="0.04 .009 .045"/>
+      </geometry>
+      <material name="red">
+          <color rgba="194 194 194 1"/>
+      </material>  
+    </visual>
+  </link>  
+  
+  <joint name="finger_right_big_to_finger_right_small" type="fixed">
+    <parent link="finger_right_big"/>
+    <child link="finger_right_small"/>
+    <origin rpy="0 0 0.34906585" xyz="0.04 0.008 0.0"/>
+  </joint> 
+ </robot>
+

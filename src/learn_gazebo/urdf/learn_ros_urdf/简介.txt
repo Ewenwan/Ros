@@ -3,6 +3,12 @@ http://blog.csdn.net/sujun3304/article/details/18962719
 ROS机器人模型urdf简明笔记
 http://blog.csdn.net/zhangrelay/article/details/60959642
 
+较好的 urdf教程
+http://blog.csdn.net/mwlwlm/article/details/54342451
+http://www.diegorobot.com/wp/?p=1254&lang=zh
+
+
+
 moveit教程
 http://www.ncnynl.com/archives/201610/1028.html
 http://www.guyuehome.com/tag/moveit
@@ -15,7 +21,8 @@ http://www.guyuehome.com/tag/moveit
  <link name="base_link" />  
 
 3定义关节
-  <joint name="joint_base_wheel1" type="fixed">  
+  <joint name="joint_base_wheel1" type="fixed"> 
+ // type="fixed"定义了轴的 特效  fixed 固定不动  revolute 能够旋转180    continuous 能够旋转 360 
     <parent link="base_link"/> #连接到的部件1 
     <child link="wheel_1"/>    #连接到的部件2
   </joint>
@@ -264,6 +271,7 @@ rosrun moveit_setup_assistant moveit_setup_assistant
     rosrun xacro xacro.py 03_xacro.xacro > 03_xacro.urdf 
 
     roslaunch urdf_tutorial xacrodisplay.launch model:=03_xacro.xacro  
+
 
 
 

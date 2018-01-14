@@ -1,0 +1,193 @@
+
+一、 使用 机械臂 urdf文件，来配置moveit 生成配置文件
+
+
+1.首先我们需要安装moveit，执行如下命令
+   apt-get install ros-indigo-moveit
+卸载
+   apt-get autoremove ros-indigo-moveit
+2.打开moveit设置助手
+roslaunch moveit_setup_assistant setup_assistant.launch
+
+3.创建新的moveit配置包
+点击create new moveit configuration package按钮 
+
+
+4.载入urdf文件
+1)点击browse按钮选择urdf文件， 选择 创建的 06_arm_model_simp.urdf
+2)点击load files载入urdf文件 
+
+	载入后，就可以在右侧看到我们创建的机械臂模型，而且在右侧显示栏中可以用鼠标进行拖动操作，放大缩小，旋转，和Rviz中的操作方式是一样的.
+
+注：rviz查看 
+roslaunch urdf_tutorial display.launch model:=06_arm_model_simp.urdf
+
+
+5.创建碰撞检测
+点击self-collisions按钮 ,可以调整sampling density，数值越高计算的时间越长，
+调整完后点击 Regenerate Default Collision Matrix按钮即开始计算。
+
+
+6.创建虚拟关节
+点击左侧的Virtual Joints
+点击右下角的 Add Virtual Joint按钮
+参数配置如下:
+Virtual Joint Name:    world_joint   虚拟关节
+Child Link:            base_link     机器人 基座 部件
+Parent Frame Name:     world_frame   虚拟部件 机器人与世界坐标系相连接
+Joint Type:            Planar        是移动式的机器人人，所以这里选Planar
+
+
+7.创建planning Groups
+点击左侧的Planning Groups
+点击add Group创建，这里我们创建planning Groups 
+
+ 创建两个
+ 其一  手臂链
+ 参数 group name: arm
+      Kinematic Solver: kdl_kinematics_plugin/KDLKinematicsPlugin  运动学求解器
+ 点击 Add Chain 配置链 
+Base Link： shoulder_stevo
+Tip  Link： hand_run_stevo
+
+ 其二  手抓
+ 参数 group name: gripper
+      Kinematic Solver: kdl_kinematics_plugin/KDLKinematicsPlugin  运动学求解器
+ 点击 Add Chain 配置链 
+ Base Link： hand_run_stevo_aixs
+ Tip  Link： finger
+
+
+8 配置机器臂的预设姿势
+点击左侧Robot Poses 
+
+
+9.配置终端控制器，手部关节
+点击end effectors
+点击Add end Effector,添加手臂的终端控制器
+End Effector Name : arm_gripper
+
+End Effector Group: gripper        链群
+
+Parent Link :  hand_run_stevo      //parent link一般选择arm的最后一个关节，点击save保存
+
+Parent Group:  arm                 链群
+
+
+10.添加作者信息
+name：  XXXX
+email： XXXXX@XXXX.com
+
+
+11.生产配置包
+选择 文件夹 six_dof_arm__move_config 作为 catkin src  的 包
+
+
+12.运行Rviz的模拟环境下对Moveit进行测试，以矫正urdf文件，及相关的配置，
+待都符合机械臂的设计要求后，就可以把配置好的moveit移植到实际的机械臂上运行。
+
+roslaunch six_dof_arm__move_config demo.launch
+
+
+
+
+
+#########################
+
+.打开moveit设置助手
+roslaunch moveit_setup_assistant setup_assistant.launch
+
+3.创建新的moveit配置包
+点击create new moveit configuration package按钮 
+
+
+4.载入urdf文件
+1)点击browse按钮选择urdf文件， 选择 创建的 08_robot_one_arm_simp.urdf
+2)点击load files载入urdf文件 
+
+
+5.创建碰撞检测
+点击self-collisions按钮 ,可以调整sampling density，数值越高计算的时间越长，
+调整完后点击 Regenerate Default Collision Matrix按钮即开始计算。
+
+
+6.创建虚拟关节
+点击左侧的Virtual Joints
+点击右下角的 Add Virtual Joint按钮
+参数配置如下:
+Virtual Joint Name:    world_joint   虚拟关节
+Child Link:            base_link     机器人 基座 部件
+Parent Frame Name:     odom   虚拟部件 机器人与世界坐标系相连接
+Joint Type:            Planar        是移动式的机器人人，所以这里选Planar
+
+
+7.创建planning Groups
+点击左侧的Planning Groups
+点击add Group创建，这里我们创建planning Groups 
+
+ 创建两个
+ 其一  手臂链
+ 参数 group name: arm
+      Kinematic Solver: kdl_kinematics_plugin/KDLKinematicsPlugin  运动学求解器
+ 点击 Add Chain 配置链 
+Base Link： arm_base
+Tip  Link： arm_joint_stevo5
+
+ 其二  手抓
+ 参数 group name: hand
+      Kinematic Solver: kdl_kinematics_plugin/KDLKinematicsPlugin  运动学求解器
+ 点击 Add Links  关节
+左侧 导入
+hand
+grip_joint_stevo6
+finger_left_big
+finger_left_small
+grip_joint_stevo7
+finger_right_big
+finger_right_small
+
+
+
+8 配置机器臂的预设姿势
+点击左侧Robot Poses 
+
+
+1     arm_def_pose
+ Planning Group :arm
+
+2 hand_open_pose
+ Planning Group :hand
+
+
+
+9.配置终端控制器，手部关节
+点击end effectors
+点击Add end Effector,添加手臂的终端控制器
+
+End Effector Name : gripper
+
+End Effector Group: hand        
+
+Parent Link :  arm_joint_stevo5      //parent link一般选择arm链群的最后一个关节，点击save保存
+
+Parent Group:  arm                 链群
+
+
+9.5. Passive Joints
+
+ 中没有涉及到被动关节，不需要设置
+
+
+10.添加作者信息
+name：  XXXX       ewenwan
+email： XXXXX@XXXX.com   1756429307@qq.com
+
+
+11.生产配置包
+选择 文件夹 robot_one_arm_moveit_con作为 catkin src  的 包
+
+
+12.运行Rviz的模拟环境下对Moveit进行测试，以矫正urdf文件，及相关的配置，
+待都符合机械臂的设计要求后，就可以把配置好的moveit移植到实际的机械臂上运行。
+
+roslaunch robot_one_arm_moveit_con demo.launch
