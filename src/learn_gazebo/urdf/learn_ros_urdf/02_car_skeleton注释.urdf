@@ -1,0 +1,106 @@
+<?xml version="1.0"?>  
+<robot name="test_robot"> 
+<!-- material blue and black color  材质 颜色属性-->
+  <material name="blue">  
+    <color rgba="0 0 .8 1"/>  
+<!-- red green blud  Alpha 
+R    ：红色值。正整数 0~255 | 百分数
+G    ：绿色值。正整数       | 百分数 
+B    ：蓝色值。正整数       | 百分数
+A    ：透明度。取值0~1之间   0完全透明 看不见  1 完全不透明 传统数字图像
+-->
+  </material>   
+  <material name="back"> 
+    <color rgba="0 0 0 1"/>
+  </material> 
+
+<!-- 5 link = base_link + 4 wheel 
+5个部件
+一个基地部件
+四个轮子部件
+-->
+
+	<!--
+	base_link
+	一个基地部件
+	-->
+      <link name="base_link">  
+        <visual>  
+           <geometry> 
+ <!-- 长方体  长宽高尺寸 c k g -->
+             <box size="0.2 .3 .5"/> 
+           </geometry> 
+<!-- 
+本部件的坐标系原点 相对于 部件的几何中心 
+rpy分别为 绕xyz三轴的旋转角度 逆时针为正 弧度制
+xyz分别为 相对几何中心沿着 xyz轴平移的距离
+-->
+           <origin rpy="0 0 0" xyz="0 0 0.25"/> 
+	   <material name="blue"/> 
+        </visual>  
+      </link>  
+      
+      <link name="wheel_1">  
+        <visual>  
+          <geometry>  
+            <cylinder length="0.05" radius="0.05"/>  
+          </geometry>  
+          <origin rpy="0 1.5 0" xyz="0.1 0.1 0"/>  
+	  <material name="black"/> 
+        </visual>  
+      </link>  
+      
+      <link name="wheel_2">  
+        <visual>  
+          <geometry>  
+            <cylinder length="0.05" radius="0.05"/>  
+          </geometry>  
+          <origin rpy="0 1.5 0" xyz="-0.1 0.1 0"/> 
+	  <material name="black"/>  
+        </visual>  
+      </link>  
+      
+      <link name="wheel_3">  
+        <visual>  
+          <geometry>  
+            <cylinder length="0.05" radius="0.05"/>  
+          </geometry>  
+          <origin rpy="0 1.5 0" xyz="0.1 -0.1 0"/>  
+	  <material name="black"/> 
+        </visual>  
+      </link>  
+      
+      <link name="wheel_4">  
+        <visual>  
+          <geometry>  
+            <cylinder length="0.05" radius="0.05"/>  
+          </geometry>  
+          <origin rpy="0 1.5 0" xyz="-0.1 -0.1 0"/>  
+	  <material name="black"/> 
+        </visual>  
+      </link>  
+
+<!-- 4 joint = base_link to 4 wheel -->      
+      <joint name="joint_base_wheel1" type="fixed">  
+// joint节点名称，type="fixed"表明是固定的连接关系
+//  type="continuous"表明是可以持续旋转 0~360度  
+//  type="revolute"  表明是可以旋转 0~180度
+        <parent link="base_link"/>  
+        <child link="wheel_1"/>  
+      </joint>  
+      
+      <joint name="joint_base_wheel2" type="fixed">  
+        <parent link="base_link"/>  
+        <child link="wheel_2"/>  
+      </joint>  
+      
+      <joint name="joint_base_wheel3" type="fixed">  
+        <parent link="base_link"/>  
+        <child link="wheel_3"/>  
+      </joint>  
+      
+      <joint name="joint_base_wheel4" type="fixed">  
+        <parent link="base_link"/>  
+        <child link="wheel_4"/>  
+      </joint>  
+</robot>  
