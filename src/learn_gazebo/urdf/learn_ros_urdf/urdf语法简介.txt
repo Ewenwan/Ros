@@ -1,0 +1,381 @@
+http://blog.csdn.net/sujun3304/article/details/18962719
+
+ROS机器人模型urdf简明笔记
+http://blog.csdn.net/zhangrelay/article/details/60959642
+
+较好的 urdf教程
+http://blog.csdn.net/mwlwlm/article/details/54342451
+http://www.diegorobot.com/wp/?p=1254&lang=zh
+
+
+
+moveit教程
+http://www.ncnynl.com/archives/201610/1028.html
+http://www.guyuehome.com/tag/moveit
+
+
+Unable to Model:  建模能力有限  不能建模如下
+http://wustl.probablydavid.com/publications/URDFandYou.pdf
+●
+Four Bar Linkage    四连杆
+●
+Functional Gears    功能齿轮
+●
+Pulleys/Ropes       滑轮和绳索
+●
+Flexible Materials  柔性材料
+●
+Certain Types of Joints 某些类型的关节 
+●
+Unoptimized Complex Models  未经优化的复杂模型
+
+
+
+1 定义机器人
+<robot name="test_robot">
+</robot> 
+
+2定义部件
+ <link name="base_link" />  
+
+3定义关节
+  <joint name="joint_base_wheel1" type="fixed"> 
+ // type="fixed"定义了轴的 特效  fixed 固定不动  revolute 能够旋转180    continuous 能够旋转 360   
+// 可以使用关节限制 限定旋转范围
+    <parent link="base_link"/> #连接到的部件1 
+    <child link="wheel_1"/>    #连接到的部件2
+  </joint>
+
+
+定义关节类型，可选项有：
+    revolute - 旋转关节，其极限位置由 upper and lower limits 决定
+    continuous - 旋转关节，无位置限制
+    prismatic - 滑动关节，其极限位置由 upper and lower limits 决定
+    fixed - 虚拟关节，关节不可运动
+    floating - 六自由度关节
+    planar - 平面关节
+
+
+
+4检查语法
+check_urdf 01_skeleton.urdf
+	<!-- 语法检查   check_urdf 01_skeleton.urdf --> 
+	<!-- rviz可视化 roslaunch urdf_tutorial display.launch model:=02_visual.urdf  -->
+
+
+5定义视觉效果
+<visual>tag用来描述模块的视觉效果。
+
+5.1定义大小和形状
+<geometry>tag 用来描述模块的形状和大小。
+<box size="0.2 .3 .1"/> 
+
+ <!-- 长方体  长宽高尺寸  单位m -->
+
+// link节点还可以是圆柱体，和球状体，如下代码是diego1.urdf中车轮的描述部分
+// 圆柱体 <cylinder length=".068" radius="0.0075"></cylinder> 一个半径为0.0075m,而高为0.068m的圆柱体
+// 球状体 <sphere  ></sphere>
+
+
+
+使用 模型文件
+// dae文件
+<geometry>
+<mesh filename=
+"package://roscon_urdf/shoulder_pan.dae" />
+</geometry>
+
+
+// stl文件
+<geometry>
+<mesh filename=
+"package://pr2_description/meshes/base_v0/base_L.stl"/>
+</geometry>
+
+
+
+5.2定义位置xyz 和 姿态rpy
+<origin>tag用来描述模块的位置。
+<origin rpy="0 0 0" xyz="0 0 0.05"/>  
+
+6定义颜色
+       <material name="white">  
+         <color rgba="1 1 1 1"/>  
+       </material> 
+
+<!-- red green blud  Alpha 
+R    ：红色值。正整数 0~255 | 百分数
+G    ：绿色值。正整数       | 百分数 
+B    ：蓝色值。正整数       | 百分数
+A    ：透明度。取值0~1之间   0完全透明 看不见  1 完全不透明 传统数字图像
+-->
+
+
+
+7在<visual>等内就可以直接使用
+<material name="white"/> 
+
+使用图片纹理
+<material name="pattern">
+<texture filename="package://roscon_urdf/logo.jpg"/>
+</material>
+
+
+8碰撞
+<!-- “碰撞”体积定义在仿真时，对应结构的物理体积，一般使它和geometry中的参数设置一致。
+其他情况：需要更快计算碰撞检测时可将复杂结构的碰撞体积定义为比较简单的几何形状
+，或者为了限制行为接近敏感设备时将碰撞体积设置较大来增加安全区域 -->  
+<collision>  
+      <geometry>  
+        <cylinder length="0.2" radius="0.03"/>  <!-- 同上的圆筒参数一致 -->  
+      </geometry>  
+      <origin rpy="0 1.57075 0 " xyz="0.1 0 0"/>  <!-- 原点参数也一致 -->  
+</collision>  
+
+9惯量
+<inertial>  <!-- “惯量” -->  
+      <mass value="0.05"/>  <!-- “质量”单位Kg -->  
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>  
+<!-- 为转动惯量矩阵，需要刚体动力学基础，可用一些三维制图软件计算 -->  
+</inertial>  
+
+
+
+10.关节的物理属性。经常用来详述建模属性，特别是对仿真必不可少
+
+    damping (optional, defaults to 0)
+关节的物理阻尼值
+    friction (optional, defaults to 0)
+关节的物理静摩擦力
+ 关节限制   (required only for revolute and prismatic joint)
+<limit effort="100" velocity="100" lower="-0.8285" upper="0.1584"/> 
+       力矩 100N.M   速度 100m/s    旋转角度限制  最低 lower="-0.8285"  最高 upper="0.1584"
+
+
+
+
+02_car_skeleton.urdf
+
+<?xml version="1.0"?>         // urdf  使用 1.0版本的 xml文件 规范
+<robot name="test_robot">     // ################ robot节点 ###########################
+<robot name="six_arm">        // 最高层节点是 <robot> 这个节点中可以定义机器人的名字
+                                    /*
+					<?xml version="1.0"?>
+					<robot name="diego1">
+
+					...
+
+					</robot>
+					*/
+//  link是指机器人的一个部件，比如说机器人的底盘，摄像头，手臂等。
+//  Joint是指机器人的各个部件的连接关节。
+
+	  <material name="blue">  
+	    <color rgba="0 0 .8 1"/> 
+	  </material>   
+	  <material name="back"> 
+	    <color rgba="0 0 .8 1"/>
+	  </material> 
+
+// ################ Link1节点  必须名为 base_link ######################
+
+      <link name="base_link">  
+        <visual>  
+           <geometry>  
+             <box size="0.2 .3 .1"/>  
+           </geometry>  
+           <origin rpy="0 0 0" xyz="0 0 0.05"/> 
+	   <material name="blue"/> 
+        </visual>  
+      </link>  
+      
+      <link name="wheel_1">  
+        <visual>  
+          <geometry>  
+            <cylinder length="0.05" radius="0.05"/>  
+          </geometry>  
+          <origin rpy="0 1.5 0" xyz="0.1 0.1 0"/>  
+	  <material name="black"/> 
+        </visual>  
+      </link>  
+      
+      <link name="wheel_2">  
+        <visual>  
+          <geometry>  
+            <cylinder length="0.05" radius="0.05"/>  
+          </geometry>  
+          <origin rpy="0 1.5 0" xyz="-0.1 0.1 0"/> 
+	  <material name="black"/>  
+        </visual>  
+      </link>  
+      
+      <link name="wheel_3">  
+        <visual>  
+          <geometry>  
+            <cylinder length="0.05" radius="0.05"/>  
+          </geometry>  
+          <origin rpy="0 1.5 0" xyz="0.1 -0.1 0"/>  
+	  <material name="black"/> 
+        </visual>  
+      </link>  
+      
+      <link name="wheel_4">  
+        <visual>  
+          <geometry>  
+            <cylinder length="0.05" radius="0.05"/>  
+          </geometry>  
+          <origin rpy="0 1.5 0" xyz="-0.1 -0.1 0"/>  
+	  <material name="black"/> 
+        </visual>  
+      </link>  
+      
+      <joint name="joint_base_wheel1" type="fixed">  
+        <parent link="base_link"/>  
+        <child link="wheel_1"/>  
+      </joint>  
+      
+      <joint name="joint_base_wheel2" type="fixed">  
+        <parent link="base_link"/>  
+        <child link="wheel_2"/>  
+      </joint>  
+      
+      <joint name="joint_base_wheel3" type="fixed">  
+        <parent link="base_link"/>  
+        <child link="wheel_3"/>  
+      </joint>  
+      
+      <joint name="joint_base_wheel4" type="fixed">  
+        <parent link="base_link"/>  
+        <child link="wheel_4"/>  
+      </joint>  
+</robot>  
+
+
+############################################################
+################################################################
+查看模型
+
+【1】 rviz显示
+roslaunch urdf_tutorial display.launch model:=02_car_skeleton.urdf
+
+【1】 Moveit显示
+使用Moveit Setup Assistant工具生成配置文件
+rosrun moveit_setup_assistant moveit_setup_assistant
+
+>>> Create_New* >>>  Load a URDF文件 >>>  Planning Groups >>>> Add Group >>> Group Name
+>>> Add Joints
+
+
+
+第四步： Xacro   优化urdf文件配置
+
+什么是Xacro? 我们可以把它理解成为针对URDF的扩展性和配置性而设计的宏语言(macro language)。
+
+有了Xacro，我们就可以像编程一样来写URDF文件了。
+
+首先我们来看Xacro文件的变量定义：
+
+    <xacro:property name="body_width" value=".2" />  
+
+只要定义了body_width，我们就可以通过${body_width}来引用其值了。
+有了这个，至少我们可以把需要配置的变量进行统一管理。
+其次，我们来看一下Xacro如何进行宏定义。
+
+这里的宏和C语言的宏很像，在转换成URDF文件时编译器会将其展开。其基本语法为：
+    <xacro:macro name="wheel" params="param1 param2">  
+    </xacro:macro>  
+
+我们来看下URDF文件中关于车身和车轮的大小描述。
+<box size="0.2 .3 .1"/>
+<origin rpy="0 0 0" xyz="0 0 0.05"/>
+<cylinder length="0.05" radius="0.05"/>
+<origin rpy="0 1.5 0" xyz="-0.1 0.1 0"/>
+
+这里涉及到的参数有：
+车身的大小（body_size），车身中心的位置(body_pos)。
+车轮半径(wheel_radius)和轮胎宽度(wheel_width)，
+车轮圆心的位置(wheel1_pos, wheel2_pos, wheel3_pos, wheel4_pos)。
+
+
+相应的在Xacro中定义参数的语法为：
+  <xacro:property name="body_size" value=".2 .3 .1" />  
+  <xacro:property name="body_pos" value="0 0 0.05" />  
+  <xacro:property name="wheel_radius" value="0.05" />  
+  <xacro:property name="wheel_length" value="0.05" />  
+  <xacro:property name="wheel1_pos" value="0.1 0.1 0" />  
+  <xacro:property name="wheel2_pos" value="-0.1 0.1 0" />  
+  <xacro:property name="wheel3_pos" value="0.1 -0.1 0" />  
+  <xacro:property name="wheel4_pos" value="-0.1 -0.1 0" /> 
+
+
+03_xacro.xacro
+
+
+<?xml version="1.0"?>  
+<robot xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"  
+         xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"  
+         xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"  
+         xmlns:xacro="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface" name="test_robot">  
+  
+  <xacro:property name="body_size" value=".2 .3 .1" />  
+  <xacro:property name="body_pos" value="0 0 0.05" />  
+  <xacro:property name="wheel_radius" value="0.05" />  
+  <xacro:property name="wheel_length" value="0.05" />  
+  <xacro:property name="wheel1_pos" value="0.1 0.1 0" />  
+  <xacro:property name="wheel2_pos" value="-0.1 0.1 0" />  
+  <xacro:property name="wheel3_pos" value="0.1 -0.1 0" />  
+  <xacro:property name="wheel4_pos" value="-0.1 -0.1 0" />  
+  
+  <xacro:macro name="wheel" params="wheelname position">  
+    <link name="${wheelname}">  
+      <visual>  
+        <geometry>  
+          <cylinder length="${wheel_length}" radius="${wheel_radius}"/>  
+        </geometry>  
+        <origin rpy="0 1.5 0" xyz="${position}"/>  
+        <material name="black">  
+          <color rgba="0 0 0 1"/>  
+        </material>  
+      </visual>  
+    </link>  
+  
+    <joint name="joint_base_${wheelname}" type="fixed">  
+      <parent link="base_link"/>  
+      <child link="${wheelname}"/>  
+    </joint>  
+  </xacro:macro>  
+  <xacro:wheel wheelname="wheel1" position="${wheel1_pos}"/>  
+  <xacro:wheel wheelname="wheel2" position="${wheel2_pos}"/>  
+  <xacro:wheel wheelname="wheel3" position="${wheel3_pos}"/>  
+  <xacro:wheel wheelname="wheel4" position="${wheel4_pos}"/>  
+  
+  <link name="base_link">  
+    <visual>  
+       <geometry>  
+         <box size="${body_size}"/>  
+       </geometry>  
+       <origin rpy="0 0 0" xyz="${body_pos}"/>  
+       <material name="white">  
+         <color rgba="1 1 1 1"/>  
+       </material>  
+    </visual>  
+  </link>  
+</robot>
+
+
+验证该文件的正确性可以有两种方法。
+1. 转换成URDF文件，使用check_urdf
+    rosrun xacro xacro.py 03_xacro.xacro > 03_xacro.urdf 
+
+    roslaunch urdf_tutorial xacrodisplay.launch model:=03_xacro.xacro  
+
+
+
+
+
+
+
+
+
+
+
