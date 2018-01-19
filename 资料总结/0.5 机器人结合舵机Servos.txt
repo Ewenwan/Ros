@@ -1,0 +1,276 @@
+
+# 相机 + 两自由度舵机 就可以使得相机 跟随 朝向 
+在可以不用移动 底座 身体的情况下 
+
+使用多功能 舵机 Dynamixel Servo 
+可以提供 反馈信息 位置 速度 力矩 等 信息
+
+URDF 机器人 模型 描述 可视化
+描述
+$ roslaunch rbx1_description test_turtlebot_with_head.launch
+#可视化
+$ rosrun rviz rviz -d `rospack find rbx1_description`/urdf.rviz
+
+
+多功能 电机 舵机控制器   串口控制 
+sudo apt-get install ros-indigo-dynamixel-motor
+
+控制 关节的  Position, Speed and Torque
+sudo apt-get install ros-indigo-dynamixel-controllers
+
+
+##  ROS 关节状态JointState  消息  结构
+rosmsg show sensor_msgs/JointState
+>>>
+std_msgs/Header header  // 消息头
+  uint32 seq            // 序列
+  time stamp            // 时间戳
+  string frame_id       // 坐标
+string[] name           // 关节名字   字符串数组 
+float64[] position      // 位置       浮点数数组 
+float64[] velocity      // 速度
+float64[] effort        // 受力   力矩 
+
+
+利用 多功能 舵机 发布的 关节多节 消息 
+发布 关节状态 话题数据 /joint_states
+
+
+
+控制位置 角度
+话题 <joint_controller_name>/command
+$ rostopic pub -1 /head_pan_joint/command std_msgs/Float64 -- -1.0  发布 负数 需要 --
+
+rostopic pub -1 /head_pan_joint/command std_msgs/Float64 1.0
+
+
+控制速度
+rosservice call /head_pan_joint/set_speed 0.5
+
+控制力矩 使用服务
+有关的两个服务 
+torque_enable      使能力矩控制
+set_torque_limit   最大力矩限制 
+
+释放舵机控制   随意手可以移动
+$ rosservice call /head_pan_joint/torque_enable False
+使能舵机控制 
+$ rosservice call /head_pan_joint/torque_enable True
+
+设置力矩限制  防止 舵机 强力抵抗 负载  烧毁舵机
+$ rosservice call /head_pan_joint/set_torque_limit 0.1
+
+
+设置 端口 波特率
+arbotix_terminal /dev/ttyUSB0 1000000
+
+ArbotiX Terminal --- Version 0.1
+Copyright 2011 Vanadium Labs LLC
+>> ls    查找总线上的 舵机设备
+1 .... .... .... .... .... .... .... ....
+.... .... .... .... .... .... .... .... ....
+>>
+
+# 变换 舵机 的 ID
+>>
+mv 1 2
+
+
+舵机参数配置文件
+rbx1_dynamixels/config/dynamixel_params.yaml
+
+joints: ['head_pan_joint', 'head_tilt_joint'] #舵机名字
+
+head_pan_joint:
+controller:
+package: dynamixel_controllers
+module: joint_position_controller
+type: JointPositionController
+joint_name: head_pan_joint
+joint_speed: 2.0
+motor:
+id: 1
+init: 512   #初始位置值
+min: 0      #位置最小值
+max: 1024   #位置最大值
+
+
+head_tilt_joint:
+controller:
+package: dynamixel_controllers
+module: joint_position_controller
+type: JointPositionController
+joint_name: head_tilt_joint
+joint_speed: 2.0
+motor:
+id: 2
+init: 512 #
+min: 300
+max: 800
+
+
+
+运行控制器 
+roslaunch rbx1_dynamixels dynamixels.launch
+可视化
+rosrun rviz rviz -d `rospack find rbx1_dynamixels`/dynamixels.rviz
+
+
+释放所有的 舵机
+rosrun rbx1_dynamixels relax_all_servos.py
+
+
+使用 两自由度 舵机 跟踪 目标(脸  关键点  颜色)
+
+rbx1_dynamixels/nodes/head_tracker.py
+
+
+跟踪脸
+1） 启动相机设备 
+深度摄像头 1 Microsoft Kinect:
+$ roslaunch freenect_launch freenect-registered-xyzrgb.launch
+
+深度摄像头 2华硕 Asus Xtion, Xtion Pro, or Primesense 1.08/1.09 cameras:
+$ roslaunch openni2_launch openni2.launch depth_registration:=true
+
+webcam  :
+$ roslaunch rbx1_vision usb_cam.launch video_device:=/dev/video0
+
+2） 舵机控制节点
+roslaunch rbx1_dynamixels dynamixels.launch
+测试舵机是否连接上
+$ rostopic pub -1 /head_pan_joint/command std_msgs/Float64 -- 1.0
+$ rostopic pub -1 /head_pan_joint/command std_msgs/Float64 -- 0.0
+
+3） 脸部追踪器
+roslaunch rbx1_vision face_tracker2.launch
+
+4）控制舵机 追踪 目标
+roslaunch rbx1_dynamixels head_tracker.launch
+
+按键 c 可以重新 检测脸
+head_tracker.py
+• 初始化舵机 Initialize the servos.
+• 订阅目标检测 结果话题  /roi .
+• /roi 目标中心 和视野中心 的性对位置, 控制水平旋转舵机(x 水平方向像素差)和 垂直旋转舵机(y垂直方向像素差值)
+                  起点 + roi 宽度/2 - 图像中心
+target_offset_x = msg.x_offset + msg.width / 2 - self.image_width / 2
+target_offset_y = msg.y_offset + msg.height / 2 - self.image_height / 2
+try:
+	percent_offset_x = float(target_offset_x) / (float(self.image_width) /2.0) // 偏移比例
+	percent_offset_y = float(target_offset_y) / (float(self.image_height) /2.0)
+except:
+	percent_offset_x = 0
+	percent_offset_y = 0
+
+if abs(percent_offset_x) > self.pan_threshold:
+        # 水平旋转舵机   速度
+	self.pan_speed = min(self.max_joint_speed, max(0, self.gain_pan *
+	abs(percent_offset_x)))
+	if target_offset_x > 0:  # 水平旋转舵机 目标位置  当前位置角度 -增量
+		self.pan_position = max(self.min_pan, current_pan -
+		self.lead_target_angle)
+	else:
+		self.pan_position = min(self.max_pan, current_pan +
+		self.lead_target_angle)
+else:
+	self.pan_speed = 0
+	self.pan_position = current_pan
+
+
+• If the /roi is lost for a given amount of time, re-center the servos to protect
+them from overheating.
+
+
+
+
+跟踪 颜色物体
+1） 启动相机设备 
+深度摄像头 1 Microsoft Kinect:
+$ roslaunch freenect_launch freenect-registered-xyzrgb.launch
+
+深度摄像头 2华硕 Asus Xtion, Xtion Pro, or Primesense 1.08/1.09 cameras:
+$ roslaunch openni2_launch openni2.launch depth_registration:=true
+
+webcam  :
+$ roslaunch rbx1_vision usb_cam.launch video_device:=/dev/video0
+
+2） 舵机控制节点
+roslaunch rbx1_dynamixels dynamixels.launch
+
+3）启动颜色目标检测节点
+roslaunch rbx1_vision camshift.launch
+
+4）舵机跟随节点 两自由度 相机旋转平台 
+roslaunch rbx1_dynamixels head_tracker.launch
+
+
+
+跟踪任意 物体 鼠标旋转的区域
+1） 启动相机设备 
+深度摄像头 1 Microsoft Kinect:
+$ roslaunch freenect_launch freenect-registered-xyzrgb.launch
+
+深度摄像头 2华硕 Asus Xtion, Xtion Pro, or Primesense 1.08/1.09 cameras:
+$ roslaunch openni2_launch openni2.launch depth_registration:=true
+
+webcam  :
+$ roslaunch rbx1_vision usb_cam.launch video_device:=/dev/video0
+
+2） 舵机控制节点
+roslaunch rbx1_dynamixels dynamixels.launch
+
+3） 特征点 光流跟踪 节点
+roslaunch rbx1_vision lk_tracker.launch
+
+4）舵机跟随节点 两自由度 相机旋转平台 
+roslaunch rbx1_dynamixels head_tracker.launch
+
+
+
+一个完整的 头部跟随 应用app
+rbx1_apps/launch/head_tracker_app.launch
+
+<launch>
+<!--The camera arg can be one of kinect, xtion, or usb 相机设备 -->
+<arg name="kinect" default="false" />
+<arg name="xtion" default="false" />
+<arg name="usb" default="false" />
+
+<!--These arguments determine which vision node we run 跟踪的目标 脸 颜色块 鼠标选择的物体关键点-->
+<arg name="face" default="false" />
+<arg name="color" default="false" />
+<arg name="keypoints" default="false" />
+
+<!-- Launch the appropriate camera driver kinect设备-->
+<include if="$(arg kinect)" file="$(find freenect_launch)/launch/examples/freenect-registered-xyzrgb.launch" />
+<!--  华硕 xtion设备-->
+<include if="$(arg xtion)" file="$(find openni2_launch)/launch/openni2.launch">
+<arg name="depth_registration" value="true" />
+</include>
+<!--  普通 usb相机设备 -->
+<include if="$(arg usb)" file="$(find rbx1_vision)/launch/usb_cam.launch" />
+
+<!--  脸部追踪 -->
+<include if="$(arg face)" file="$(findrbx1_vision)/launch/face_tracker2.launch" />
+<!--  颜色快追踪 -->
+<include if="$(arg color)" file="$(findrbx1_vision)/launch/camshift.launch" />
+<!--  特征点 光流追踪 -->
+<include if="$(arg keypoints)" file="$(findrbx1_vision)/launch/lk_tracker.launch" />
+<!--  舵机设备节点 -->
+<include file="$(find rbx1_dynamixels)/launch/dynamixels.launch" />
+<!--  舵机追踪控制器 -->
+<include file="$(find rbx1_dynamixels)/launch/head_tracker.launch" />
+</launch>
+
+
+
+
+运行 app 设置参数 color:=True keypoints:=True 
+roslaunch rbx1_apps head_tracker_app.launch kinect:=true face:=true
+
+
+
+
+
+
