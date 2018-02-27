@@ -1,0 +1,5 @@
+#Add Integers  
+int64 a # Request date type
+int64 b
+---
+int64 sum # Response date type
