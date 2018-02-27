@@ -104,15 +104,20 @@ rospack depends package_name 包依赖关系
     return 0;
     }
 
-    编译
+
+编译
+
     catkin_make
-    运行
+运行
+
     roscore
+    
     rosrun lesson_simple lesson_simple_node
 
 
 
-    标准消息 Standard data primitives-------------------
+标准消息 Standard data primitives-------------------
+
     – 布尔量
     Boolean:          bool
     – 整数 (有符号)
@@ -131,27 +136,31 @@ rospack depends package_name 包依赖关系
     Other: Nest message types for more complex data structure
 
 
-    自定义消息类型 -----------------------------------------
+自定义消息类型 -----------------------------------------
+
     以 .msg文件结尾 编译后形成 自定义消息头文件 放在 /msg文件下
-    位置消息类型 PathPosition.msg
+ 位置消息类型 PathPosition.msg
+    
     # A 2D position and orientation 注释
     Header  header
     float64 x     # X coordinate 水平方向坐标 
     float64 y     # Y coordinate 垂直方向坐标
     float64 angle # Orientation  方向
 
-    修改 package.xml  支持 自定义消息类型生成
+ 修改 package.xml  支持 自定义消息类型生成
     <build_depend>message_generation</build_depend>  // 编译依赖
     <run_depend>message_runtime</run_depend>         // 运行依赖
 
     修改 CMakeLists.txt
-    增加包生成（编译）依赖
+增加包生成（编译）依赖
+
     find_package(catkin REQUIRED COMPONENTS
       roscpp
       rospy
       message_generation
     )
-    增加需要生成的消息 的消息文件
+增加需要生成的消息 的消息文件
+ 
     ## Generate messages in the 'msg' folder
      add_message_files(
        FILES
@@ -160,13 +169,15 @@ rospack depends package_name 包依赖关系
     #   Message2.msg
      )
 
-    增加新增消息的 依赖消息类型 标准消息/之前自定义的消息
+增加新增消息的 依赖消息类型 标准消息/之前自定义的消息
+
     generate_messages(
        DEPENDENCIES
        std_msgs  # Or other packages containing msgs
      )
 
-    增加包 运行依赖
+增加包 运行依赖
+
     ## DEPENDS: system dependencies of this project that dependent projects also need
     catkin_package(
       INCLUDE_DIRS include
@@ -177,7 +188,8 @@ rospack depends package_name 包依赖关系
     #  DEPENDS system_lib
     )
 
-    增加消息头文件依赖 确保 节点运行前 自定义的消息已经自动生成头文件 可能有些问题
+ 增加消息头文件依赖 确保 节点运行前 自定义的消息已经自动生成头文件 可能有些问题
+ 
     可以先生成 消息头文件  再编译需要消息头文件的 源文件
      add_dependencies(simple_subscriber ${PROJECT_NAME}_generate_messages_cpp)
      add_dependencies(simple_publisher ${PROJECT_NAME}_generate_messages_cpp)
@@ -198,7 +210,8 @@ rospack depends package_name 包依赖关系
     rostopic echo <topic> 打印话题消息
     rostopic find <message_type> 查询发布指定消息类型的 话题
 
-    创建 PathPosition消息发布者 PathPosition_publisher.cpp 
+创建 PathPosition消息发布者 PathPosition_publisher.cpp 
+
     #include <ros/ros.h>
     #include <ros_industrial_learn/PathPosition.h>//包含自动生成的 自定义消息头文件
     #include <stdlib.h>                           //标准库 产生rand()随机数
@@ -246,18 +259,19 @@ rospack depends package_name 包依赖关系
     return 0;
     }
 
-    修改   CMakeLists.txt
+修改   CMakeLists.txt
+
     add_executable(PathPosition_pub_node src/PathPosition_publisher.cpp)
     target_link_libraries(PathPosition_pub_node ${catkin_LIBRARIES})
 
-    编译
+ 编译
     catkin_make
     运行
     roscore
     rosrun lesson_simple PathPosition_pub_node
 
 
-    创建 PathPosition消息订阅者 PathPosition_subscriber.cpp 
+创建 PathPosition消息订阅者 PathPosition_subscriber.cpp 
 
     #include <ros/ros.h>
     #include <ros_industrial_learn/PathPosition.h>//包含自动生成的 自定义消息头文件
@@ -288,19 +302,21 @@ rospack depends package_name 包依赖关系
     add_executable(PathPosition_sub_node src/PathPosition_subscriber.cpp)
     target_link_libraries(PathPosition_sub_node ${catkin_LIBRARIES})
 
-    编译
+ 编译
+ 
     catkin_make
     运行
     roscore
     rosrun lesson_simple PathPosition_sub_node
 
 
-    rqt_grapt 查看 话题 节点 关系 
+rqt_grapt 查看 话题 节点 关系 
 
 
 
 
-    参数 Parameters    全局变量
+参数 Parameters    全局变量
+
     参数服务器 Parameter Server
     配置文件 Config File 
     节点 Node
