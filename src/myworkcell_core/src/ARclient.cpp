@@ -1,10 +1,12 @@
 /**
 **  Simple ROS Node
-**  ARclient.cpp  客户端
+**  moveit 接口 运动规划 
 **/
 #include <ros/ros.h>// 系统头文件
 #include <myworkcell_core/LocalizePart.h>// 服务头文件
 
+#include <tf/tf.h>// 坐标变换
+#include <moveit/move_group_interface/move_group.h>//moveit 接口 新版 move_group_interface.h
 
 // 自定义类
 class ScanNPlan
@@ -32,6 +34,16 @@ public:
       return;
     }
     ROS_INFO_STREAM("part localized: " << srv.response);// 打印响应
+
+    // Plan for robot to move to part
+    //moveit::planning_interface::MoveGroupInterface move_group("manipulator");//运动规划组　配置文件里定义的　新版
+    moveit::planning_interface::MoveGroup move_group("manipulator");//运动规划组　配置文件里定义的 老板　
+    geometry_msgs::Pose move_target = srv.response.pose;//目标　位姿
+    move_group.setPoseTarget(move_target);// 设置　moveit 运动规划　目标位置
+    move_group.move();// 规划　并　执行
+    
+    
+
   }
 
 private:
@@ -55,10 +67,16 @@ int main(int argc, char **argv)
   // 私有节点获取参数                      坐标系参数名  存储变量    默认值
   private_node_handle.param<std::string>("base_frame", base_frame ,"world"); 
 
+// move_group.move() command requires use of an "asynchronous" spinner, 
+// to allow processing of ROS messages during the blocking move() command.
+  ros::AsyncSpinner async_spinner(1);
 
   ScanNPlan app(nh);// 客户端
-  ros::Duration(.5).sleep();  // 等待客户端初始化完成 wait for the class to initialize
+  sleep(3); //alows for debugging
+  ros::Duration(6).sleep();  // 等待客户端初始化完成 wait for the class to initialize
+  async_spinner.start();
   app.start(base_frame);// 请求服务
 
-  ros::spin();// 节点 存活  rosnode list 可以一直看到
+  // ros::spin();// 节点 存活  rosnode list 可以一直看到
+  ros::waitForShutdown();
 }
