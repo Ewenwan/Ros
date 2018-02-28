@@ -119,3 +119,31 @@ controller_joint_names: [shoulder_pan_joint, shoulder_lift_joint, elbow_joint, w
 
 运行　
 roslaunch myworkcell_moveit_config myworkcell_planning_execution.launch
+
+-----------------------------------------------------------------------------------
+
+######################################################################
+rviz 运动规划
+
+roslaunch myworkcell_moveit_config myworkcell_planning_execution.launch
+
+1　显示　Displays
+    Scene Robot -> Show Robot Visual　　　　　勾选
+    Scene Robot -> Show Robot Collision　　　×
+    Planning Request -> Query Start State　×
+    Planning Request -> Query Goal State　　勾选
+
+2　Motion Planning >> Planning
+   Query  >>>> Goal State 选择　random valid　　点击　Update
+　　　Commands >>> Plan / Plan and Execute
+
+3 显示规划　Displays -> Motion Planning -> Planned Path -> Show Trail
+
+4 更换　规划算法　Context >>> OMPL
+  RRTkConfigDefault  默认算法　较快
+
+5 添加障碍物
+Scene Objects >>>> Import File 
+
+https://raw.githubusercontent.com/ros-industrial/industrial_training/indigo/training/orig/3.5/src/I-Beam.dae
+
