@@ -1,0 +1,7 @@
+<launch>
+	<node name="fake_ar_publisher" pkg="fake_ar_publisher" type="fake_ar_publisher_node" />
+	<node name="ARserver_node" pkg="myworkcell_core" type="ARserver_node" />
+	<node name="ARclient_node" pkg="myworkcell_core" type="ARclient_node"  output="screen">
+            <param name="base_frame" value="world"/>
+        </node>
+</launch>
