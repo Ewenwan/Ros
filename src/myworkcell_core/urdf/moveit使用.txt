@@ -1,0 +1,121 @@
+Moveit  使用
+会生成新的 moveit 配置包  myworkcell_moveit_config
+配置一个机械臂 规划组  manipulator  包含 一个运动学规划链  从 UR5的基坐标系 base_link 到 末端 tool0
+
+1 启动配置助手
+roslaunch moveit_setup_assistant setup_assistant.launch
+2 选择 Create New MoveIt Configuration Package 
+3 勾选 Enable Jade+ xacro extensions 载入 workcell.xacro
+4 避免碰撞 矩阵 myworkcell_moveit_config/config/joint_names.yaml
+5 添加固定虚拟关节 Add a fixed virtual base joint.
+	name = 'FixedBase' (arbitrary)
+	child = 'world' (should match the URDF root link)
+	parent = 'world' (reference frame used for motion planning)
+	type = 'fixed'
+6 创建运动规划组 planning group
+   Group Name        ： manipulator
+   Kinematics Solver :  KDLKinematicsPlugin
+
+Add Kin.Chain: base_link 到 tool0
+
+
+7 添加确定位置
+  zero  关节全0
+  home  垂直举高
+
+8 末端执行机构 effectors/grippers
+  暂无
+
+9 被动关节 passive joints
+  暂无
+
+10 作者信息
+  需要添加  邮箱不会验证
+
+11 生成配置文件
+/home/ewenwan/ewenwan/catkin_ws/src/myworkcell_moveit_config
+
+12 运行
+roslaunch myworkcell_moveit_config demo.launch
+
+---------------------------------------------------------------
+
+在实际的硬件 UR5上实验
+需要在 配置文件下 myworkcell_moveit_config/config 新建一些配置文件
+1 创建 controllers.yaml 
+------------------------
+controller_list:
+  - name: ""
+    action_ns: joint_trajectory_action
+    type: FollowJointTrajectory
+    joints: [shoulder_pan_joint, shoulder_lift_joint, elbow_joint, wrist_1_joint, wrist_2_joint, wrist_3_joint]
+---------------------
+
+2 创建joint_names.yaml
+-----------------------------
+controller_joint_names: [shoulder_pan_joint, shoulder_lift_joint, elbow_joint, wrist_1_joint, wrist_2_joint, wrist_3_joint] 
+-----------------------------
+
+3 更新　myworkcell_moveit_config/launch/myworkcell_moveit_controller_manager.launch.xml
+------------------------------------
+<launch>
+  <arg name="moveit_controller_manager"
+       default="moveit_simple_controller_manager/MoveItSimpleControllerManager"/>
+  <param name="moveit_controller_manager"
+         value="$(arg moveit_controller_manager)"/>
+
+  <rosparam file="$(find myworkcell_moveit_config)/config/controllers.yaml"/>
+</launch>
+---------------------------------------------
+
+4 创建　新文件　myworkcell_moveit_config/launch/myworkcell_planning_execution.launch
+--------------------------------------------------
+<launch>
+  <!-- The planning and execution components of MoveIt! configured to run -->
+  <!-- using the ROS-Industrial interface. -->
+ 
+  <!-- Non-standard joint names:
+       - Create a file [robot_moveit_config]/config/joint_names.yaml
+           controller_joint_names: [joint_1, joint_2, ... joint_N] 
+       - Update with joint names for your robot (in order expected by rbt controller)
+       - and uncomment the following line: -->
+  <rosparam command="load" file="$(find myworkcell_moveit_config)/config/joint_names.yaml"/>
+ 
+  <!-- the "sim" argument controls whether we connect to a Simulated or Real robot -->
+  <!--  - if sim=false, a robot_ip argument is required -->
+  <arg name="sim" default="true" />
+  <arg name="robot_ip" unless="$(arg sim)" />
+ 
+  <!-- load the robot_description parameter before launching ROS-I nodes -->
+  <include file="$(find myworkcell_moveit_config)/launch/planning_context.launch" >
+    <arg name="load_robot_description" value="true" />
+  </include>
+
+  <!-- run the robot simulator and action interface nodes -->
+  <group if="$(arg sim)">
+    <include file="$(find industrial_robot_simulator)/launch/robot_interface_simulator.launch" />
+  </group>
+
+  <!-- run the "real robot" interface nodes -->
+  <!--   - this typically includes: robot_state, motion_interface, and joint_trajectory_action nodes -->
+  <!--   - replace these calls with appropriate robot-specific calls or launch files -->
+  <group unless="$(arg sim)">
+    <include file="$(find ur_bringup)/launch/ur5_bringup.launch" />
+  </group>
+
+  <!-- publish the robot state (tf transforms) -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+  <include file="$(find myworkcell_moveit_config)/launch/move_group.launch">
+    <arg name="publish_monitored_planning_scene" value="true" />
+  </include>
+
+  <include file="$(find myworkcell_moveit_config)/launch/moveit_rviz.launch">
+    <arg name="config" value="true"/>
+  </include>
+  
+</launch>
+------------------------------------------------------------------------------
+
+运行　
+roslaunch myworkcell_moveit_config myworkcell_planning_execution.launch
