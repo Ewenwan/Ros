@@ -1,12 +1,13 @@
 /**
 **  Simple ROS Node
 **  ARserver.cpp  服务器 
+**  加入坐标变换  监听
 **/
 #include <ros/ros.h>// 系统头文件
 // // git clone https://github.com/jmeyer1292/fake_ar_publisher.git 安装
 #include <fake_ar_publisher/ARMarker.h>// 自定义消息头文件
 #include <myworkcell_core/LocalizePart.h>// 服务头文件
-
+#include <tf/transform_listener.h>// 坐标变换  监听
 
 // 自定义类
 class Localizer
@@ -36,7 +37,21 @@ public:
       fake_ar_publisher::ARMarkerConstPtr p = last_msg_;
       if (!p) return false;//空指针 无信息
 
-      res.pose = p->pose.pose;
+      // res.pose = p->pose.pose;
+
+      tf::Transform cam_to_target;// 参考坐标系 相机 到 目标坐标系的变换
+      // geometry_msgs::Pose 转换到 tf::Transform object: 
+      tf::poseMsgToTF(p->pose.pose, cam_to_target);
+
+      // 监听 request.base_frame(客户端给的基坐标系) 到 ARMarker message  (which should be "camera_frame") 坐标变换
+      tf::StampedTransform req_to_cam;
+      listener_.lookupTransform(req.base_frame, p->header.frame_id, ros::Time(0), req_to_cam);
+
+      tf::Transform req_to_target;
+      req_to_target = req_to_cam * cam_to_target;// 目标 在客户端给的基 坐标系下的 坐标变换
+
+      tf::poseTFToMsg(req_to_target, res.pose);
+
       return true;
   }
 
@@ -44,6 +59,7 @@ public:
   ros::Subscriber ar_sub_;// 订阅者
   fake_ar_publisher::ARMarkerConstPtr last_msg_;//常量指针
   ros::ServiceServer server_;// 服务器
+  tf::TransformListener listener_;// 坐标变换监听
 };
 
 
