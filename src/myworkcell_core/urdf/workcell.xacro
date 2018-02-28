@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<robot name="myworkcell" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find ur_description)/urdf/ur5.urdf.xacro" />
+<!-- git clone https://github.com/ros-industrial/universal_robot.git  -->
+<!-- http://ros-industrial.github.io/industrial_training/_source/session3/Workcell-XACRO.html -->
+
+<!-- Add the world frame as a "virtual link" (no geometry) -->
+  <link name="world"/>
+
+<!-- the table frame  -->
+  <link name="table">
+    <visual>
+      <geometry>
+        <box size="1.0 1.0 0.05"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="1.0 1.0 0.05"/>
+      </geometry>
+    </collision>
+  </link>
+
+<!-- Add the camera_frame frame as another virtual link (no geometry)  -->
+  <link name="camera_frame"/>
+
+
+<!-- need to call the macro to create the robot links and joints.  -->
+  <xacro:ur5_robot prefix="" joint_limited="true"/>
+
+<!-- world  to table -->
+  <joint name="world_to_table" type="fixed">
+    <parent link="world"/>
+    <child link="table"/>
+    <origin xyz="0 0 0.5" rpy="0 0 0"/>
+  </joint>
+
+<!-- world to camera -->
+  <joint name="world_to_camera" type="fixed">
+    <parent link="world"/>
+    <child link="camera_frame"/>
+    <origin xyz="-0.25 -0.5 1.25" rpy="0 3.14159 0"/>
+  </joint>
+
+<!-- table to ur5_robot 
+Connect the UR5 base_link to your existing static geometry with a fixed link.
+-->
+  <joint name="table_to_robot" type="fixed">
+    <parent link="table"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+</robot>
