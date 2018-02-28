@@ -1,0 +1,9 @@
+<launch>
+  <arg name="gui" default="true"/>
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find myworkcell_core)/urdf/workcell.xacro'" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="$(arg gui)"/>
+  </node>
+  <node name="rviz" pkg="rviz" type="rviz" if="$(arg gui)"/>
+</launch>
