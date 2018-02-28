@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<robot name="myworkcell" xmlns:xacro="http://ros.org/wiki/xacro">
+<!-- Add the world frame as a "virtual link" (no geometry) -->
+  <link name="world"/>
+<!-- the table frame  -->
+  <link name="table">
+    <visual>
+      <geometry>
+        <box size="1.0 1.0 0.05"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="1.0 1.0 0.05"/>
+      </geometry>
+    </collision>
+  </link>
+<!-- Add the camera_frame frame as another virtual link (no geometry)  -->
+  <link name="camera_frame"/>
+<!-- joint -->
+  <joint name="world_to_table" type="fixed">
+    <parent link="world"/>
+    <child link="table"/>
+    <!-- up to z 0.5m -->
+    <origin xyz="0 0 0.5" rpy="0 0 0"/>
+  </joint>
+  <joint name="world_to_camera" type="fixed">
+    <parent link="world"/>
+    <child link="camera_frame"/>
+    <origin xyz="-0.25 -0.5 1.25" rpy="0 3.14159 0"/>
+  </joint>
+</robot>
