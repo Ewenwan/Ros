@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- target recognition node -->
+  <remap from="sensor_cloud" to="/kinect/depth_registered/points"/>
+  <node pkg="collision_avoidance_pick_and_place" type="target_recognition_service" name="target_recognition_service" output="screen">
+	<rosparam command="load" file="$(find collision_avoidance_pick_and_place)/config/ur5/target_recognition_parameters.yaml"/>
+  </node>
+
+</launch>

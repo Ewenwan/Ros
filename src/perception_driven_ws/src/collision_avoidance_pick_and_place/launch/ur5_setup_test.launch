@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="use_bag_data" default="false"/>
+  <arg name="use_generated_cloud" default="false"/>
+
+  <!-- moveit components -->
+  <include file="$(find ur5_collision_avoidance_moveit_config)/launch/moveit_planning_execution.launch">
+    <arg name="sim" value="true"/>
+  </include>
+
+  <!-- simulated nodes -->
+  <!-- grasp action service (simulated) -->
+  <node pkg="robot_io" type="simulated_grasp_action_server" name="gripper_action_server" output="screen"/>
+
+  <!-- static frame publisher for simulation -->
+  <node pkg="tf" type="static_transform_publisher" name="world_to_tag" args="-0.8 0.2 0.17 0.785 0 0 world_frame ar_tag 100"/>
+
+  <!-- detection node (simulation with bag data) -->
+
+  <include file="$(find collision_avoidance_pick_and_place)/launch/ur5_target_recognition.launch"/>
+  <include if="$(arg use_bag_data)" file="$(find collision_avoidance_pick_and_place)/launch/publish_sensor_data_bag.launch"/>
+  <include if="$(arg use_generated_cloud)" file="$(find collision_avoidance_pick_and_place)/launch/ur5_generate_test_cloud_obstacles.launch"/>
+
+  <!-- rviz -->
+  <node name="$(anon rviz)" pkg="rviz" type="rviz" respawn="false" 
+        args="-d $(find collision_avoidance_pick_and_place)/config/ur5/rviz_config.rviz" output="screen">
+    <rosparam command="load" file="$(find ur5_collision_avoidance_moveit_config)/config/kinematics.yaml"/>
+  </node>
+
+</launch>

@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="sim_robot" default="true"/>
+  <arg name="sim_sensor" default="true"/>
+  <arg name="sim_gripper" default="true"/>
+  <arg name="robot_ip" unless="$(arg sim_robot)"/>
+
+  <!-- moveit components -->
+  <include file="$(find ur5_collision_avoidance_moveit_config)/launch/moveit_planning_execution.launch">
+    <arg name="sim" value="$(arg sim_robot)"/>
+    <arg unless="$(arg sim_robot)" name="robot_ip" value="$(arg robot_ip)"/>
+  </include>
+
+  <!-- simulated robot mode nodes-->
+  <group if="$(arg sim_gripper)">
+    <!-- grasp action service (simulated) -->
+    <node pkg="robot_io" type="simulated_grasp_action_server" name="gripper_action_server" output="screen"/>
+  </group>
+
+  <!-- robot interface (real robot) nodes -->
+  <group unless="$(arg sim_gripper)">
+     <!-- grasp action service for vacuum gripper -->
+    <node pkg="robot_io" type="suction_gripper_action_server" name="gripper_action_server" output="screen"/>
+    <param name="suction_on_output_channel" value="0"/>
+    <param name="suction_check_output_channel" value="1"/>
+    <param name="use_sensor_feedback" value="false"/>
+  </group>
+
+	<!-- real sensor mode -->
+  <group unless="$(arg sim_sensor)">
+    <!-- sensor setup -->
+    <include file="$(find sensor_config)/launch/ur5_sensor_setup.launch"/>
+    <!-- detection node -->
+    <include file="$(find collision_avoidance_pick_and_place)/launch/ur5_target_recognition.launch"/>
+    
+    <!-- ar tag detection node -->	
+    <node name="ar_pose" pkg="ar_pose" type="ar_multi" respawn="false">
+      <remap from="/usb_cam/image_raw" to="/kinect/rgb/image_color"/>
+      <remap from="/usb_cam/camera_info" to="/kinect/rgb/camera_info"/>
+      <param name="marker_pattern_list" type="string" value="$(find ar_pose)/data/target_info"/>
+      <param name="threshold" type="int" value="100"/>
+    </node>
+  </group>
+
+ <!-- simulated sensor mode -->
+  <group if="$(arg sim_sensor)">	
+		<!-- static ar_tag frame publisher for simulation -->
+   <node pkg="tf" type="static_transform_publisher" name="world_to_tag" args="-0.8 0.2 0.17 0.785 0 0 world_frame ar_tag 100"/>
+		<!-- detection node -->
+   <include file="$(find collision_avoidance_pick_and_place)/launch/ur5_target_recognition.launch"/>
+		<!-- simulated sensor data -->
+   <include file="$(find collision_avoidance_pick_and_place)/launch/ur5_generate_test_cloud_obstacles.launch"/>	
+  </group>
+ 
+
+  <!-- rviz -->
+  <node name="$(anon rviz)" pkg="rviz" type="rviz" respawn="false" 
+        args="-d $(find collision_avoidance_pick_and_place)/config/ur5/rviz_config.rviz" output="screen" launch-prefix="nice">
+    <rosparam command="load" file="$(find ur5_collision_avoidance_moveit_config)/config/kinematics.yaml"/>
+  </node>
+
+</launch>
