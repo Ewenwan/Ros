@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<package>
+  <name>collision_avoidance_pick_and_place</name>
+  <version>0.0.0</version>
+  <description>
+     The collision_avoidance_pick_and_place package
+  </description>
+
+  <maintainer email="jnicho@swri.org">jnicho</maintainer> -->
+  <author email="jnicho@swri.org">jnicho</author>
+  <license>BSD</license>
+
+  <url type="website">http://ros.org/wiki/collision_avoidance_pick_and_place</url>
+
+  <!-- Dependencies can be catkin packages or system dependencies -->
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>moveit_msgs</build_depend>
+  <build_depend>moveit_ros_manipulation</build_depend>
+  <build_depend>moveit_ros_move_group</build_depend>
+  <build_depend>moveit_ros_planning_interface</build_depend>
+  <build_depend>robot_io</build_depend>
+  <build_depend>object_manipulation_msgs</build_depend>
+  <build_depend>actionlib</build_depend>
+  <build_depend>industrial_robot_client</build_depend>
+  <build_depend>industrial_robot_simulator</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>shape_msgs</build_depend>
+  <build_depend>pcl_ros</build_depend>
+  <build_depend>pcl_msgs</build_depend>
+  <build_depend>tf_conversions</build_depend>
+	<build_depend>message_generation</build_depend>
+	
+
+
+  <run_depend>roscpp</run_depend>
+  <run_depend>moveit_msgs</run_depend>
+  <run_depend>moveit_ros_manipulation</run_depend>
+  <run_depend>moveit_ros_move_group</run_depend>
+  <run_depend>moveit_ros_planning_interface</run_depend>
+  <run_depend>robot_io</run_depend>
+  <run_depend>object_manipulation_msgs</run_depend>
+  <run_depend>actionlib</run_depend>
+  <run_depend>industrial_robot_client</run_depend>
+  <run_depend>industrial_robot_simulator</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>shape_msgs</run_depend>
+  <run_depend>pcl_ros</run_depend>
+  <run_depend>pcl_msgs</run_depend>
+  <run_depend>tf_conversions</run_depend>
+  <run_depend>message_runtime</run_depend>
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+  </export>
+
+</package>
