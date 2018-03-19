@@ -1,0 +1,31 @@
+# Requests that grasp planning be performed on the object to be grasped
+# returns a list of grasps to be tested and executed
+
+# the arm being used
+string arm_name
+
+# the object to be grasped
+GraspableObject target
+
+# the name that the target object has in the collision environment
+# can be left empty if no name is available
+string collision_object_name
+
+# the name that the support surface (e.g. table) has in the collision map
+# can be left empty if no name is available
+string collision_support_surface_name
+
+# an optional list of grasps to be evaluated by the planner
+Grasp[] grasps_to_evaluate
+
+# an optional list of obstacles that we have semantic information about
+# and that can be moved in the course of grasping
+GraspableObject[] movable_obstacles
+
+---
+
+# the list of planned grasps
+Grasp[] grasps
+
+# whether an error occurred
+GraspPlanningErrorCode error_code
