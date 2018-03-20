@@ -8,6 +8,8 @@
    srv.request.trajectory = moveit_traj;
    moveit_run_path_client_.call(srv)
 
+5 可以 请求 执行轨迹的行动
+ac_.sendGoal(goal);// 发送目标
 */
 #include <plan_and_run/demo_application.h>
 
@@ -63,6 +65,7 @@ void DemoApplication::runPath(const DescartesTrajectory& path)
     exit(-1);
   }
 
+/*
   // 转换 笛卡尔轨迹 到 moveit 机械臂关节 轨迹  并添加关节速度
   // creating Moveit trajectory from Descartes Trajectory
   moveit_msgs::RobotTrajectory moveit_traj;
@@ -70,23 +73,16 @@ void DemoApplication::runPath(const DescartesTrajectory& path)
   fromDescartesToMoveitTrajectory(path,moveit_traj.joint_trajectory);
 
   // sending robot path to server for execution
-  /*  Fill Code:
-   * Goal:
-   * - Complete the service request by placing the "moveit_msgs::RobotTrajectory" trajectory in the request object
-   * - Use the service client to send the trajectory for execution.
-   * Hint:
-   * - The "srv.request.trajectory" can be assigned the Moveit trajectory.
-   * - The "moveit_run_path_client_.call(srv)" sends a trajectory execution request.
-   */
+
   // 发送执行轨迹的请求 给 执行轨迹的服务器
   //  服务的提供节点 为 ros系统 /move_group 节点提供服务
   moveit_msgs::ExecuteKnownTrajectory srv;
-  //srv.request.trajectory ; /* [ COMPLETE HERE ]: = ?? */;
+  //srv.request.trajectory ;  
   srv.request.trajectory = moveit_traj;
   srv.request.wait_for_execution = true;
 
   ROS_INFO_STREAM("Robot path sent for execution");
-  //if(false /* [ COMPLETE HERE ]: moveit_run_path_client_.??( ?? ) */)
+  //if(false 
   if(moveit_run_path_client_.call(srv))
   {
     ROS_INFO_STREAM("Robot path execution completed");
@@ -96,6 +92,16 @@ void DemoApplication::runPath(const DescartesTrajectory& path)
     ROS_ERROR_STREAM("Failed to run robot path with error "<<srv.response.error_code.val);
     exit(-1);
   }
+*/
+    trajectory_msgs::JointTrajectory RBjoint_trajectory;
+    // demo_application.c
+    fromDescartesToMoveitTrajectory(path, RBjoint_trajectory);
+    control_msgs::FollowJointTrajectoryGoal goal;// 行动中的　目标
+    goal.trajectory = RBjoint_trajectory;// 目标轨迹
+    ac_.sendGoal(goal);// 发送目标
+    bool FLAG = ac_.waitForResult();// 等待执行结果   bool = ac_.waitForResult();
+    if(FLAG) ROS_INFO_STREAM("Robot path execution completed");
+    else{ ROS_ERROR_STREAM("Failed to run robot path with error "); exit(-1);}
 
   ROS_INFO_STREAM("Task '"<<__FUNCTION__<<"' completed");
 
