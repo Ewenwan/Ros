@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<package>
+  <name>plan_and_run</name>
+  <version>0.0.0</version>
+  <description>The plan_and_run package</description>
+  <maintainer email="jnicho@swri.org">Jorge Nicho</maintainer>
+  <license>Apache2.0</license>
+  <url type="website">https://github.com/ros-industrial/industrial_training</url>
+  <author email="jnicho@swri.org">Jorge Nicho</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>descartes_core</build_depend>
+  <build_depend>descartes_planner</build_depend>
+  <build_depend>descartes_moveit</build_depend>
+  <build_depend>descartes_utilities</build_depend>
+  <build_depend>moveit_msgs</build_depend>
+  <build_depend>moveit_ros_planning_interface</build_depend>
+  <build_depend>ur5_demo_descartes</build_depend>
+
+  <run_depend>descartes_core</run_depend>
+  <run_depend>descartes_planner</run_depend>
+  <run_depend>descartes_moveit</run_depend>
+  <run_depend>descartes_utilities</run_depend>
+  <run_depend>moveit_msgs</run_depend>
+  <run_depend>moveit_ros_planning_interface</run_depend>
+  <run_depend>ur5_demo_descartes</run_depend>
+
+
+  <export>
+  </export>
+</package>
