@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<launch>
+  <node name="plan_and_run_node" type="plan_and_run_node" pkg="plan_and_run" output="screen">
+    <param name="group_name" value="manipulator"/>
+    <param name="tip_link" value="tool"/>
+    <param name="base_link" value="base_link"/>
+    <param name="world_frame" value="world"/>
+    <param name="trajectory/time_delay" value="0.1"/>
+    <param name="trajectory/foci_distance" value="0.07"/>
+    <param name="trajectory/radius" value="0.08"/>
+    <param name="trajectory/num_points" value="200"/>
+    <param name="trajectory/num_lemniscates" value="4"/>
+    <rosparam param="trajectory/center">[0.36, 0.2, 0.1]</rosparam>
+    <rosparam param="trajectory/seed_pose">[0.0, -1.03, 1.57 , -0.21, 0.0, 0.0]</rosparam>
+    <param name="visualization/min_point_distance" value="0.02"/>
+  </node>
+</launch>

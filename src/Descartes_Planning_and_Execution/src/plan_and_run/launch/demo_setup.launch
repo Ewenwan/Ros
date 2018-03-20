@@ -1,0 +1,75 @@
+<?xml version="1.0" ?>
+<launch>
+
+  <arg name="sim" default="true" />
+  <arg name="robot_ip" unless="$(arg sim)" />
+  <arg name="min_payload" default="0.0" />
+  <arg name="max_payload" default="5.0" />
+  <arg name="limited" default="true" />
+  <arg name="prefix" default="" />
+
+  <!-- By default, we do not start a database (it can be large) -->
+  <arg name="db" default="false" />
+
+  <!-- By default, we are not in debug mode -->
+  <arg name="debug" default="false" />
+
+  <!-- Load the URDF, SRDF and other .yaml configuration files on the param server -->
+  <include file="$(find ur5_demo_moveit_config)/launch/planning_context.launch">
+    <arg name="load_robot_description" value="true"/>
+  </include>
+
+  <!-- If needed, broadcast static tf for robot root -->
+      
+  <!-- Run the main MoveIt executable without trajectory execution (we do not have controllers configured by default) -->
+  <include file="$(find ur5_demo_moveit_config)/launch/move_group.launch">
+    <arg name="allow_trajectory_execution" value="true"/>  
+    <arg name="fake_execution" value="false"/>
+    <arg name="info" value="true"/>
+    <arg name="debug" value="$(arg debug)"/>
+  </include>
+
+  <rosparam param="controller_joint_names">[
+  'shoulder_pan_joint',
+  'shoulder_lift_joint',
+  'elbow_joint',
+  'wrist_1_joint',
+  'wrist_2_joint',
+  'wrist_3_joint']</rosparam>
+
+  <!-- run the "real robot" interface nodes -->
+  <!--   - this typically includes: robot_state, motion_interface, and joint_trajectory_action nodes -->
+  <!--   - replace these calls with appropriate robot-specific calls or launch files -->
+  <group unless="$(arg sim)">
+    <remap from="/follow_joint_trajectory/status" to="/joint_trajectory_action/status" />
+    <remap from="/follow_joint_trajectory/feedback" to="/joint_trajectory_action/feedback" />
+    <remap from="/follow_joint_trajectory/result" to="/joint_trajectory_action/result" />
+    <remap from="/follow_joint_trajectory/goal" to="/joint_trajectory_action/goal" />
+    <remap from="/follow_joint_trajectory/cancel" to="/joint_trajectory_action/cancel" />
+
+    <include file="$(find ur_modern_driver)/launch/ur_common.launch">
+      <arg name="prefix" value="$(arg prefix)" />
+      <arg name="robot_ip" value="$(arg robot_ip)" />
+      <arg name="min_payload" value="$(arg min_payload)" />
+      <arg name="max_payload" value="$(arg max_payload)" />
+    </include>  
+    
+	  <!-- TF Buffer Server -->
+    <node pkg="tf2_ros" type="buffer_server" name="tf2_buffer_server" output="screen">
+		  <param name="buffer_size" value="120.0"/>
+    </node>
+  </group>
+
+  <!-- run the robot simulator and action interface nodes -->
+  <group if="$(arg sim)">
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
+
+    <include file="$(find industrial_robot_simulator)/launch/robot_interface_simulator.launch" />
+    <rosparam param="initial_joint_state">[0.0, -1.03, 0.91 , -0.21, 0.0, 0.0]</rosparam>
+  </group>
+
+  <!-- rviz -->
+  <node name="rviz" type="rviz" pkg="rviz" args="-d $(find plan_and_run)/config/demo_config.rviz" required="true"/>
+
+
+</launch>
