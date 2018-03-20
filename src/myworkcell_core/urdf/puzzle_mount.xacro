@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="tool">
+  
+  <link name="ee_mount" />
+  
+  <!-- link "ee_base" and connected joints-->
+  <link name="ee_base" >
+    <visual>
+      <geometry>
+        <mesh filename="package://myworkcell_core/meshes/puzzle_mount.stl" />
+      </geometry>>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://myworkcell_core/meshes/puzzle_mount.stl" />
+      </geometry>
+    </collision>
+  </link>
+ 
+  <joint name="ee_mount-ee_base" type="fixed" >
+    <parent link="ee_mount" />
+    <child link="ee_base" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+
+  <!-- tool1 is the point that parts connect to the tool -->
+  <link name="tool1" />
+  <joint name="ee_base-tool1" type="fixed" >
+    <parent link="ee_base" />
+    <child link="tool1" />
+    <origin xyz="-0.0083 0.0541 0.0143" rpy="0.523599 -0.523599 0" />
+  </joint>
+
+  <link name="part" >
+    <visual>
+      <geometry>
+        <mesh filename="package://myworkcell_core/meshes/puzzle_bent.dae" />
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://myworkcell_core/meshes/puzzle_bent.dae" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="tool1-part" type="fixed" >
+    <parent link="tool1" />
+    <child link="part" />
+    <origin xyz="0.0110 0.0030 -0.0379" rpy="0 -0.2618 0" />
+  </joint>
+
+</robot>

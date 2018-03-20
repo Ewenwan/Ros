@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="grinder">
+    <link name="grinder_frame">
+      <visual>
+       <origin xyz="0 0 0" rpy="0 3.14159 0" />
+        <geometry>
+          <mesh filename="package://myworkcell_core/meshes/grinder_visual.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 3.14159 0" />
+        <geometry>
+          <mesh filename="package://myworkcell_core/meshes/grinder_collision.dae" />
+        </geometry>
+      </collision>
+    </link>
+ </robot>
