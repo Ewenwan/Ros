@@ -1,8 +1,7 @@
-
-          参考　
+# 参考　
           http://ros-industrial.github.io/industrial_training/_source/session4/Introduction-to-Perception.html
 
-          安装ar 仿真工件　测试包
+# 安装ar 仿真工件　测试包
           sudo apt install ros-indigo-calibration-msgs
           cd ~/catkin_ws/src
           git clone https://github.com/jmeyer1292/fake_ar_publisher.git
@@ -10,12 +9,12 @@
           source devel/setup.bash 
           rospack find fake_ar_publisher  //找到安装包
 
-          创建包
+# 创建包
           cd ~/catkin_ws/src
           catkin_create_pkg myworkcell_core roscpp
 
           cd myworkcell_core
-          gedit package.xml
+## gedit package.xml
 
           // 修改
             <build_depend>roscpp</build_depend> 编译依赖
@@ -24,7 +23,7 @@
             <run_depend>roscpp</run_depend>
 
 
-          gedit CMakeList.txt
+## gedit CMakeList.txt
           // 修改
           add_compile_options(-std=c++11) # 支持c++ 11 新标准
 
@@ -48,7 +47,7 @@
           #连接
           target_link_libraries(vision_node ${catkin_LIBRARIES})
 
-          查看信息列表
+### 查看信息列表
           rosmsg list
           显示信息详情
           rosmsg show fake_ar_publisher/ARMarker
@@ -72,7 +71,7 @@
             float64[36] covariance
           uint32 confidence
 
-
+##  Simple ROS Node
 
           /**
           **  Simple ROS Node
@@ -119,15 +118,15 @@
 
           }
 
-          运行 
+##   运行 
           roscore
           rosrun fake_ar_publisher fake_ar_publisher_node
           rosrun workcell_core vision_node
-          查看节点间关系
+##  查看节点间关系
           rqt_graph
 
           ###############################################################################
-          服务 类似函数调用------------------------------------------------------
+##       服务 类似函数调用------------------------------------------------------
           srv/LocalizePart.srv
           #request 请求
           string base_frame #目标基坐标系 名称
@@ -202,7 +201,8 @@
           add_dependencies(ARclient_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
           #连接
           target_link_libraries(ARclient_node ${catkin_LIBRARIES})
-
+          
+## ARserver.cpp   服务器
           ---------------------------------------------------------------------
           /**
           **  Simple ROS Node
@@ -335,7 +335,7 @@
 
           ###################################################
           ##########################################################
-          Action 行动   长周期的 任务  复杂序列 任务 
+##       Action 行动   长周期的 任务  复杂序列 任务 
 
 
           ######################################################
@@ -353,7 +353,7 @@
 
 
           #############################################################
-          参数 
+##  参数 
           param
           /**
           **  Simple ROS Node
@@ -435,7 +435,7 @@
 
 
           ###################################################
-          urdf文件 机器人描述语言
+##    urdf文件 机器人描述语言
           urdf/workcell.urdf
           ------------------------------------------------------------------
           <?xml version="1.0" ?>
@@ -480,7 +480,7 @@
           roslaunch urdf_tutorial display.launch model:=workcell.urdf
 
           ################################################################
-          XACRO语言
+##     XACRO语言
           // 安装 ur机器人  丹麦UR优傲机械臂  http://www.ur5.cc/UR10.html
           cd ~/catkin_ws/src
           git clone https://github.com/ros-industrial/universal_robot.git
@@ -560,7 +560,7 @@
             <node name="rviz" pkg="rviz" type="rviz" if="$(arg gui)"/> // rviz显示
           </launch>
           -------------------------------------------------------
-          启动
+##     启动
           roslaunch myworkcell_core urdf.launch
 
           切换 Fixed Frame 为 world
@@ -570,7 +570,7 @@
 
           ---------------------------------------------------------------------------------
           ########################################################################
-          TF Coordinate Tranforms  坐标变换 发布
+##    TF Coordinate Tranforms  坐标变换 发布
 
           ---------------------------------------------------------------------
           gedit package.xml
@@ -711,14 +711,14 @@
 
           --------------------------------------------------------------
 
-          运行
+##      运行
           roslaunch myworkcell_core urdf.launch       机械臂
           roslaunch myworkcell_core workcell.launch   目标物体
 
 
           --------------------------------------------------------------
           ########################################################
-          Moveit  使用
+##    Moveit  使用
           会生成新的 moveit 配置包  myworkcell_moveit_config
           配置一个机械臂 规划组  manipulator  包含 一个运动学规划链  从 UR5的基坐标系 base_link 到 末端 tool0
 
@@ -760,9 +760,9 @@
 
           ---------------------------------------------------------------
 
-          在实际的硬件 UR5上实验
+##    在实际的硬件 UR5上实验
           需要在 配置文件下 myworkcell_moveit_config/config 新建一些配置文件
-          1 创建 controllers.yaml 
+###        1 创建 controllers.yaml 
           ------------------------
           controller_list:
             - name: ""
@@ -771,12 +771,12 @@
               joints: [shoulder_pan_joint, shoulder_lift_joint, elbow_joint, wrist_1_joint, wrist_2_joint, wrist_3_joint]
           ---------------------
 
-          2 创建joint_names.yaml
+###       2 创建joint_names.yaml
           -----------------------------
           controller_joint_names: [shoulder_pan_joint, shoulder_lift_joint, elbow_joint, wrist_1_joint, wrist_2_joint, wrist_3_joint] 
           -----------------------------
 
-          3 更新　myworkcell_moveit_config/launch/myworkcell_moveit_controller_manager.launch.xml
+###      3 更新　myworkcell_moveit_config/launch/myworkcell_moveit_controller_manager.launch.xml
           ------------------------------------
           <launch>
             <arg name="moveit_controller_manager"
@@ -788,7 +788,7 @@
           </launch>
           ---------------------------------------------
 
-          4 创建　新文件　myworkcell_moveit_config/launch/myworkcell_planning_execution.launch
+###     4 创建　新文件　myworkcell_moveit_config/launch/myworkcell_planning_execution.launch
           --------------------------------------------------
           <launch>
             <!-- The planning and execution components of MoveIt! configured to run -->
@@ -837,14 +837,14 @@
           </launch>
           ------------------------------------------------------------------------------
 
-          运行　
+###       运行　
           roslaunch myworkcell_moveit_config myworkcell_planning_execution.launch
 
 
           -----------------------------------------------------------------------------------
 
           ######################################################################
-          rviz moveit 运动规划
+##      rviz moveit 运动规划
 
           roslaunch myworkcell_moveit_config myworkcell_planning_execution.launch
 
@@ -870,7 +870,7 @@
 
           -------------------------------------------------------------
           #################################################################
-          使用　moveit  C++ 接口　运动规划
+###      使用　moveit  C++ 接口　运动规划
           ---------------------------------------------------------------------
           gedit package.xml
           // 修改
@@ -998,14 +998,14 @@
 
 
           -----------------------------------------------------------
-          运行　
+###     运行　
           roslaunch myworkcell_moveit_config myworkcell_planning_execution.launch
           roslaunch myworkcell_core workcell.launch
           可以看到　机械臂移动到　一个固定的地方(目标物体　fake_ar_publisher的位置)
 
 
           -----------------------------------------------------
-          zai RVIZ中显示　添加的　目标物体　fake_ar_publisher
+###     在RVIZ中显示　添加的　目标物体　fake_ar_publisher
 
           Add >>> By topic >>>> /ar_pose_visual >>> Marker 
 
@@ -1018,7 +1018,7 @@
 
 
           ##################################################################
-          Descartes  笛卡尔　运动规划求解  正逆运动学求解器　solve forward and inverse kinematics
+##      Descartes  笛卡尔　运动规划求解  正逆运动学求解器　solve forward and inverse kinematics
           终端　规划求解器
           机器人模型　robot model 
           轨迹点　trajectory points　　　　vector 存储
@@ -1026,24 +1026,23 @@
           http://wiki.ros.org/descartes/Tutorials/Getting%20Started%20with%20Descartes
 
 
-          １】descartes_core
+###      １】descartes_core
           descartes_core::TrajectoryPt　　　　笛卡尔轨迹点　　　　　descartes trajectory point
           descartes_core::RobotModel 　　　　　笛卡尔规划机器人模型　descartes robot model　机器人运动学模型　kinematics of the robot　正逆运动学求解　IF/FK
           descartes_core::PathPlannerBase　笛卡尔规划器　　　　　descartes path planner
 
 
-          ２】descartes_moveit
+###       ２】descartes_moveit
           descartes_moveit::MoveitStateAdapter      descartes_core::RobotModel using Moveit 
 
 
-
-          ３】descartes_planner
+###       ３】descartes_planner
           descartes_planner::DensePlanner  dense_planner   稠密求解器
           descartes_planner::SparsePlanner sparse_planner  稀疏规划器
 
 
 
-          ４】descartes_trajectory
+###      ４】descartes_trajectory 笛卡尔轨迹点
           descartes_trajectory::JointTrajectoryPt
 
           descartes_trajectory::CartTrajectoryPt  依赖于　descartes_core::TrajectoryPt
@@ -1053,13 +1052,13 @@
 
 
 
-          ５】descartes_utilities
-          descartes_utilities::toRosJointPoints  笛卡尔规划结果　转化为　标准ROS关节信息
+###      ５】descartes_utilities
+          descartes_utilities::toRosJointPoints  笛卡尔规划结果　转化为　标准ROS机器人关节信息
 
 
 
           ------------------------------------------------
-          安装
+##          安装
           cd src
           git clone https://github.com/ros-industrial-consortium/descartes.git
 
@@ -1073,7 +1072,7 @@
           复制未完成的节点　到　包目录
           cp ~/industrial_training/exercises/4.1/src/descartes_node_unfinished.cpp myworkcell_core/src/descartes_node.cpp
           ------------------------------------------------------------
-          修改　package.xml文件
+###          修改　package.xml文件
           添加
             <build_depend>ur5_demo_descartes</build_depend>
             <run_depend>ur5_demo_descartes</run_depend>
@@ -1092,7 +1091,7 @@
 
           --------------------------------------------------------------------------
 
-          修改　CMakeLists.txt文件
+ ###         修改　CMakeLists.txt文件
 
           # 包编译依赖
           find_package(catkin REQUIRED COMPONENTS
@@ -1154,7 +1153,7 @@
 
 
           --------------------------------------------------------------
-          添加服务文件
+ ###         添加服务文件
           workcell_core/PlanCartesianPath.srv
           # request 请求　目标位置
           geometry_msgs/Pose pose
@@ -1166,7 +1165,7 @@
 
 
           -------------------------------------------------
-          修改　descartes_node.cpp文件　　修改TODO部分
+ ###         修改　descartes_node.cpp文件　　修改TODO部分
 
           /*
           使用　Descartes  笛卡尔　运动规划求解  正逆运动学求解器　demo
@@ -1431,7 +1430,7 @@
           }
 
           --------------------------------------------------------------------------
-          修改　ARclient.cpp　增加　终端工具　动作规划
+###          修改　ARclient.cpp　增加　终端工具　动作规划
 
           /**
           **  Simple ROS Node
@@ -1549,7 +1548,7 @@
           }
 
           ----------------------------------------------------------
-          新建　setup.launch
+###          新建　setup.launch
           <launch>
                   <include file = "$(find myworkcell_moveit_config)/launch/myworkcell_planning_execution.launch" /> // UR5moveit配置文件
             <node name="fake_ar_publisher" pkg="fake_ar_publisher" type="fake_ar_publisher_node" /> // 目标工件发布
@@ -1568,7 +1567,7 @@
 
 
           ##############################################################
-          pcl　点云数据　模式识别
+##        pcl　点云数据　模式识别
 
           pcl_ros PCL（Point Cloud Library）ROS接口堆，
           PCL_ROS是在ROS中涉及n维点云和3D几何处理的3D应用的首选桥梁。
@@ -1577,7 +1576,7 @@
           http://www.cnblogs.com/qixianyu/p/6607440.html
 
 
-          示例桌子　点云数据
+###          示例桌子　点云数据
           /industrial_training/gh_pages/_downloads/table.pcd　
 
           命令行显示数据　　　pcl_viewer table.pcd　
@@ -1592,9 +1591,9 @@
           rviz
           ADD --> By topic ----> /orig_cloud_pcd  ----->  ointCloud2
 
-          pcl 算法库应用
+###          pcl 算法库应用
 
-          １】　采样一致性分割算法　
+####          １】　采样一致性分割算法　
           主要是从原点云中提取目标模型，比如说面，球体，圆柱等等，从而为后续的目标识别或者点云匹配等等做准备。
           使用此算法之前应该先熟悉PCL中的采样一致性（sample consensus）模块，
           里边包含了模型（平面、直线等）和采样方法（RANSAC、LMedS等）的一些枚举变量，
@@ -1612,7 +1611,7 @@
           f) virtual void segment (PointIndices &inliers,ModelCoefficients &model_coefficients) 输出提取点的索引和目标模型的参数。
 
           ---------------------------------------------------------------------------
-          命令行　示例
+#####          命令行　示例
 
           1 获取桌面
           分割平面　　　　　　　　　　　原来的　　　新生成的　　　　分割阈值
@@ -1629,7 +1628,7 @@
           rosrun pcl_ros pcd_to_pointcloud object_on_table.pcd 0.1 _frame_id:=map cloud_pcd:=object_on_table_cloud
           rviz
 
-          2】　点云滤波算法　　
+####          2】　点云滤波算法　　
           http://blog.csdn.net/qq_33933704/article/details/78649728
           一）使用VoxelGrid滤波器对点云进行下采样　
           体素化网格方法实现下采样，即减少点的数量 减少点云数据，并同时保存点云的形状特征，
@@ -1651,7 +1650,7 @@
           平均距离在标准范围之外的点，可以被定义为离群点并可从数据中去除。
 
 
-          1 下采样示例
+#####          1 下采样示例
           示例　　　　　　　　　　　　　　　　　　　　　　　设置滤波时创建的体素体积为 5cm 的立方体  
           pcl_voxel_grid table.pcd table_downsampled5cm.pcd -leaf 0.05,0.05,0.05
           显示　pcl_viewer table_downsampled5cm.pcd
@@ -1666,7 +1665,7 @@
           rviz
 
 
-          2 移除　离群点示例
+#####          2 移除　离群点示例
           pcl_outlier_removal table.pcd table_outlier_removal.pcd -method statistical
           显示　pcl_viewer table_outlier_removal.pcd
           rviz显示
@@ -1674,12 +1673,12 @@
           rviz
 
 
-          3】　估计点云的法向量
+####          3】　估计点云的法向量
           估计平面的法向量　　　　平面估计　大小半价参数　
           pcl_normal_estimation only_table.pcd table_normals.pcd -radius 0.1
           查看　pcl_viewer table_normals.pcd -normals  20
 
-          4】曲面重建
+####          4】曲面重建
           pcl_marching_cubes_reconstruction table_normals.pcd table_mesh.vtk -grid_res 50
           pcl_viewer table_mesh.vtk
 
@@ -1696,8 +1695,8 @@
 
           #########################################################
           ###############################################################
-          应用　　【１】
-          三维感知驱动的　操作　　Perception-Driven_Manipulation
+ #         应用　　【１】
+ #         三维感知驱动的　操作　　Perception-Driven_Manipulation
           模式识别驱动的　操作手示例　　pick and place task
 
           包含内容：
@@ -1708,7 +1707,7 @@
           path planning　　　　　　　运动规划
           collision avoidance　碰撞检测
 
-          获取　文件
+##          获取　文件
           https://github.com/ros-industrial/industrial_training
           三维感知驱动的　操作
           cp -r ~/industrial_training/exercises/Perception-Driven_Manipulation/template_ws ~/perception_driven_ws
@@ -1719,7 +1718,7 @@
           进入避免碰撞　包
           cd ~/perception_driven_ws/src/collision_avoidance_pick_and_place/
 
-          launch文件夹　/launch：
+ ###         launch文件夹　/launch：
           ur5_setup.launch     : 启动整个系统　Brings up the entire ROS system 
                     (MoveIt!, rviz, perception, ROS-I drivers, robot I/O peripherals)
           ur5_pick_and_place.launch   : 抓取节点　Runs your pick and place node.
@@ -1732,7 +1731,7 @@
 
 
 
-          参数配置文件夹 /config :
+  ###        参数配置文件夹 /config :
           ur5/
            - pick_and_place_parameters.yaml    :　　　　　　　　抓取节点所需参数
            - rviz_config.rviz   : 　　　　　　　　　　　　　　　　　　　　　　Rviz 　显示参数配置
@@ -1741,7 +1740,7 @@
            - collision_obstacles.txt   : 　　　　　　　　　　　　　　　仿真模式下　的　障碍物　范围　　参数
 
 
-          源文件　/src：
+   ###       源文件　/src：
           /src/nodes:　主应用节点
            - pick_and_place_node.cpp : 主应用线程　包括消息头header  和　函数调用
            - generate_point_cloud.cpp　　　　　　　: 生成点云
@@ -1769,20 +1768,20 @@
            - pick_and_place_utilities.cpp : 核心　Contains support functions that will help you complete the exercise.
 
 
-          建立包的依赖环境
+###       建立包的依赖环境
           cd ~/perception_driven_ws
           catkin build --cmake-args -G 'CodeBlocks - Unix Makefiles'
           source devel/setup.bash
 
 
-          启动 UR5仿真环境  目标识别服务等
+ ###         启动 UR5仿真环境  目标识别服务等
           roslaunch collision_avoidance_pick_and_place ur5_setup.launch　　默认都是仿真的
           roslaunch collision_avoidance_pick_and_place ur5_setup.launch sim_sensor:=false　　　真实的传感器Kinect 假的机器人
           roslaunch collision_avoidance_pick_and_place ur5_setup.launch sim_robot:=false robot_ip:= [robot ip]　真实的机器人　传递ip　假的传感器
           roslaunch collision_avoidance_pick_and_place ur5_setup.launch sim_robot:=false robot_ip:= [robot ip] sim_sensor:=false sim_gripper:=false
           真实的传感器　真是的机器人　真实的抓取手
           --------------------------------------------------------------------
-          ur5环境启动　目标识别服务等
+####   ur5环境启动　目标识别服务等
           ur5_setup.launch
           ------------------------------
           <?xml version="1.0"?>
@@ -1876,7 +1875,7 @@
 
           -----------------------------------------------------------------------------
 
-          应用程序变量　定义　
+###    应用程序变量　定义　
 
           /include/collision_avoidance_pick_and_place/pick_and_place_utilities.h　　
           应用程序变量定义
@@ -1939,7 +1938,7 @@
           }
 
           ----------------------------------------------------------------------
-          而在　
+#### 而在　
           /src/nodes/pick_and_place_node.cpp : 主应用线程　包括消息头header  和　函数调用
           下
           使用命名空间  using namespace collision_avoidance_pick_and_place;
@@ -1983,7 +1982,7 @@
           -------------------------------------------------------------------------
           -------------------------------------------------------------------------
 
-           运动到　等候区　函数实现　
+####   运动到　等候区　函数实现　
             // move to a "clear" position　　运动到　等候区
             application.move_to_wait_position();
           实现函数：
@@ -2007,7 +2006,7 @@
 
           -------------------------------------------------------------------------------
           ----------------------------------------------------------------------------------
-          设置抓手状态　  application.set_gripper(false);
+####   设置抓手状态　  application.set_gripper(false);
           实现文件　/src/tasks/set_gripper.cpp
           void collision_avoidance_pick_and_place::PickAndPlace::set_gripper(bool do_grasp)
 
@@ -2059,7 +2058,7 @@
           --------------------------------------------------------------------------
           ========================================================================================
           ======================================================================================
-          检测 目标箱子的位姿
+####   检测 目标箱子的位姿
           box_pose = application.detect_box_pick();
           实现 
           /src/tasks/detect_box_pick.cpp
@@ -2079,7 +2078,7 @@
           --------------------------------------------------------------------------
           ========================================================================================
           ======================================================================================
-          获取到目标箱子的 位姿路径
+####     获取到目标箱子的 位姿路径
           pick_poses = application.create_pick_moves(box_pose);
           实现 
           /src/tasks/create_pick_moves.cpp
@@ -2092,7 +2091,7 @@
           --------------------------------------------------------------------------
           ========================================================================================
           ======================================================================================
-          执行抓取箱子
+####     执行抓取箱子
             application.pickup_box(pick_poses,box_pose);
           实现 
           /src/tasks/pickup_box.cpp
@@ -2116,7 +2115,7 @@
           --------------------------------------------------------------------------
           ========================================================================================
           ======================================================================================
-          获取放置物体到目标位置 的 位姿 路径
+####    获取放置物体到目标位置 的 位姿 路径
           place_poses = application.create_place_moves();
           实现 
           /src/tasks/create_place_moves.cpp
@@ -2147,7 +2146,7 @@
           --------------------------------------------------------------------------
           ========================================================================================
           ======================================================================================
-          执行放置物体
+####  执行放置物体
           application.place_box(place_poses,box_pose);
           实现 
           /src/tasks/place_box.cpp
@@ -2162,7 +2161,7 @@
           --------------------------------------------------------------------------
           ========================================================================================
           ======================================================================================
-          返回到等候区
+####   返回到等候区
            application.move_to_wait_position();
           实现 
           /src/tasks/
@@ -2183,7 +2182,7 @@
           // MoveGroupPtr move_group_ptr;// moveit运动规划指针　　访问需要使用　->  
 
 
-          整体实验：
+###      整体实验：
           启动环境 服务等
           roslaunch collision_avoidance_pick_and_place ur5_setup.launch
           启动任务
@@ -2192,7 +2191,7 @@
 
           ########################################################################################
           ###################################################################################
-          应用2 笛卡尔规划
+#     应用2 笛卡尔规划
           http://ros-industrial.github.io/industrial_training/_source/demo2/Application-Structure.html
 
           获取　文件
@@ -2207,7 +2206,7 @@
           catkin build
           source devel/setup.bash
 
-          规划执行文件夹/
+##  规划执行文件夹/
           plan_and_run/
 
               src : 应用程序源文件 Application source files.
@@ -2222,7 +2221,7 @@
               config: 配置文件
 
 
-           主应用节点  
+##       主应用节点  
           plan_and_run/src/plan_and_run_node.cpp
 
           可能需要修改 机器人描述语言文件
@@ -2233,14 +2232,14 @@
             <xacro:property name="pi_2" value="1.5707963267948966"/>
 
           ==================================================================
-          仿真启动
+##    仿真启动
           环境
           roslaunch plan_and_run demo_setup.launch
           应用节点 精确轨迹规划
           roslaunch plan_and_run demo_run.launch
           ==============================================
 
-          环境+真实机器人
+##    环境+真实机器人
           roslaunch plan_and_run demo_setup.launch sim:=false robot_ip:=000.000.0.00 
           应用节点 精确轨迹规划
           roslaunch plan_and_run demo_run.launch
@@ -2267,7 +2266,7 @@
 
 
           ====================================================
-          载入参数
+###    载入参数
 
           主节点 plan_and_run_node.cpp
             // creating application plan_and_run命令空间下 创建类
@@ -2312,7 +2311,7 @@
           // __FUNCTION__ 为函数名
             ROS_INFO_STREAM("Task '"<<__FUNCTION__<<"' completed");
           ==================================================================
-          初始化ROS系统
+###      初始化ROS系统
           主节点 plan_and_run_node.cpp
             // initializing ros components 初始化 ros系统
             application.initRos();
@@ -2325,7 +2324,7 @@
           // 可视化轨迹发布器 可视化马卡消息（发送到rviz显示）
             marker_publisher_  = nh_.advertise<visualization_msgs::MarkerArray>(VISUALIZE_TRAJECTORY_TOPIC,1,true);
 
-           // 创建一个服客户端节点 来发送 规划的路径点 客户端 轨迹发布
+####      // 创建一个服客户端节点 来发送 规划的路径点 客户端 轨迹发布
           moveit_run_path_client_ = nh_.serviceClient<moveit_msgs::ExecuteKnownTrajectory>(EXECUTE_TRAJECTORY_SERVICE,true);
 
           等待 moveit 执行轨迹服务器  /execute_kinematic_path 出现
@@ -2334,7 +2333,7 @@
 
 
 
-          执行轨迹还可以使用  轨迹跟随行动 实现
+####     执行轨迹还可以使用  轨迹跟随行动 实现
           类头文件 demo_application.h
           添加头文件
           //　笛卡尔规划　行动服务接口
@@ -2358,7 +2357,7 @@
 
 
           ===============================================================
-          初始化笛卡尔规划器
+###         初始化笛卡尔规划器
           主节点 plan_and_run_node.cpp
             // initializing descartes    初始化 笛卡尔规划
             application.initDescartes();
@@ -2381,7 +2380,7 @@
           ===============================================================================
 
 
-          移动到等候区（家位置）
+###        移动到等候区（家位置）
           主节点 plan_and_run_node.cpp
             // moving to home position 移动到等候区（家位置）
             application.moveHome();
@@ -2440,7 +2439,7 @@
           */
 
           ============================================================================
-          产生笛卡尔规划轨迹 引用形参传回
+###         产生笛卡尔规划轨迹 引用形参传回
           // 类头文件 类型定义
           //typedef std::vector<descartes_core::TrajectoryPtPtr> DescartesTrajectory;//笛卡尔轨迹 点 数组
             // generating trajectory  产生笛卡尔规划轨迹 引用形参传回
@@ -2455,7 +2454,7 @@
           descartes_trajectory::AxialSymmetricPt(); 创建笛卡尔轨迹（带有姿态）
 
           ==========================================================================
-          规划 笛卡尔轨迹  
+###        规划 笛卡尔轨迹  
             // planning robot path   规划机器人路径
             plan_and_run::DescartesTrajectory output_path;
             application.planPath(traj,output_path);
@@ -2470,14 +2469,14 @@
 
 
           ==========================================================================
-          执行路径
+###        执行路径
             // running robot path  执行路径
             application.runPath(output_path);
           实现函数为 
           src/tasks/run_path.cpp
 
 
-          1 使用movieit  /execute_kinematic_path服务实现 运动
+####         1 使用movieit  /execute_kinematic_path服务实现 运动
            执行笛卡尔规划器规划的轨迹
           1 由轨迹第一个点 得到机械臂 各个关节的位姿 first_point_ptr->getNominalJointPose(seed_pose, *robot_model_ptr_, start_pose);
           2 机械臂运动到 初始的 启动状态 move_group.setJointValueTarget(start_pose);//设定关节位姿
@@ -2506,7 +2505,7 @@
                         move_group/ClearOctomapService
                         " />
           ----------------------------------------------------------
-          2 也可用 执行轨迹行动action实现 
+####        2 也可用 执行轨迹行动action实现 
 
               trajectory_msgs::JointTrajectory RBjoint_trajectory;
               // demo_application.c
