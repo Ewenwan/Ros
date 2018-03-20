@@ -1,9 +1,16 @@
+<?xml version="1.0" ?>
 <launch>
-        <include file = "$(find myworkcell_moveit_config)/launch/myworkcell_planning_execution.launch" />
+	<arg name="adv" default="0" />
+        <include file = "$(find myworkcell_moveit_config)/launch/myworkcell_planning_execution.launch" >
+        </include>
 	<node name="fake_ar_publisher" pkg="fake_ar_publisher" type="fake_ar_publisher_node" />
 	<node name="ARserver_node"  pkg="myworkcell_core" type="ARserver_node" />
-        <node name="descartes_node" pkg="myworkcell_core" type="descartes_node" output="screen"/>
-	<node name="ARclient_node"  pkg="myworkcell_core" type="ARclient_node"  output="screen">
+        <node name="descartes_node" pkg="myworkcell_core" type="descartes_node" output="screen" />
+	<node name="adv_descartes_node" pkg="myworkcell_core" type="adv_descartes_node" output="screen" />
+	<node name="ARclient_node"  pkg="myworkcell_core" type="ARclient_node"  output="screen" unless="$(arg adv)">
+            <param name="base_frame" value="world"/>
+        </node>
+	<node name="adv_myworkcell_node"  pkg="myworkcell_core" type="adv_myworkcell_node"  output="screen" if="$(arg adv)" >
             <param name="base_frame" value="world"/>
         </node>
 </launch>
