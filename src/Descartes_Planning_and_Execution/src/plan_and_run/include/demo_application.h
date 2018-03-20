@@ -18,6 +18,9 @@
 #include <visualization_msgs/MarkerArray.h>
 #include <eigen_conversions/eigen_msg.h>
 #include <ur5_demo_descartes/ur5_robot_model.h>
+//　笛卡尔规划　行动服务接口
+#include <actionlib/client/simple_action_client.h>// 动作　服务接口
+#include <control_msgs/FollowJointTrajectoryAction.h>// 控制消息　　轨迹行动　根据轨迹点集合　执行　移动到个点
 
 namespace plan_and_run
 {
@@ -34,7 +37,7 @@ const std::string PLANNER_ID = "RRTConnectkConfigDefault";//规划器ID
 const std::string HOME_POSITION_NAME = "home";//休息区 名字
 
 typedef std::vector<descartes_core::TrajectoryPtPtr> DescartesTrajectory;//笛卡尔轨迹点 指针 数组
-
+typedef actionlib::SimpleActionClient<control_msgs::FollowJointTrajectoryAction> FJTAction;
 /*  =============================== Application Data Structure ===============================
  *
  * Holds the data used at various points in the application.  This structure is populated
@@ -141,6 +144,8 @@ protected:
                                                      such IK, FK and collision detection*/
   descartes_planner::SparsePlanner planner_;      /* 笛卡尔稀疏规划器 Plans a smooth robot path given a trajectory of points */
 
+ //FJTAction ac_;// 行动请求 客户端
+actionlib::SimpleActionClient<control_msgs::FollowJointTrajectoryAction> ac_;// 行动请求 客户端
 };
 
 } /* namespace plan_and_run */
