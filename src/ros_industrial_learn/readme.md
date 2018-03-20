@@ -7,7 +7,7 @@
       $ catkin_make  -DCATKIN_WHITELIST_PACKAGES="beginner_tutorials"
 
 
-      节点编译三部曲
+# 节点编译三部曲
       #添加可执行文件
       add_executable(ARclient_node src/ARclient.cpp) # 可执行文件
       #依赖　　解决依赖　消息　服务　action头文件　问题
@@ -26,7 +26,7 @@
       //这样:  ros::getGlobalCallbackQueue()->callAvailable(ros::WallDuration(0));
        // ros::AsyncSpinner async_spinner(1);
 
-      那么spin到底做了什么呢?
+# 那么spin到底做了什么呢?
       首先, 当我们调用ros::spin时, 会有一个互斥锁, 把你的回调队列加锁, 防止执行混乱. 
       然后, 检测如果回调队列不为空, 则读取回调队列
       最后,当while(nh.ok())为true时, 调用当前队列中的所有函数,如果有不满足的, 会重新放回队列中
@@ -48,7 +48,8 @@
 
       没有用户订阅, 服务和回调是不会被调用的.
 
-      ###### 多线程Spinning ########
+###### 多线程Spinning ########
+
       roscpp内部支持调用多线程, 有两个:
       1  ros::MultiThreadedSpinner
       ros::MultiThreadedSpinner是阻塞微调, 类似于ros::spin(), 你可以在它的构造函数中指定线程数量,
@@ -70,19 +71,19 @@
 
 
 
-      教程地址：
+# 教程地址：
       industrial_training
       ===================
       Training material
-       - [Kinetic](http://ros-industrial.github.io/industrial_training/).
+[Kinetic](http://ros-industrial.github.io/industrial_training/).
 
       Training material before Kinetic
       ================================
-       - [Indigo](http://aeswiki.datasys.swri.edu/rositraining/indigo/Exercises/)
-       - [Hydro](http://aeswiki.datasys.swri.edu/rositraining/hydro/Exercises/)
+[Indigo](http://aeswiki.datasys.swri.edu/rositraining/indigo/Exercises/)
+[Hydro](http://aeswiki.datasys.swri.edu/rositraining/hydro/Exercises/)
 
 
-      安装ar 仿真测试包
+# 安装ar 仿真测试包
       sudo apt install ros-kinetic-calibration-msgs
       cd ~/catkin_ws/src
       git clone https://github.com/jmeyer1292/fake_ar_publisher.git
@@ -92,7 +93,7 @@
 
 
       【1】===================================================== 
-      linux基础
+# linux基础
 
       Ctrl+H 显示隐藏文件
 
@@ -110,7 +111,7 @@
       Shift+M   显示内存使用情况排序
       q 结束
 
-      【2】ros基础 
+#    【2】ros基础 
       创建包
       catkin_create_pkg pkg_name dep1 dep2
       到包文件夹
@@ -122,7 +123,7 @@
       rospack depends package_name 包依赖关系
 
 
-      节点程序对比
+# 节点程序对比
 
       简单C++程序
       //
@@ -147,7 +148,7 @@
       //
 
 
-      运行节点
+#  运行节点
       rosrun package_name node_name
 
       rosnode
@@ -156,7 +157,7 @@
       rosnode kill node_name 结束节点
 
       ////////////////////////
-      创建包
+#  创建包
       catkin_create_pkg lesson_simple roscpp
       修改   CMakeLists.txt
       add_executable(lesson_simple_node src/lesson_simple_node.cpp)
@@ -180,7 +181,7 @@
       return 0;
       }
 
-      编译
+#  编译
       catkin_make
       运行
       roscore
@@ -188,7 +189,7 @@
 
 
 
-      标准消息 Standard data primitives-------------------
+#   标准消息 Standard data primitives-------------------
       – 布尔量
       Boolean:          bool
       – 整数 (有符号)
@@ -207,7 +208,7 @@
       Other: Nest message types for more complex data structure
 
 
-      自定义消息类型 -----------------------------------------
+#   自定义消息类型 -----------------------------------------
       以 .msg文件结尾 编译后形成 自定义消息头文件 放在 /msg文件下
       位置消息类型 PathPosition.msg
       # A 2D position and orientation 注释
@@ -220,14 +221,14 @@
       <build_depend>message_generation</build_depend>  // 编译依赖
       <run_depend>message_runtime</run_depend>         // 运行依赖
 
-      修改 CMakeLists.txt
+#    修改 CMakeLists.txt
       增加包生成（编译）依赖
       find_package(catkin REQUIRED COMPONENTS
         roscpp
         rospy
         message_generation
       )
-      增加需要生成的消息 的消息文件
+#   增加需要生成的消息 的消息文件
       ## Generate messages in the 'msg' folder
        add_message_files(
          FILES
@@ -236,7 +237,7 @@
       #   Message2.msg
        )
 
-      增加新增消息的 依赖消息类型 标准消息/之前自定义的消息
+#   增加新增消息的 依赖消息类型 标准消息/之前自定义的消息
       generate_messages(
          DEPENDENCIES
          std_msgs  # Or other packages containing msgs
@@ -262,13 +263,13 @@
       可以看到在 devel/include/lesson_simple/PathPosition.h 生成了 自定义消息类型的头文件
 
 
-      rosmsg list 话题发布的消息列表
+#     rosmsg list 话题发布的消息列表
       rosmsg package <package>
       rosmsg show <package>/<message_type> 显示消息
       rosmsg info <package>/<message_type>
 
 
-      rostopic list 话题 列表
+#    rostopic list 话题 列表
       rostopic type <topic> 话题发布的消息类型
       rostopic info <topic> 话题消息 类型 发布者 订阅者 
       rostopic echo <topic> 打印话题消息
@@ -332,8 +333,7 @@
       roscore
       rosrun lesson_simple PathPosition_pub_node
 
-
-      创建 PathPosition消息订阅者 PathPosition_subscriber.cpp 
+#  创建 PathPosition消息订阅者 PathPosition_subscriber.cpp 
 
       #include <ros/ros.h>
       #include <ros_industrial_learn/PathPosition.h>//包含自动生成的 自定义消息头文件
@@ -371,12 +371,12 @@
       rosrun lesson_simple PathPosition_sub_node
 
 
-      rqt_grapt 查看 话题 节点 关系 
+#   rqt_grapt 查看 话题 节点 关系 
 
 
 
       #######################################################################
-      参数 Parameters    全局变量
+#   参数 Parameters    全局变量
       参数服务器 Parameter Server
       配置文件 Config File 
       节点 Node
@@ -387,9 +387,9 @@
       --- algorithm limits / tuning 算法限制参数/调优
 
 
-      参数配置来源--------------------------------------------------
+#   参数配置来源--------------------------------------------------
 
-      1 YAML Files 参数文件 
+##   1 YAML Files 参数文件 
 
       manipulator_kinematics:
       solver: kdl_plugin/KDLKinematics
@@ -397,27 +397,26 @@
       timeout: 0.005
       attempts: 3
 
-      2 命令行 Command Line
+##    2 命令行 Command Line
 
       rosrun my_pkg load_robot _ip:="192.168.1.21"
       rosparam set "/debug" true
 
-      3 程序 program
+##    3 程序 program
 
       nh.setParam("name", "left");
 
-
-      参数形式----------------------------------------------------
+##     参数形式----------------------------------------------------
       基本数据结构  int, real, boolean， string
       列表 向量 Lists (vectors)
            混合类型 [1, str, 3.14159]
            单一类型 [1.1, 1.2, 1.3]
-      结构体 structures
+##   结构体 structures
        /box/weight
        /box/center/x
        /box/center/y
 
-      命令行  rosparam  --------------------------------
+##    命令行  rosparam  --------------------------------
       rosparam set <key> <value>  设置参数值
       rosparam get <key>          获取参数值
       rosparam delete <key>       删除参数
@@ -425,7 +424,7 @@
       rosparam load <filename>  [<namespace>] 从参数文件 载入参数
 
 
-      C++ API -----------------------------------------
+##    C++ API -----------------------------------------
       ros::NodeHandle relative;//节点句柄未赋值
       relative.getParam("test");// 相对 命名空间参数 "/<ns>/test"
 
@@ -435,17 +434,17 @@
       ros::NodeHandle priv("~");//节点句柄 ~
       priv.getParam("test");// 私有命名空间参数 "/myNode/test"
 
-      节点句柄 的方法有 ---------------------------------------
+###     节点句柄 的方法有 ---------------------------------------
       nh.hasParam(key)           // 如果参数存在 返回 true
       nh.getParam(key, &value)   // 获取参数值到 value上 ，存在返回true
       nh.param(key, &value, default)// 获取参数值到 value上 ，存在返回true, 不存在 设置默认值
       nh.setParam(key, value)    // 设置参数值
       nh.deleteParam(key)        // 删除参数
 
-      参数动态配置  dynamic_reconfigure
+###    参数动态配置  dynamic_reconfigure
 
 
-      // test.yaml
+###     // test.yaml
       global_integer_value: 10
 
       simple_parameters: {
@@ -457,7 +456,7 @@
        simple_string: Test Value
       }
 
-      命令行载入参数
+###     命令行载入参数
       rosparam load src/ros_industrial_learn/config/test.yaml
       rosparam get /global_integer_value  //获取参数 >>> 10
       rosparam get /simple_parameters/simple_string
@@ -468,7 +467,7 @@
       rosparam set /global_new_value "New String"    //设置新参数
       rosparam get /global_new_value                 //查看新参数
 
-      // C++ 程序获取参数
+###      // C++ 程序获取参数
       ros::NodeHandle node("/simple_parameters");
       int integer_value;
       if(!node.hasParam("integer_value")) {
@@ -479,7 +478,7 @@
          ROS_INFO_STREAM("  integer_value is " << integer_value);
       }
 
-      // C++ 程序设置参数
+###     // C++ 程序设置参数
       double x, y;
       node.param("point/x", x, 0.0);
       node.param("point/y", y, 0.0);
@@ -489,15 +488,15 @@
 
 
       ##############################################################################
-      服务 Services  类似于 函数调用  有需求时才返回数据
+##   服务 Services  类似于 函数调用  有需求时才返回数据
 
       应用程序 客户端client   >>>>>> 请求Rrquest >>>>> 各个关键姿态   Server服务器 正运动学求解器  请求回调函数
                              末端位置 <<<<<< 回应Response <<<<<
-      典型应用 
+##     典型应用 
       算法 ： 运动学、感知
       闭环命令 ： 移动到某一位置  打开抓手
 
-      服务定义  定义 请求和回应的数据 类型
+###   服务定义  定义 请求和回应的数据 类型
       AddTwoInts.srv
       #Add Integers   // 注释
       int64 a         // 请求的数据类型
@@ -513,7 +512,7 @@
       <run_depend>message_runtime</run_depend>         // 运行依赖
 
 
-      修改   CMakeLists.txt---------------------------
+###   修改   CMakeLists.txt---------------------------
 
       ## Generate services in the 'srv' folder
        add_service_files(
@@ -523,7 +522,7 @@
       #   Service2.srv
        )
 
-      ## 自定义服务
+###    ## 自定义服务
       # 客户端client 发布服务（有需求） 请求
       add_executable(add_two_ints_client src/add_two_ints_client.cpp)
       target_link_libraries(add_two_ints_client ${catkin_LIBRARIES})
@@ -540,7 +539,7 @@
       //添加srv/AddTwoInts.srv 文件 后有catkin_make 自动生成的库文件  
       #include "ros_industrial_learn/AddTwoInts.h"
 
-      //服务器回应 客户端服务请求的 回调函数
+####    //服务器回应 客户端服务请求的 回调函数
       //       包名      服务数据类型
       bool add(ros_industrial_learn::AddTwoInts::Request  &req,//引用 不用复制 时间短
                ros_industrial_learn::AddTwoInts::Response &res)
@@ -600,14 +599,14 @@
       }
 
 
-      编译
+###    编译
       catkin_make
       运行
       roscore
       rosrun ros_industrial_learn add_two_ints_server
       rosrun ros_industrial_learn add_two_ints_client 121 121
 
-      查看服务类型
+###      查看服务类型
       rossrv show ros_industrial_learn/AddTwoInts
       int64 a
       int64 b
@@ -616,7 +615,7 @@
 
 
       ###############################################################
-      行动 动作 Action   处理长周期 运行的 任务 Long-Running Tasks
+##     行动 动作 Action   处理长周期 运行的 任务 Long-Running Tasks
 
       客户端 client,
       服务端 server
@@ -624,11 +623,11 @@
       结果 Result，   服务端 生成结果 ，  发生给 客户端
       反馈 FeedBack， 服务端 生成 反馈    客户端对反馈监控，可以取消 本次 action
 
-      典型应用 ：
+###    典型应用 ：
         长周期 任务 ： 机器人运动 Robot Motion, 路径规划 Path Planning
         复杂序列    ： 拿起箱子 Pick Up Box, 排序任务 Sort Widgets
 
-      行动 动作 Action 定义 
+###    行动 动作 Action 定义 
       CalcPi.action
       #Calculate Pi   #注释
       int32 digits    #目标 Goal
@@ -638,7 +637,7 @@
       string pi       #反馈 FeedBack
       int32 iter
 
-      放在 action文件夹下
+###    放在 action文件夹下
       action/CalcPi.action
 
       修改 package.xml 文件-------------------------
