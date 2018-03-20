@@ -12,8 +12,8 @@
 
 namespace plan_and_run
 {
-// 构造函数
-DemoApplication::DemoApplication()
+// 构造函数  带有　笛卡尔轨迹执行行动 初始化　列表
+DemoApplication::DemoApplication():ac_("joint_trajectory_action", true)
 {}
 //虚 析构函数 可以继承
 DemoApplication::~DemoApplication()
