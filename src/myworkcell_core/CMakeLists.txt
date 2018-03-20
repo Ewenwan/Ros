@@ -127,6 +127,15 @@ add_dependencies(ARclient_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPO
 #连接
 target_link_libraries(ARclient_node ${catkin_LIBRARIES})
 
+# adv_descartes　高级笛卡尔轨迹规划 提供从轨迹点csv文件生成轨迹点的服务　 
+add_executable(adv_descartes_node src/adv_descartes_node.cpp)
+add_dependencies(adv_descartes_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(adv_descartes_node ${catkin_LIBRARIES})
+
+# 　高级笛卡尔应用节点
+add_executable(adv_myworkcell_node src/adv_myworkcell_node.cpp)
+add_dependencies(adv_myworkcell_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(adv_myworkcell_node ${catkin_LIBRARIES})
 
 #############
 ## Install ##
