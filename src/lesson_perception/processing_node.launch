@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<launch>
+  <node name="processing_node" pkg="lesson_perception" type="perception_node" output="screen">
+    <rosparam>
+      cloud_topic: "kinect/depth_registered/points"
+      world_frame: "kinect_link"
+      camera_frame: "kinect_link"
+      voxel_leaf_size: 0.001 <!-- mm -->
+      x_filter_min: -2.5 <!-- m -->
+      x_filter_max: 2.5 <!-- m -->
+      y_filter_min: -2.5 <!-- m -->
+      y_filter_max: 2.5 <!-- m -->
+      z_filter_min: -2.5 <!-- m -->
+      z_filter_max: 2.5 <!-- m -->
+      plane_max_iterations: 100
+      plane_distance_threshold: 0.03
+      cluster_tolerance: 0.01
+      cluster_min_size: 250
+      cluster_max_size: 500000
+    </rosparam>
+  </node>
+</launch>
