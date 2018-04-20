@@ -1,0 +1,25 @@
+<package>
+  <name>nodelet_tutorial_math</name>
+  <version>0.1.11</version>
+  <description>Package for Nodelet tutorial.</description>
+  <maintainer email="d.stonier@gmail.com">Daniel Stonier</maintainer>
+  <author>Tully Foote</author>
+  <license>BSD</license>
+  <url type="website">http://www.ros.org/wiki/nodelet_tutorial_math</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>nodelet</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>std_msgs</build_depend>
+
+  <run_depend>nodelet</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>std_msgs</run_depend>
+
+  <export>
+    <nodelet plugin="${prefix}/nodelet_math.xml"/>
+  </export>
+</package>
+
+

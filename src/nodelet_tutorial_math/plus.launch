@@ -1,0 +1,16 @@
+<launch>
+  <node pkg="nodelet" type="nodelet" name="standalone_nodelet"  args="manager" output="screen"/>
+
+  <node pkg="nodelet" type="nodelet" name="Plus" args="load nodelet_tutorial_math/Plus standalone_nodelet" output="screen">
+    <remap from="/Plus/out" to="remapped_output"/>
+  </node>		  
+  
+  <rosparam param="Plus2" file="$(find nodelet_tutorial_math)/plus_default.yaml"/>
+  <node pkg="nodelet" type="nodelet" name="Plus2" args="load nodelet_tutorial_math/Plus standalone_nodelet" output="screen">
+    <rosparam file="$(find nodelet_tutorial_math)/plus_default.yaml"/>
+  </node>
+  <node pkg="nodelet" type="nodelet" name="Plus3" args="standalone nodelet_tutorial_math/Plus" output="screen">
+    <param name="value" type="double" value="2.5"/>
+    <remap from="Plus3/in" to="Plus2/out"/>
+  </node>
+</launch>

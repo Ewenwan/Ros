@@ -1,0 +1,260 @@
+nodelet是什么？
+
+1 ROS的数据通信在graph结构中以topic,service和param的方式传输数据，
+天生的数据交互存在一定的延时和阻塞。Nodelet 包就是改善这一状况设计的，
+ 使得多个算法运行在同一个过程中，并且算法间数据传输无需拷贝就可实现。
+
+简单的讲就是可以将以前启动的多个node捆绑在一起manager，
+使得同一个manager里面的topic的数据传输更快。
+即同一个manager过程的nodelet数据传输zero copy 。
+
+2 nodelet的manager可以加载多个的nodelets，nodelets间数据传输zero copy，有效避免数据copy和网络传输代价
+3 支持pulgin的方式动态加载，基类nodelet::Nodelet， 任何nodelet继承自它可以使用plugin的方式动态加载。
+
+
+
+nodelet命令
+
+nodelet load pkg/Type manager //向manager中loader nodelet
+nodelet standalone pkg/Type //程序复用，相当启动一个普通node
+nodelet unload name manager //从manager移除nodelet
+nodelet manager //创建mananger
+
+实例：
+rosrun nodelet nodelet manager __name:=nodelet_manager
+创建mananger ，名字为nodelet_manager
+rosrun nodelet nodelet load nodelet_tutorial_math/Plus nodelet_manager (人工空格) __name:=nodelet1 (人工空格) nodelet1/in:=foo (人工空格) _value:=1.1
+使用nodelet_manager 加载nodelet_tutorial_math/Plus ，并且实例化
+namespace 重命名为nodelet1。
+nodelet1/in 重映射为foo，value的值为1.1
+
+执行完上述两条命令后，可以查看当前的node ，topic列表
+$rostopic list
+$rosnode list
+现在向节点发送topic
+$rostopic pub /foo std_msgs/Float64 5.0 -r 10 
+
+查看输出结果
+$rostopic echo /nodelet1/out
+
+
+
+
+
+//　安装
+sudo apt-get install ros-indigo-nodelet*
+
+
+====================================================
+4.1 CMakeLists.txt
+------------------------------------
+cmake_minimum_required(VERSION 2.8.3)
+project(nodelet_tutorial_math)
+
+find_package(catkin REQUIRED COMPONENTS nodelet roscpp std_msgs)
+
+## Setup include directories
+include_directories(${catkin_INCLUDE_DIRS})
+
+catkin_package(
+  LIBRARIES nodelet_math
+  CATKIN_DEPENDS nodelet roscpp std_msgs
+)
+
+## Create the nodelet tutorial library
+add_library(nodelet_math src/plus.cpp)
+target_link_libraries(nodelet_math ${catkin_LIBRARIES})
+if(catkin_EXPORTED_LIBRARIES)
+  add_dependencies(nodelet_math ${catkin_EXPORTED_LIBRARIES})
+endif()
+
+## Mark the nodelet library for installations
+install(TARGETS nodelet_math
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+
+## Mark other files for installation (e.g. launch and bag files, etc.)
+install(FILES nodelet_math.xml plus.launch plus_default.yaml
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+
+========================================================
+
+4.2 package.xml
+-----------------------
+<package>
+  <name>nodelet_tutorial_math</name>
+  <version>0.1.11</version>
+  <description>Package for Nodelet tutorial.</description>
+  <maintainer email="d.stonier@gmail.com">Daniel Stonier</maintainer>
+  <author>Tully Foote</author>
+  <license>BSD</license>
+  <url type="website">http://www.ros.org/wiki/nodelet_tutorial_math</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>nodelet</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>std_msgs</build_depend>
+
+  <run_depend>nodelet</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>std_msgs</run_depend>
+
+  <export>
+    <nodelet plugin="${prefix}/nodelet_math.xml"/>    　////// 必须显式指定 导出的插件 描述文件
+  </export>
+</package>
+-----------------------------------
+<export>
+</export>
+为了让pluginlib查询跨所有ROS包的系统上的所有可用插件，每个包必须显式指定它导出的插件，以及哪些包库包含这些插件。
+ 插件提供程序必须在其导出标记块中的package.xml中指向其插件描述文件。 
+========================================================
+
+4.3 pulgin  nodelet_math.xml
+
+插件描述文件是一个XML文件，用于以机器可读格式存储有关插件的所有重要信息。 
+它包含有关插件所在的库的信息，插件的名称，插件的类型等 
+ibary path :动态库的相对路径 
+name:类的查找名称。 由pluginlib工具用作插件的标识符。
+	此字段在pluginlib 1.9和更高版本（ROS Groovy或更高版本）中是可选的
+type:类型
+base_class_type：基类的类型
+description 标签：类的描述和它能做什么
+
+
+------------------
+
+<library path="lib/libnodelet_math">
+  <class name="nodelet_tutorial_math/Plus" type="nodelet_tutorial_math::Plus" base_class_type="nodelet::Nodelet">
+    <description> 
+      A node to add a value and republish.
+    </description>
+  </class>
+</library>
+
+
+注：Library path 是相对位置。 
+ 说明参考：http://wiki.ros.org/pluginlib/PluginDescriptionFile
+========================================================
+
+4.4 launch   plus.launch
+----------------------------------
+
+<launch>
+///////创建manger，名字为standalone_nodelet//////
+  <node pkg="nodelet" type="nodelet" name="standalone_nodelet"  args="manager" output="screen"/>
+///// 使用 standalone_nodelet 加载nodelet_tutorial_math/Plus ，命名空间为Plus，topic可以remap /////////
+
+  <node pkg="nodelet" type="nodelet" name="Plus" args="load nodelet_tutorial_math/Plus standalone_nodelet" output="screen">
+    <remap from="/Plus/out" to="remapped_output"/>
+  </node>		  
+  
+  <rosparam param="Plus2" file="$(find nodelet_tutorial_math)/plus_default.yaml"/>    /////param
+  <node pkg="nodelet" type="nodelet" name="Plus2" args="load nodelet_tutorial_math/Plus standalone_nodelet" output="screen">
+    <rosparam file="$(find nodelet_tutorial_math)/plus_default.yaml"/>
+  </node
+>
+  <node pkg="nodelet" type="nodelet" name="Plus3" args="standalone nodelet_tutorial_math/Plus" output="screen">
+    <param name="value" type="double" value="2.5"/>
+    <remap from="Plus3/in" to="Plus2/out"/>   <!--这里将plus2的输出重定向到plus3的输入-->
+  </node>
+</launch>
+
+===================================================
+
+
+
+一个应用实例 
+1）启动nodelet manager
+ 一般nodelet manager是用C++实现的一段程序，用以监听ROS service，
+nodelet可以动态加载进来运行。
+作为节点之间的桥梁（管理话题数据）
+
+rosrun nodelet nodelet manager __name:=nodelet_manager  
+
+本例子将运行一个standalone manager，但通常manager是被嵌入到node中使用的。
+
+
+提示错误：
+[ERROR] [1524228556.024454472]: Skipping XML Document "/opt/ros/indigo/share/gmapping/nodelet_plugins.xml" which had no Root Element.  This likely means the XML is malformed or missing.
+
+解决办法
+新建　nodelet_plugins.xml
+
+<library path="lib/libslam_gmapping_nodelet">  
+	<class name="SlamGMappingNodelet" type="SlamGMappingNodelet" base_class_type="nodelet::Nodelet">  
+	<description>  
+		Nodelet ROS wrapper for OpenSlam's Gmapping.  
+	</description>  
+	</class>  
+</library> 
+
+
+
+2）启动nodelet
+rosrun nodelet nodelet load nodelet_tutorial_math/Plus nodelet_manager __name:=nodelet1 nodelet1/in:=foo _value:=1.1  
+
+该命令指示nodelet_magager实例化nodelet_tutorial_math/Plus描述的nodelet，并将name和remapping传递到了nodelet中。 
+节点名为：　nodelet1
+话题名　/nodelet1/in　重新改名　成  /foo   参数值指定为　1.1　
+
+3）简单测试
+方式一： 命令行测试
+rostopic pub /foo std_msgs/Float64 5.0 -r 10  
+发布数据到　/foo话题上
+
+节点列表
+ rosnode list
+节点信息
+ rosnode info /nodelet1
+话题列表
+rostopic list
+话题信息
+rostopic info /nodelet1/out
+打印话题上发布的信息
+rostopic echo /nodelet1/out
+
+
+查看话题节点　结构图
+rqt_plot
+
+节点1　发布数据　到　/foo　话题
+nodelet_manager 的　nodelet_manager　订阅　/foo　话题
+与　nodelet_manager 的　nodelet_manager/bound 交互
+
+nodelet_manager 的　nodelet_manager/bound　与　节点2　nodelet1 交互
+
+
+4) launch启动文件
+<launch>
+
+/////////////// nodelet manage 节点 名字　standalone_nodelet　////////////
+  <node pkg="nodelet" type="nodelet" name="standalone_nodelet"  args="manager" output="screen"/>
+
+////////////// 	Plus节点　与　standalone_nodelet/bound　节点交互///////////
+  <node pkg="nodelet" type="nodelet" name="Plus" args="load nodelet_tutorial_math/Plus standalone_nodelet" output="screen">
+    <remap from="/Plus/out" to="remapped_output"/>
+  </node>		  
+ 
+///////////// 	Plus2节点　与　standalone_nodelet/bound　节点交互 从standalone_nodelet载入参数Plus2/////////
+  <rosparam param="Plus2" file="$(find nodelet_tutorial_math)/plus_default.yaml"/>
+  <node pkg="nodelet" type="nodelet" name="Plus2" args="load nodelet_tutorial_math/Plus standalone_nodelet" output="screen">
+    <rosparam file="$(find nodelet_tutorial_math)/plus_default.yaml"/>
+  </node>
+
+////////////　Plus3节点　//////////////////////////
+  <node pkg="nodelet" type="nodelet" name="Plus3" args="standalone nodelet_tutorial_math/Plus" output="screen">
+    <param name="value" type="double" value="2.5"/>////////////参数
+    <remap from="Plus3/in" to="Plus2/out"/>//////　　Plus3/in　　接入　Plus2/out
+  </node>
+
+</launch>
+
+
+
+
+
+
+
