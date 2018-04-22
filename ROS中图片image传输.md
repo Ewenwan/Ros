@@ -1,4 +1,4 @@
-      1. 摄像头图像采集
+# 1. 摄像头图像采集
 
       有2个思路，一个是使用ROS现有的包（主流方法）；
       一个是利用OpenCV提供的VideoCapture方法，然后通过ROS提供的cv_bridge转为sensor_msgs/Image消息（cv_bridge的例程）。
@@ -8,13 +8,13 @@
 
 
 
-      2. 图像信息在ROS中的流动
+# 2. 图像信息在ROS中的流动
 
       使用ROS提供的image_transport空间发布和订阅图像话题。
       一个细节是，image_transport提供了两组类：Publisher, Subscriber 和 CameraPublisher, CameraSubscriber，
       前者仅发送图像消息（Sensor_msgs/Image），后者同时提供摄像机信息（sensor_msgs/CameraInfo）。
 
-      2.1 Sensor_msgs/Image
+##  2.1 Sensor_msgs/Image
           # This message contains an uncompressed image  
           # (0, 0) is at top-left corner of image  
           std_msgs/Header header  
@@ -25,7 +25,7 @@
           uint32 step  
           uint8[] data 
 
-      2.2 sensor_msgs/CameraInfo
+##  2.2 sensor_msgs/CameraInfo
       主要包含了相机分辨率、内参矩阵、畸变向量、旋转矩阵（针对双目相机）,投影矩阵 等。
 
       派生到我的代码片
@@ -42,11 +42,11 @@
           uint32 binning_y  
           sensor_msgs/RegionOfInterestroi  
 
-      2.3 插件
+## 2.3 插件
       Compressed_image_transport是image_transport的一个插件包，可以将图像压缩为JPEG或PNG。
       Threora_image_transport是image_transport的一个插件包，可以对图像消息做视频流压缩处理。
 
-      3. 视觉算法前的预处理
+# 3. 视觉算法前的预处理
       从摄像头采集的图像一般需要去畸变等步骤才可为高阶视觉算法使用。
       ROS的image_pipline主要实现5个功能：相机标定、单相机去畸变（image_proc类实现）、
       双目相机去畸变、深度相机处理（Kinect）和可视化（image_view）。
@@ -63,7 +63,7 @@
       image_rect_color[image]
 
 
-      4. OpenCV在ROS里的使用
+#  4. OpenCV在ROS里的使用
       参考官方文档。主要包含两个包：cv_bridge和image_geometry。
       前者主要实现OpenCV的Mat/IplImage向ROS消息的转换；
       http://wiki.ros.org/cv_bridge/Tutorials/UsingCvBridgeToConvertBetweenROSImagesAndOpenCVImages
@@ -86,7 +86,7 @@
       camera_info_manager的使用在camera1394里有应用。
       https://github.com/ros-drivers/camera1394/blob/master/src/nodes/driver1394.cpp#L80
 
-      5. 坐标转换
+#    5. 坐标转换
       Tf采用树的结构组织每个frame的转换关系（旋转和平移，一个细节是这里用四元数Quaternion或 欧拉角 RPY的方式描述旋转，
       有别于OpenCV里的3*3旋转矩阵或罗德里格斯变换。）
       每个frame可以发布和订阅指定的转换（同时还有时间维度，因为转换关系可能随时间变化）。
