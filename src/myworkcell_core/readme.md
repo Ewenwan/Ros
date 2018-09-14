@@ -1,5 +1,11 @@
 # 参考　
           http://ros-industrial.github.io/industrial_training/_source/session4/Introduction-to-Perception.html
+	  
+	  ur3 
+	  https://github.com/ros-industrial/industrial_training/issues/147
+	  
+	  #include <descartes_moveit/ikfast_moveit_state_adapter.h>
+	  robot_model_ptr_.reset(new IkFastMoveitStateAdapter());
 
 # 安装ar 仿真工件　测试包
           sudo apt install ros-indigo-calibration-msgs
