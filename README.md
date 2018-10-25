@@ -22,3 +22,5 @@
 [Gazebo Ros入门](https://www.cnblogs.com/shhu1993/p/5067749.html)
 
 [ROS源代码分析、笔记和注释](https://github.com/Ewenwan/ROS----ros_comm)
+
+[ROS学习资料汇总 ](https://github.com/sychaichangkun/ROS_Resources)
