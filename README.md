@@ -24,3 +24,5 @@
 [ROS源代码分析、笔记和注释](https://github.com/Ewenwan/ROS----ros_comm)
 
 [ROS学习资料汇总 ](https://github.com/sychaichangkun/ROS_Resources)
+
+[古月居](https://mp.weixin.qq.com/s?__biz=MzIyMzkxODg0Mw==&mid=2247484445&idx=1&sn=8f10fb4ee78da414588ffabd3eb721a6&chksm=e817ab89df60229f5888a2ec660649d81f371f16f7eff60b982e78fea0a6fe1c0762bc433e15&mpshare=1&scene=1&srcid=1023JPEqq835Iu6CamiVpO2R&pass_ticket=GUYqMrcaykeEbRgrCw0aeD%2BfAzY39PVt%2Bi56mOUARZhCrsvWuLlkpUmDb3YAV5LN#rd)
