@@ -152,7 +152,7 @@ include_directories(    #头文件路径
 # )
 
 # TTS
-add_executable(xftts src/xf_ttf.cpp)
+add_executable(xftts src/xf_tts.cpp)
 target_link_libraries(
 xftts 
 ${catkin_LIBRARIES}  
