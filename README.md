@@ -296,6 +296,11 @@ target_link_libraries(example3b ${catkin_LIBRARIES})
 ```
 
 # 二、行动action类型 参数服务器 坐标变换 tf可视化 安装插件 gazebo仿真
+[插件1]
+(https://github.com/PacktPublishing/Robot-Operating-System-Cookbook/tree/master/Chapter03/chapter3_tutorials/nodelet_hello_ros)
+
+[插件2](https://github.com/PacktPublishing/Robot-Operating-System-Cookbook/blob/master/Chapter03/chapter3_tutorials/pluginlib_tutorials/src/polygon_plugins.cpp)
+
 ## 1. 发布行动 action
 // 类似于服务，但是是应对 服务任务较长的情况，避免客户端长时间等待，
 
@@ -760,13 +765,13 @@ start_demo.launch
 
 ```
 
+## 6. 可视化 插件
+[rviz 插件](https://github.com/PacktPublishing/Robot-Operating-System-Cookbook/blob/master/Chapter03/chapter3_tutorials/rviz_plugin_tutorials/src/imu_display.cpp)
+
+[gazebo 插件](https://github.com/PacktPublishing/Robot-Operating-System-Cookbook/blob/master/Chapter03/chapter3_tutorials/gazebo_plugin_tutorial/hello_world.cc)
 
 
-## 6. 发布自定义消息 msg
-```c
-
-
-```
+# 三、日志
 
 
 ## 7. 发布自定义消息 msg
