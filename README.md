@@ -33,6 +33,8 @@
 [ros编程书籍 c++ !!!!推荐](https://github.com/PacktPublishing/Robot-Operating-System-Cookbook)
 
 
+[Mastering-ROS-for-Robotics-Programming-Second-Edition 代码](https://github.com/PacktPublishing/Mastering-ROS-for-Robotics-Programming-Second-Edition)
+
 # 一、消息
 
 ## 1. 发布 字符串 消息
