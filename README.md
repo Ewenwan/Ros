@@ -568,6 +568,8 @@ int main(int argc, char **argv)
 }
 
 ```
+
+
 CMakeLists.txt
 ```c
 cmake_minimum_required(VERSION 2.8.3)
@@ -604,28 +606,170 @@ target_link_libraries(parameter_server_tutorials ${catkin_LIBRARIES})
 ```
 
 
-## 3. 发布自定义消息 msg
+## 4. 坐标变换发布 tf_broadcaster 
+```c
+#include <ros/ros.h>
+#include <tf/transform_broadcaster.h> // 坐标变换发布/广播
+#include <turtlesim/Pose.h>// 小乌龟位置类型
+
+std::string turtle_name;
+
+// 小乌龟 位姿 话题 回调函数 =======
+void poseCallback(const turtlesim::PoseConstPtr& msg)
+{
+  static tf::TransformBroadcaster br;// 坐标变换广播
+  tf::Transform transform;// 坐标变换 
+  transform.setOrigin( tf::Vector3(msg->x, msg->y, 0.0) );// 坐标位置
+  tf::Quaternion q;// 位姿四元素
+  q.setRPY(0, 0, msg->theta);// 按照 rpy 姿态向量形式设置 平面上只有 绕Z轴的旋转 偏航角
+  transform.setRotation(q);// 姿态
+  // 广播位姿变换消息=====
+  br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "world", turtle_name));
+}
+
+int main(int argc, char** argv)
+{
+  ros::init(argc, argv, "tf_broadcaster");
+  if (argc != 2){ROS_ERROR("need turtle name as argument"); return -1;};
+  turtle_name = argv[1];
+
+  ros::NodeHandle node;
+  // 订阅小乌龟 位姿 话题数据  绑定回调函数 poseCallback
+  ros::Subscriber sub = node.subscribe(turtle_name+"/pose", 10, &poseCallback);
+
+  ros::spin();
+  return 0;
+}
+
+
+```
+
+
+## 5. 坐标变换监听 tf_listener 
+```c
+#include <ros/ros.h>
+#include <tf/transform_listener.h>// 坐标变换监听
+#include <geometry_msgs/Twist.h>  // 消息类型
+#include <turtlesim/Spawn.h>// 生成一个小乌龟
+
+int main(int argc, char** argv)
+{
+  ros::init(argc, argv, "tf_listener");
+
+  ros::NodeHandle node;
+
+  ros::service::waitForService("spawn");// 等待 生成小乌龟的服务到来
+  ros::ServiceClient add_turtle =
+    node.serviceClient<turtlesim::Spawn>("spawn"); // 服务客户端
+  turtlesim::Spawn srv;
+  add_turtle.call(srv); // 调用服务
+  
+  // 发布小乌龟运动指令=====
+  ros::Publisher turtle_vel =
+    node.advertise<geometry_msgs::Twist>("turtle2/cmd_vel", 10);
+  
+  // 左边变换监听
+  tf::TransformListener listener;
+
+  ros::Rate rate(10.0);
+  while (node.ok())
+  {
+    tf::StampedTransform transform; // 得到的坐标变换消息
+    try
+    {
+      // 两个小乌龟坐标变换消息 之差 左边变换??
+      // 有两个  坐标变换发布器 一个发布 /turtle1  一个发布 /turtle2
+      listener.lookupTransform("/turtle2", "/turtle1",
+                               ros::Time(0), transform);
+    }
+    catch (tf::TransformException &ex) 
+    {
+      ROS_ERROR("%s",ex.what());
+      ros::Duration(1.0).sleep();
+      continue;
+    }
+    
+    // 根据位姿差，发布 命令 让 小乌龟2 追赶上 小乌龟1
+    geometry_msgs::Twist vel_msg;
+    // 位置差值 计算角度
+    vel_msg.angular.z = 4.0 * atan2(transform.getOrigin().y(),
+                                    transform.getOrigin().x());
+    // 位置直线距离，关联到速度
+    vel_msg.linear.x = 0.5 * sqrt(pow(transform.getOrigin().x(), 2) +
+                                  pow(transform.getOrigin().y(), 2));
+    // 发布速度命令
+    turtle_vel.publish(vel_msg);
+
+    rate.sleep();
+  }
+  return 0;
+}
+
+```
+
+CMakeLists.txt
+```c
+cmake_minimum_required(VERSION 2.8.3)
+project(tf_tutorials)
+
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  rospy
+  tf
+  turtlesim
+)
+
+catkin_package()
+
+include_directories(
+# include
+  ${catkin_INCLUDE_DIRS}
+)
+
+add_executable(turtle_tf_broadcaster src/turtle_tf_broadcaster.cpp)
+target_link_libraries(turtle_tf_broadcaster ${catkin_LIBRARIES})
+
+add_executable(turtle_tf_listener src/turtle_tf_listener.cpp)
+target_link_libraries(turtle_tf_listener ${catkin_LIBRARIES})
+
+```
+
+start_demo.launch
+```c
+<launch>
+    <!-- Turtlesim Node 小乌龟1-->
+    <node pkg="turtlesim" type="turtlesim_node" name="sim"/>
+    <!--  小乌龟1 键盘控制 -->
+    <node pkg="turtlesim" type="turtle_teleop_key" name="teleop" output="screen"/>
+    
+    <!-- Axes -->
+    <param name="scale_linear" value="2" type="double"/>
+    <param name="scale_angular" value="2" type="double"/>
+    <!--  发布 小乌龟1 位姿 ->
+    <node pkg="tf_tutorials" type="turtle_tf_broadcaster"
+          args="/turtle1" name="turtle1_tf_broadcaster" />
+    <!--  发布 小乌龟2 位姿 ->	  
+    <node pkg="tf_tutorials" type="turtle_tf_broadcaster"
+          args="/turtle2" name="turtle2_tf_broadcaster" />
+    <!-- 监听两者位姿变换 让小乌龟2 追上 小乌龟1 ->	  
+    <node pkg="tf_tutorials" type="turtle_tf_listener"
+          name="listener" />
+
+  </launch>
+
+
+```
+
+
+
+## 6. 发布自定义消息 msg
 ```c
 
 
 ```
 
 
-## 3. 发布自定义消息 msg
-```c
-
-
-```
-
-
-## 3. 发布自定义消息 msg
-```c
-
-
-```
-
-
-## 3. 发布自定义消息 msg
+## 7. 发布自定义消息 msg
 ```c
 
 
