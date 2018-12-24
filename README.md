@@ -296,23 +296,310 @@ target_link_libraries(example3b ${catkin_LIBRARIES})
 ```
 
 # 二、行动action类型 参数服务器 坐标变换 tf可视化 安装插件 gazebo仿真
-## 1. 发布自定义消息 msg
-```c
+## 1. 发布行动 action
+// 类似于服务，但是是应对 服务任务较长的情况，避免客户端长时间等待，
 
+// 以及服务结果是一个序列，例如一件工作先后很多步骤完成
+```c
+#include <ros/ros.h>
+#include <actionlib/server/simple_action_server.h> // action 服务器
+#include <actionlib_tutorials/FibonacciAction.h>   // 自定义的 action类型 产生斐波那契数列 
+// action/Fibonacci.action
+// #goal definition        任务目标
+// int32 order
+// ---
+// #result definition      最终 结果
+// int32[] sequence
+// ---
+// #feedback               反馈 序列 记录中间 递增 序列
+// int32[] sequence
+
+//  定义的一个类========================
+class FibonacciAction
+{
+// 私有=============
+protected:
+  ros::NodeHandle nh_; // 节点实例
+  
+  // 节点实例必须先被创建 NodeHandle instance 
+  actionlib::SimpleActionServer<actionlib_tutorials::FibonacciAction> as_; // 行动服务器，输入自定义的模板类似
+  std::string action_name_;// 行动名称
+  
+  // 行动消息，用来发布的 反馈feedback / 结果result
+  actionlib_tutorials::FibonacciFeedback feedback_;
+  actionlib_tutorials::FibonacciResult result_;
+  
+// 公开==================
+public:
+  // 类构造函数=============
+  FibonacciAction(std::string name) :
+    // 行动服务器 需要绑定 行动回调函数===FibonacciAction::executeCB====
+    as_(nh_, name, boost::bind(&FibonacciAction::executeCB, this, _1), false),
+    action_name_(name)
+  {
+    as_.start();// 启动
+  }
+  // 类析构函数========
+  ~FibonacciAction(void)
+  {
+  }
+  //  行动回调函数=========
+  void executeCB(const actionlib_tutorials::FibonacciGoalConstPtr &goal)
+  {
+  
+    ros::Rate r(1);// 频率
+    bool success = true;// 标志
+
+    /* the seeds for the fibonacci sequence */
+    feedback_.sequence.clear();// 结果以及反馈
+    feedback_.sequence.push_back(0); // 斐波那契数列
+    feedback_.sequence.push_back(1);
+
+    ROS_INFO("%s: Executing, creating fibonacci sequence of order %i with seeds %i, %i", action_name_.c_str(), goal->order, feedback_.sequence[0], feedback_.sequence[1]);
+
+    /* start executing the action */
+    for(int i=1; i<=goal->order; i++)// order 为序列数量
+    {
+      /* check that preempt has not been requested by the client */
+      if (as_.isPreemptRequested() || !ros::ok())
+      {
+        ROS_INFO("%s: Preempted", action_name_.c_str());
+		
+        /* set the action state to preempted */
+        as_.setPreempted();
+        success = false;
+        break;
+      }
+      // 产生后一个数 
+      feedback_.sequence.push_back(feedback_.sequence[i] + feedback_.sequence[i-1]);
+      
+	  /* publish the feedback */
+      as_.publishFeedback(feedback_);// 发布
+      /* this sleep is not necessary, however, the sequence is computed at 1 Hz for demonstration purposes */
+      r.sleep();
+    }
+
+    if(success)
+    {
+      // 最终结果
+      result_.sequence = feedback_.sequence;
+      ROS_INFO("%s: Succeeded", action_name_.c_str());
+      
+	  /* set the action state to succeeded */
+      as_.setSucceeded(result_);
+    }
+  }
+
+
+};
+
+
+int main(int argc, char** argv)
+{
+  ros::init(argc, argv, "fibonacci server");
+
+  FibonacciAction fibonacci("fibonacci");
+  ros::spin();
+
+  return 0;
+}
 
 ```
 
 
-## 2. 发布自定义消息 msg
+## 2. 行动客户端 类似 服务消费者
 ```c
+#include <ros/ros.h>
+#include <actionlib/client/simple_action_client.h>// action 客户端
+#include <actionlib/client/terminal_state.h>      // action 状态
+#include <actionlib_tutorials/FibonacciAction.h>  // 自定义行动类型
 
+int main (int argc, char **argv)
+{
+  ros::init(argc, argv, "fibonacci client");
+
+  /* create the action client
+     "true" causes the client to spin its own thread */
+  //  action 客户端 =====
+  actionlib::SimpleActionClient<actionlib_tutorials::FibonacciAction> ac("fibonacci", true);
+
+  ROS_INFO("Waiting for action server to start.");
+  
+  /* will be  waiting for infinite time */
+  ac.waitForServer(); // 等待 行动服务器启动
+
+  ROS_INFO("Action server started, sending goal.");
+  
+  // 发布任务目标 产生20个数量的 斐波那契数列序列
+  actionlib_tutorials::FibonacciGoal goal;
+  goal.order = 20;
+  ac.sendGoal(goal);// 发给 行动服务器=====
+
+  // 等待 行动 执行结果
+  bool finished_before_timeout = ac.waitForResult(ros::Duration(30.0));
+
+  if (finished_before_timeout)
+  {
+    actionlib::SimpleClientGoalState state = ac.getState();// 状态
+    ROS_INFO("Action finished: %s",state.toString().c_str());
+  }
+  else
+    ROS_INFO("Action doesnot finish before the time out.");
+
+  return 0;
+}
+
+```
+
+CMakeLists.txt
+```c
+cmake_minimum_required(VERSION 2.8.3)
+project(actionlib_tutorials)
+# add_compile_options(-std=c++11)
+# 找到包依赖
+find_package(catkin REQUIRED COMPONENTS
+  actionlib
+  actionlib_msgs
+  message_generation
+  roscpp
+  rospy
+  std_msgs
+)
+## 行动自定义文件
+add_action_files(
+   DIRECTORY action
+   FILES Fibonacci.action
+ )
+## 生成行动类型 头文件
+generate_messages(
+ DEPENDENCIES actionlib_msgs std_msgs
+)
+## 包依赖
+catkin_package(
+  INCLUDE_DIRS include
+  LIBRARIES actionlib_tutorials
+  CATKIN_DEPENDS actionlib actionlib_msgs message_generation roscpp rospy std_msgs
+  DEPENDS system_lib
+)
+## 包含
+include_directories(
+# include
+  ${catkin_INCLUDE_DIRS}
+)
+
+## 编译 连接 
+add_executable(fibonacci_server src/fibonacci_server.cpp)
+add_executable(fibonacci_client src/fibonacci_client.cpp)
+
+target_link_libraries(fibonacci_server ${catkin_LIBRARIES})
+target_link_libraries(fibonacci_client ${catkin_LIBRARIES})
+
+add_dependencies(fibonacci_server ${actionlib_tutorials_EXPORTED_TARGETS})
+add_dependencies(fibonacci_client ${actionlib_tutorials_EXPORTED_TARGETS})
 
 ```
 
 
-## 3. 发布自定义消息 msg
+## 3. 参数服务器 parameter_server 
 ```c
+#include <ros/ros.h>
 
+#include <dynamic_reconfigure/server.h>// 动态参数 调整
+#include <parameter_server_tutorials/parameter_server_Config.h> // 自定义的 配置参数列表
+
+// cfg/parameter_server_tutorials.cfg===========
+/*
+# coding:utf-8
+#!/usr/bin/env python
+PACKAGE = "parameter_server_tutorials" # 包名
+
+from dynamic_reconfigure.parameter_generator_catkin import *
+
+gen = ParameterGenerator()# 参数生成器
+
+# 参数列表 ====================
+gen.add("BOOL_PARAM",   bool_t,   0, "A Boolean  parameter",  True) # BOOL量类型参数
+gen.add("INT_PARAM",    int_t,    0, "An Integer Parameter",  1,   0, 100) # 整形量参数
+gen.add("DOUBLE_PARAM", double_t, 0, "A Double   Parameter",  0.01, 0,   1)# 浮点型变量参数
+gen.add("STR_PARAM",    str_t,    0, "A String   parameter",  "Dynamic Reconfigure") # 字符串类型变量参数
+
+#  自定义 枚举常量 类型 ==========
+size_enum = gen.enum([ gen.const("Low",        int_t,  0, "Low : 0"),
+                       gen.const("Medium",     int_t,  1, "Medium : 1"),
+                       gen.const("High",       int_t,  2, "Hight :2")],
+                       "Selection List")
+# 添加自定义 变量类型
+gen.add("SIZE", int_t, 0, "Selection List", 1, 0, 3, edit_method=size_enum)
+
+# 生成 动态参数配置 头文件   以 parameter_server_ 为前缀
+exit(gen.generate(PACKAGE, "parameter_server_tutorials", "parameter_server_"))
+
+*/
+
+
+// 参数改变后 的回调函数，parameter_server_Config 为参数头
+void callback(parameter_server_tutorials::parameter_server_Config &config, uint32_t level)
+{
+
+  ROS_INFO("Reconfigure Request: %s %d %f %s %d", 
+            config.BOOL_PARAM?"True":"False", 
+            config.INT_PARAM, 
+            config.DOUBLE_PARAM, 
+            config.STR_PARAM.c_str(),
+            config.SIZE);
+
+}
+
+int main(int argc, char **argv) 
+{
+  ros::init(argc, argv, "parameter_server_tutorials");
+
+  dynamic_reconfigure::Server<parameter_server_tutorials::parameter_server_Config> server;// 参数服务器
+  dynamic_reconfigure::Server<parameter_server_tutorials::parameter_server_Config>::CallbackType f;// 参数改变 回调类型
+  
+  // 绑定回调函数
+  f = boost::bind(&callback, _1, _2);
+  // 参数服务器设置 回调器
+  server.setCallback(f);
+
+  ROS_INFO("Spinning");
+  ros::spin();// 启动
+  return 0;
+}
+
+```
+CMakeLists.txt
+```c
+cmake_minimum_required(VERSION 2.8.3)
+project(parameter_server_tutorials)
+# add_compile_options(-std=c++11)
+
+# 找到包
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  std_msgs
+  message_generation
+  dynamic_reconfigure
+)
+# 动态参数配置文件
+generate_dynamic_reconfigure_options(
+  cfg/parameter_server_tutorials.cfg
+)
+# 依赖
+catkin_package(
+CATKIN_DEPENDS message_runtime
+)
+
+# 包含
+include_directories(
+  include
+  ${catkin_INCLUDE_DIRS}
+)
+
+# 生成可执行文件
+add_executable(parameter_server_tutorials src/parameter_server_tutorials.cpp)
+add_dependencies(parameter_server_tutorials parameter_server_tutorials_gencfg)
+target_link_libraries(parameter_server_tutorials ${catkin_LIBRARIES})
 
 ```
 
