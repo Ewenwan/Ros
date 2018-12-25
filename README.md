@@ -771,7 +771,7 @@ start_demo.launch
 [gazebo 插件](https://github.com/PacktPublishing/Robot-Operating-System-Cookbook/blob/master/Chapter03/chapter3_tutorials/gazebo_plugin_tutorial/hello_world.cc)
 
 
-# 三、日志 + 话题/服务/参数/action
+# 三、日志 + 话题/服务/参数/action/发布图像/发布点云/发布marker
 
 
 ## 1. 定义 ROS_DEBUG 
@@ -1194,7 +1194,7 @@ int main(int argc, char** argv)
 [ diagnostic_updater/diagnostic_updater.h 诊断???](https://github.com/PacktPublishing/Robot-Operating-System-Cookbook/blob/master/Chapter04/chapter4_tutorials/src/program7.cpp)
 
 
-## 8. 图像消息 + 日志
+## 8. 发布图像消息 + 日志
 ```c
 #include <ros/ros.h>
 
@@ -1254,19 +1254,121 @@ int main( int argc, char **argv )
 ```
 
 
-## 3. 发布自定义消息 msg
+## 9. 发布点云消息 + 日志 
+```c
+#include <ros/ros.h>
+
+#include <visualization_msgs/Marker.h>       // rviz可视化图像/marker
+
+#include <sensor_msgs/PointCloud2.h>         // 点云消息
+#include <pcl_conversions/pcl_conversions.h> // pcl类型转换成 rospcl类型
+#include <pcl/point_cloud.h>// 点云
+#include <pcl/point_types.h>// 点类型
+
+int main( int argc, char **argv )
+{
+  ros::init( argc, argv, "program9" );
+
+  ros::NodeHandle n;
+
+  // 发布marker消息
+  ros::Publisher pub_marker = n.advertise< visualization_msgs::Marker >( "marker", 1000 );
+  // 发布点云消息
+  ros::Publisher pub_pc = n.advertise< sensor_msgs::PointCloud2 >( "pc", 1000 );
+  
+  // 可视化marker消息----------------------------------------------------
+  visualization_msgs::Marker msg_marker;
+  msg_marker.header.frame_id = "/frame_world"; // 消息头，坐标系id
+  msg_marker.ns = "shapes"; // 所属命名空间
+  msg_marker.id = 0;        // id
+  msg_marker.type = visualization_msgs::Marker::CUBE;  // 形状类型，正方体
+  msg_marker.action = visualization_msgs::Marker::ADD; // 叠加
+
+  msg_marker.pose.position.x = 0.;// 位置
+  msg_marker.pose.position.y = 1.;
+  msg_marker.pose.position.z = 2.;
+  msg_marker.pose.orientation.x = 0.;// 姿态 四元素类型
+  msg_marker.pose.orientation.y = 0.;
+  msg_marker.pose.orientation.z = 0.;
+  msg_marker.pose.orientation.w = 1.;
+
+  msg_marker.scale.x = 1.;// 尺寸
+  msg_marker.scale.y = 1.;
+  msg_marker.scale.z = 1.;
+
+  msg_marker.color.r = 1.; // 颜色
+  msg_marker.color.g = 0.;
+  msg_marker.color.b = 0.;
+  msg_marker.color.a = 1.; // 透明度，不透明
+
+  msg_marker.lifetime = ros::Duration();// 声生命周期
+
+  ROS_INFO_STREAM( "Marker Created." );
+
+
+// 点云消息--------------------------------------------
+  sensor_msgs::PointCloud2 msg_pc;// rospcl 类型
+  pcl::PointCloud< pcl::PointXYZ > pc;// pcl XYZ类型点云
+
+  pc.width  = 300;
+  pc.height = 200; // 有序点云
+  pc.is_dense = false;// 有nan点
+  pc.points.resize( pc.width * pc.height );
+  // 随机生成假的点云数据
+  for( size_t i = 0; i < pc.height; ++i ) {
+    for( size_t j = 0; j < pc.width; ++j ) {
+      const size_t k = pc.width * i + j;
+      pc.points[k].x = 0.1 * i;
+      pc.points[k].y = 0.2 * j;
+      pc.points[k].z = 1.5;
+    }
+  }
+
+  ROS_INFO_STREAM( "Point Cloud Created." );
+
+  ros::Rate rate( 1 );
+  
+  while( ros::ok() )
+  {
+    msg_marker.header.stamp = ros::Time::now(); // marker时间戳
+    msg_marker.pose.position.x += 0.01; // 位置在移动
+    msg_marker.pose.position.y += 0.02;
+    msg_marker.pose.position.z += 0.03;
+
+    for( size_t i = 0; i < pc.height; ++i ) {
+      for( size_t j = 0; j < pc.width; ++j ) {
+        const size_t k = pc.width * i + j;
+
+        pc.points[k].z -= 0.1; // z方向位置在移动
+      }
+    }
+
+    pcl::toROSMsg( pc, msg_pc );// pcl点云类型 转换成 rospcl类型
+
+    msg_pc.header.stamp = msg_marker.header.stamp;// 时间戳
+    msg_pc.header.frame_id = "/frame_robot";// 坐标系
+
+    pub_marker.publish( msg_marker );// 发布marker
+    pub_pc.publish( msg_pc );        // 发布 点云
+
+    ros::spinOnce();
+    rate.sleep();
+  }
+
+  return EXIT_SUCCESS;
+}
+
+```
+
+
+## 10. 交互式marker +日志
 ```c
 
 
 ```
 
 
-## 3. 发布自定义消息 msg
-```c
-
-
-```
-
+# 四、
 
 ## 3. 发布自定义消息 msg
 ```c
