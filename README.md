@@ -1363,7 +1363,176 @@ int main( int argc, char **argv )
 
 ## 10. 交互式marker +日志
 ```c
+#include <ros/ros.h>
+#include <tf/tf.h>
 
+#include <interactive_markers/interactive_marker_server.h> // 交互式marker 可以响应鼠标
+
+// 有交互后的回调函数----------------------------------------------------------------------------
+void feedback_callback(const visualization_msgs::InteractiveMarkerFeedbackConstPtr &feedback)
+{
+    double roll, pitch, yaw;
+    tf::Quaternion q;
+    tf::quaternionMsgToTF(feedback->pose.orientation, q);// 获取四元素姿态
+    tf::Matrix3x3(q).getRPY(roll, pitch, yaw);// 对应的姿态向量 
+    
+    // 打印marker的位置 和 姿态
+    ROS_INFO_STREAM(
+                feedback->marker_name << "position (x, y, z) = (" <<
+                feedback->pose.position.x << ", " <<
+                feedback->pose.position.y << ", " <<
+                feedback->pose.position.z << "), orientation (roll, pitch, yaw) = (" <<
+                roll << ", " << pitch << ", " << yaw << ")"
+                );
+}
+
+int main( int argc, char** argv )
+{
+    ros::init(argc, argv, "program10");
+    
+    // 交互式marker服务器
+    interactive_markers::InteractiveMarkerServer server("marker");
+
+    visualization_msgs::InteractiveMarker marker;// 交互式marker 类型
+    marker.header.frame_id = "base_link";// 头，坐标系
+    marker.name = "marker";// 名字
+    marker.description = "2-DOF Control";// 自我介绍
+
+    /* Box marker */
+    visualization_msgs::Marker box_marker;
+    box_marker.type = visualization_msgs::Marker::CUBE; // 正方体
+    box_marker.scale.x = 0.5;// 尺寸
+    box_marker.scale.y = 0.5;
+    box_marker.scale.z = 0.5;
+    box_marker.color.r = 0.5;// 颜色
+    box_marker.color.g = 0.5;
+    box_marker.color.b = 0.5;
+    box_marker.color.a = 1.0;
+
+    /* Non-interactive control which contains the box */
+    visualization_msgs::InteractiveMarkerControl box_control;// 交互式marker控制
+    box_control.always_visible = true;// 一直显示
+    box_control.markers.push_back(box_marker);// 设置控制对象
+
+    /* Controls to move the box */
+    visualization_msgs::InteractiveMarkerControl move_x_control, rotate_z_control;
+    move_x_control.name = "move_x";
+    move_x_control.interaction_mode = visualization_msgs::InteractiveMarkerControl::MOVE_AXIS;// 沿轴方向移动
+
+    rotate_z_control.name = "rotate_z";
+    rotate_z_control.orientation.w = 1;
+    rotate_z_control.orientation.y = 1;
+    rotate_z_control.interaction_mode = visualization_msgs::InteractiveMarkerControl::ROTATE_AXIS;// 沿轴方向旋转
+
+// 交互式marker设置可 交互方式
+    marker.controls.push_back(box_control);
+    marker.controls.push_back(move_x_control);
+    marker.controls.push_back(rotate_z_control);
+
+// 交互式marker服务器吗，设置携带交互方式的 交互式marker
+    server.insert(marker, &feedback_callback);
+    server.applyChanges();
+
+    ros::spin();
+}
+
+```
+
+CMakeLists.txt
+```c
+
+cmake_minimum_required(VERSION 2.8.3)
+project(chapter4_tutorials)
+
+set(ROS_BUILD_TYPE Debug) # 编译模式
+
+# 找到依赖包
+find_package(catkin REQUIRED
+    COMPONENTS
+      roscpp
+      message_generation
+      std_msgs
+      geometry_msgs
+      sensor_msgs
+      visualization_msgs
+      dynamic_reconfigure
+      diagnostic_updater
+      cv_bridge
+      image_transport
+      pcl_conversions
+      interactive_markers)
+
+# 找依赖库
+find_package(OpenCV)
+find_package(PCL REQUIRED)
+
+# 自定义服务类型
+add_service_files(FILES SetSpeed.srv)
+# 生成服务类型 的 头文件
+generate_messages(DEPENDENCIES std_msgs)
+# 生成动态参数配置参数 的头文件
+generate_dynamic_reconfigure_options(cfg/DynamicParam.cfg)
+
+# 设置包
+catkin_package(
+    CATKIN_DEPENDS
+      roscpp
+      message_runtime
+      std_msgs
+      geometry_msgs
+      sensor_msgs
+      visualization_msgs
+      dynamic_reconfigure
+      diagnostic_updater
+      cv_bridge
+      image_transport
+      pcl_conversions
+      interactive_markers)
+# 添加依赖库 
+include_directories(
+    ${catkin_INCLUDE_DIRS}
+    ${OpenCV_INCLUDE_DIRS}
+    ${PCL_INCLUDE_DIRS})
+
+# 编译
+add_executable(program1 src/program1.cpp)
+target_link_libraries(program1 ${catkin_LIBRARIES})
+
+add_executable(program1_dump src/program1_dump.cpp)
+target_link_libraries(program1_dump ${catkin_LIBRARIES})
+
+add_executable(program1_mem src/program1_mem.cpp)
+target_link_libraries(program1_mem ${catkin_LIBRARIES})
+
+add_executable(program2 src/program2.cpp)
+target_link_libraries(program2 ${catkin_LIBRARIES})
+
+add_executable(program3 src/program3.cpp)
+target_link_libraries(program3 ${catkin_LIBRARIES})
+
+add_executable(program4 src/program4.cpp)
+add_dependencies(program4 ${PROJECT_NAME}_generate_messages_cpp)
+target_link_libraries(program4 ${catkin_LIBRARIES})
+
+add_executable(program5 src/program5.cpp)
+add_dependencies(program5 ${PROJECT_NAME}_generate_messages_cpp)
+target_link_libraries(program5 ${catkin_LIBRARIES})
+
+add_executable(program6 src/program6.cpp)
+add_dependencies(program6 ${PROJECT_NAME}_gencfg)
+target_link_libraries(program6 ${catkin_LIBRARIES})
+
+add_executable(program7 src/program7.cpp)
+target_link_libraries(program7 ${catkin_LIBRARIES})
+
+add_executable(program8 src/program8.cpp)
+target_link_libraries(program8 ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+
+add_executable(program9 src/program9.cpp)
+target_link_libraries(program9 ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+
+add_executable(program10 src/program10.cpp)
+target_link_libraries(program10 ${catkin_LIBRARIES})
 
 ```
 
