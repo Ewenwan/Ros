@@ -1756,7 +1756,7 @@ int main(int argc, char** argv)
 
 ```
 
-# 五、总和 应用
+# 五、综合 应用
 
 ## 1. 三维重建 opencv pcl g2o 
 [参考](https://github.com/PacktPublishing/Robot-Operating-System-Cookbook/blob/master/Chapter08/chapter8_tutorials/opencv_candidate/src/reconst3d/reconstruction.cpp)
@@ -1784,70 +1784,9 @@ int main(int argc, char** argv)
 [multi sensor fusion EKF多传感器融合框架 ](https://github.com/PacktPublishing/Robot-Operating-System-Cookbook/tree/master/Chapter09/chapter9_tutorials/ethzasl_msf)
 
 
-## 7. 地理信息系统```c
+## 7. 地理信息系统
+[参考](https://github.com/PacktPublishing/Robot-Operating-System-Cookbook/tree/master/Chapter09/chapter9_tutorials/geographic_info)
 
 
-```
-
-## 3. 发布自定义消息 msg
-```c
-
-
-```
-
-
-## 3. 发布自定义消息 msg
-```c
-
-
-```
-
-
-## 3. 发布自定义消息 msg
-```c
-
-
-```
-
-
-## 3. 发布自定义消息 msg
-```c
-
-
-```
-
-
-## 3. 发布自定义消息 msg
-```c
-
-
-```
-
-
-## 3. 发布自定义消息 msg
-```c
-
-
-```
-
-
-## 3. 发布自定义消息 msg
-```c
-
-
-```
-
-
-## 3. 发布自定义消息 msg
-```c
-
-
-```
-
-
-## 3. 发布自定义消息 msg
-```c
-
-
-```
-
+## 8. 无人机仿真
+[参考](https://github.com/PacktPublishing/Robot-Operating-System-Cookbook/tree/master/Chapter09/chapter9_tutorials/rotors_simulator)
