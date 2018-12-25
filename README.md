@@ -1158,6 +1158,7 @@ public:
 
     void callback(chapter4_tutorials::DynamicParamConfig& config, uint32_t level)
     {
+    // 打印动态配置后的参数
         ROS_INFO_STREAM(
                     "New configuration received with level = " << level << ":\n" <<
                     "BOOL   = " << config.BOOL << "\n" <<
@@ -1176,7 +1177,7 @@ int main(int argc, char** argv)
 {
     ros::init(argc, argv, "program6");
 
-    DynamicParamServer dps;
+    DynamicParamServer dps;// 定义参数服务器类，修改参数后，回调函数会指定执行
 
     while(ros::ok())
     {
@@ -1189,16 +1190,66 @@ int main(int argc, char** argv)
 ```
 
 
-## 3. 发布自定义消息 msg
+## 7. diagnostic_updater 诊断
+[ diagnostic_updater/diagnostic_updater.h 诊断???](https://github.com/PacktPublishing/Robot-Operating-System-Cookbook/blob/master/Chapter04/chapter4_tutorials/src/program7.cpp)
+
+
+## 8. 图像消息 + 日志
 ```c
+#include <ros/ros.h>
 
+#include <image_transport/image_transport.h> // 图像发送
+#include <cv_bridge/cv_bridge.h>// opencv 图像 转换成 ros图像
+#include <sensor_msgs/image_encodings.h> // 图像编码
 
-```
+#include <opencv2/highgui/highgui.hpp>// opencvgui
 
+int main( int argc, char **argv )
+{
+    ros::init( argc, argv, "program8" );
 
-## 3. 发布自定义消息 msg
-```c
+    ros::NodeHandle nh;
 
+    /*Open camera with CAMERA_INDEX (webcam is typically #0).*/
+    const int CAMERA_INDEX = 0; // 摄像头id
+    cv::VideoCapture capture( CAMERA_INDEX );// opencv打开相机
+
+    if(not capture.isOpened() )
+    {// 打开相机发生错误
+        ROS_ERROR_STREAM("Failed to open camera with index " << CAMERA_INDEX << "!");
+        ros::shutdown();
+    }
+    
+    // 图像信息发送器
+    image_transport::ImageTransport it(nh);
+    // 发布图像消息
+    image_transport::Publisher pub_image = it.advertise( "camera", 1 );
+    
+    // opencv 图像 带 时间戳
+    cv_bridge::CvImagePtr frame = boost::make_shared< cv_bridge::CvImage >();
+    frame->encoding = sensor_msgs::image_encodings::BGR8;
+
+    while( ros::ok() ) {
+        capture >> frame->image;// 图像域
+
+        if( frame->image.empty() )
+        {
+            ROS_ERROR_STREAM( "Failed to capture frame!" );
+            ros::shutdown();
+        }
+
+        frame->header.stamp = ros::Time::now();// 时间戳
+        pub_image.publish( frame->toImageMsg() );// 转换成 ros图像消息后发布出去====
+
+        cv::waitKey( 3 );
+
+        ros::spinOnce();
+    }
+
+    capture.release();// 释放相机=======
+
+    return EXIT_SUCCESS;
+}
 
 ```
 
