@@ -1756,52 +1756,35 @@ int main(int argc, char** argv)
 
 ```
 
-# 五、
+# 五、总和 应用
 
-## 1. 三维重建 
-```c
-
-
-```
+## 1. 三维重建 opencv pcl g2o 
+[参考](https://github.com/PacktPublishing/Robot-Operating-System-Cookbook/blob/master/Chapter08/chapter8_tutorials/opencv_candidate/src/reconst3d/reconstruction.cpp)
 
 
-## 2. 发布自定义消息 msg
-```c
+## 2. RGBD数据处理
+[参考](https://github.com/PacktPublishing/Robot-Operating-System-Cookbook/blob/master/Chapter08/chapter8_tutorials/opencv_candidate/src/rgbd/src/odometry.cpp)
 
 
-```
+
+## 3. 机器人控制  pid 笛卡尔臂控制 差分底盘控制
+[参考](https://github.com/PacktPublishing/Robot-Operating-System-Cookbook/blob/master/Chapter08/chapter8_tutorials/robot_controllers/robot_controllers/src/pid.cpp)
 
 
-## 3. 发布自定义消息 msg
-```c
+
+## 4. 智能抓取
+[参考](https://github.com/PacktPublishing/Robot-Operating-System-Cookbook/blob/master/Chapter08/chapter8_tutorials/smart_grasping_sandbox/smart_grasping_sandbox/src/smart_grasping_sandbox/smart_grasper.py)
 
 
-```
+## 5. universal_robot  UR机械臂 UR3 UR5 UR10 MOVI配置 gazebo 运动学
+[参考](https://github.com/PacktPublishing/Robot-Operating-System-Cookbook/tree/master/Chapter08/chapter8_tutorials/universal_robot)
 
 
-## 3. 发布自定义消息 msg
-```c
+## 6. 发布自定义消息 msg
+[multi sensor fusion EKF多传感器融合框架 ](https://github.com/PacktPublishing/Robot-Operating-System-Cookbook/tree/master/Chapter09/chapter9_tutorials/ethzasl_msf)
 
 
-```
-
-
-## 3. 发布自定义消息 msg
-```c
-
-
-```
-
-
-## 3. 发布自定义消息 msg
-```c
-
-
-```
-
-
-## 3. 发布自定义消息 msg
-```c
+## 7. 地理信息系统```c
 
 
 ```
