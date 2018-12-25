@@ -1537,34 +1537,235 @@ target_link_libraries(program10 ${catkin_LIBRARIES})
 ```
 
 
-# 四、
+# 四、发布 雷达数据 坐标变换 里程计数据
 
-## 3. 发布自定义消息 msg
+## 1. 发布雷达数据
+```c
+#include <ros/ros.h>
+#include <sensor_msgs/LaserScan.h> // 雷达扫描数据
+
+int main(int argc, char** argv)
+{
+ ros::init(argc, argv, "laser_scan_publisher");
+ ros::NodeHandle n;
+ 
+ // 话题 发布 雷达扫描数据
+ ros::Publisher scan_pub = n.advertise<sensor_msgs::LaserScan>("scan", 50);
+
+ unsigned int num_readings = 100;  // 一周数据点??
+ double laser_frequency = 40;      // 频率
+ double ranges[num_readings];      // 范围
+ double intensities[num_readings]; // 密度
+ int count = 0;
+
+
+ ros::Rate r(1.0);
+
+ while(n.ok()){
+
+    // 生成假的雷达数据=============
+    for(unsigned int i = 0; i < num_readings; ++i)
+    {
+     ranges[i] = count;            // 距离数据
+     intensities[i] = 100 + count; // 密度数据，反射强度??
+    }
+    
+    
+    // 准备雷达数据=========================
+    ros::Time scan_time = ros::Time::now();
+    sensor_msgs::LaserScan scan;// 定义雷达数据
+    scan.header.stamp = scan_time;// 时间戳
+    scan.header.frame_id = "base_link";// 坐标系
+    scan.angle_min = -1.57; // 扫描最小角度 -90度
+    scan.angle_max = 1.57;  // 扫描最大角度 +90度
+    scan.angle_increment = 3.14 / num_readings; // 180度 100个数据，角度分辨率
+    scan.time_increment = (1 / laser_frequency) / (num_readings);// 每一个扫描需要的时间，时间增量
+    scan.range_min = 0.0;    // 数据范围
+    scan.range_max = 100.0;
+    scan.ranges.resize(num_readings); // 距离范围数据
+    scan.intensities.resize(num_readings);// 强度数据??
+
+    for(unsigned int i = 0; i < num_readings; ++i)
+    {
+     // 填充距离数据 和 强度数据
+     scan.ranges[i] = ranges[i];
+     scan.intensities[i] = intensities[i];
+    }
+    
+    // 发布雷达数据
+    scan_pub.publish(scan);
+    ++count;
+    r.sleep();
+
+ }
+
+}
+
+
+```
+
+## 2. 发布里程计数据
+```c
+#include <string>
+#include <ros/ros.h>
+#include <sensor_msgs/JointState.h>   // 关节状态??
+#include <tf/transform_broadcaster.h> // 左边变换 广播
+#include <nav_msgs/Odometry.h>        // 导航下的里程计消息
+
+
+int main(int argc, char** argv)
+{
+	ros::init(argc, argv, "state_publisher");
+	ros::NodeHandle n;
+	
+	// 发布里程计消息
+	ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("odom", 10);
+
+	// 初始2d位姿
+	double x = 0.0; 
+	double y = 0.0;
+	double th = 0;
+
+	// 速度 velocity
+	double vx = 0.4; // 前进线速度
+	double vy = 0.0;
+	double vth = 0.4;// 旋转角速度
+
+	ros::Time current_time;
+	ros::Time last_time;
+	current_time = ros::Time::now();// 当前时间
+	last_time = ros::Time::now();   // 上次时间
+
+	tf::TransformBroadcaster broadcaster; // 位姿 广播
+	ros::Rate loop_rate(20);// 频率
+
+	const double degree = M_PI/180; // 度转 弧度
+
+	// message declarations
+	geometry_msgs::TransformStamped odom_trans; // 坐标变换消息
+	odom_trans.header.frame_id = "odom";
+	odom_trans.child_frame_id = "base_footprint";
+
+	while (ros::ok()) {
+		current_time = ros::Time::now(); // 当前时间
+
+		double dt = (current_time - last_time).toSec();// 两次时间差
+		double delta_x = (vx * cos(th) - vy * sin(th)) * dt;
+		double delta_y = (vx * sin(th) + vy * cos(th)) * dt;
+		double delta_th = vth * dt;
+		
+		//     \vy y  /vx
+		//      \  | /
+		//       \ |/
+		//        -------x-------
+		//
+
+		x += delta_x;
+		y += delta_y;
+		th += delta_th;
+
+		geometry_msgs::Quaternion odom_quat;// 四元素位姿	
+		odom_quat = tf::createQuaternionMsgFromRollPitchYaw(0,0,th);// rpy转换到 四元素
+
+		// 更新左边变换消息，tf广播发布==================
+		odom_trans.header.stamp = current_time; // 当前时间
+		odom_trans.transform.translation.x = x; // 位置 
+		odom_trans.transform.translation.y = y; 
+		odom_trans.transform.translation.z = 0.0;
+		odom_trans.transform.rotation = tf::createQuaternionMsgFromYaw(th);// 位姿
+
+		// 更新 里程计消息
+		nav_msgs::Odometry odom;//  里程计消息
+		odom.header.stamp = current_time;// 当前时间
+		odom.header.frame_id = "odom";
+		odom.child_frame_id = "base_footprint";
+
+		// 位置 position
+		odom.pose.pose.position.x = x;
+		odom.pose.pose.position.y = y;
+		odom.pose.pose.position.z = 0.0;
+		odom.pose.pose.orientation = odom_quat; // 位姿
+
+		// 速度 velocity
+		odom.twist.twist.linear.x = vx;// 线速度
+		odom.twist.twist.linear.y = vy;
+		odom.twist.twist.linear.z = 0.0;
+		odom.twist.twist.angular.x = 0.0; // 小速度
+		odom.twist.twist.angular.y = 0.0;
+		odom.twist.twist.angular.z = vth;
+
+		last_time = current_time;// 迭代消息
+
+		// publishing the odometry and the new tf
+		broadcaster.sendTransform(odom_trans);// 发布坐标变换消息 =====
+		odom_pub.publish(odom);// 发布里程计消息====
+
+		loop_rate.sleep();
+	}
+	return 0;
+}
+
+```
+
+## 3. 发布 目标位置 action
+```c
+#include <ros/ros.h>
+#include <move_base_msgs/MoveBaseAction.h> // 移动底盘 action消息
+#include <actionlib/client/simple_action_client.h>// action 客户端，发布目标
+#include <tf/transform_broadcaster.h>// 坐标变换广播
+#include <sstream>
+
+// action 客户端==========
+typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
+
+int main(int argc, char** argv)
+{
+	ros::init(argc, argv, "navigation_goals");
+	
+        // action 客户端
+	MoveBaseClient ac("move_base", true);
+        
+	// 等待action服务 启动
+	while(!ac.waitForServer(ros::Duration(5.0)))
+	{
+		ROS_INFO("Waiting for the move_base action server");
+	}
+        
+	// action 目标信息 目标位置
+	move_base_msgs::MoveBaseGoal goal;
+
+	goal.target_pose.header.frame_id = "map";// 坐标系
+	goal.target_pose.header.stamp = ros::Time::now();// 时间戳
+
+	goal.target_pose.pose.position.x = 1.0;// 目标位置
+	goal.target_pose.pose.position.y = 1.0;
+	goal.target_pose.pose.orientation.w = 1.0;// 姿态
+
+	ROS_INFO("Sending goal");
+	ac.sendGoal(goal);// 发送 action 目标
+
+	ac.waitForResult(); // 等待 action服务端 完成action
+
+	if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+		ROS_INFO("You have arrived to the goal position");
+	else{
+		ROS_INFO("The base failed for some reason");
+	}
+	return 0;
+}
+
+```
+
+# 五、
+
+## 1. 三维重建 
 ```c
 
 
 ```
 
-## 3. 发布自定义消息 msg
-```c
 
-
-```
-
-## 3. 发布自定义消息 msg
-```c
-
-
-```
-
-## 3. 发布自定义消息 msg
-```c
-
-
-```
-
-
-## 3. 发布自定义消息 msg
+## 2. 发布自定义消息 msg
 ```c
 
 
