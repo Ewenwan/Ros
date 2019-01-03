@@ -1,6 +1,8 @@
 # 机械臂三维感知应用1 避免碰撞抓取和放置
 [参考](http://ros-industrial.github.io/industrial_training/_source/demo1/index.html)
 
+[Github项目](https://github.com/Ewenwan/Ros/tree/master/src/perception_driven_ws/src/collision_avoidance_pick_and_place)
+
         三维感知驱动的　操作　　     Perception-Driven_Manipulation
         模式识别驱动的　操作手示例　　pick and place task
 
