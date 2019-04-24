@@ -32,8 +32,9 @@
 
 [ros编程书籍 c++ !!!!推荐](https://github.com/PacktPublishing/Robot-Operating-System-Cookbook)
 
-
 [Mastering-ROS-for-Robotics-Programming-Second-Edition 代码](https://github.com/PacktPublishing/Mastering-ROS-for-Robotics-Programming-Second-Edition)
+
+[第十四届全国大学生智能汽车竞赛室外光电竞速创意赛,ART-Racecar  ros 激光雷达+IMU建图导航](https://github.com/Ewenwan/racecar)
 
 # 一、消息
 
