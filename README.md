@@ -36,6 +36,10 @@
 
 [第十四届全国大学生智能汽车竞赛室外光电竞速创意赛,ART-Racecar  ros 激光雷达+IMU建图导航](https://github.com/Ewenwan/racecar)
 
+# 感谢支持
+
+![](https://github.com/Ewenwan/EwenWan/blob/master/zf.jpg)
+
 # 一、消息
 
 ## 1. 发布 字符串 消息
